@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra Worksheet (wireframe)</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .worksheet {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #007acc;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .section {
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .key-section {
+            background-color: #f0f8ff;
+            border: 2px solid #007acc;
+        }
+        .form-group {
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .form-group label {
+            min-width: 180px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group input[type="text"], .form-group input[type="number"] {
+            width: 100px;
+        }
+        .form-group input.wide {
+            width: 200px;
+        }
+        .form-group textarea {
+            width: 100%;
+            height: 60px;
+            resize: vertical;
+        }
+        
+        /* Event Info Grid */
+        .event-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .info-group h3 {
+            margin: 0 0 15px 0;
+            color: #007acc;
+            font-size: 16px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        /* Cash breakdown */
+        .bill-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .bill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bill-item label {
+            min-width: 30px;
+            font-weight: bold;
+        }
+        .bill-item input {
+            width: 50px;
+            text-align: center;
+        }
+        .bill-item .amount {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        /* Dynamic rows */
+        .expense-row, .membership-row {
+            display: flex;
+            gap: 10px;
+            margin: 8px 0;
+            align-items: center;
+        }
+        .expense-row input[type="text"], .membership-row input[type="text"] {
+            width: 150px;
+        }
+        .expense-row input[type="number"], .membership-row input[type="number"] {
+            width: 80px;
+        }
+        .add-btn {
+            padding: 4px 8px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        /* Talent grid */
+        .talent-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .talent-grid th, .talent-grid td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .talent-grid th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .talent-grid input {
+            width: 80px;
+            border: none;
+            background: transparent;
+        }
+        .talent-grid input.name {
+            width: 120px;
+        }
+        .talent-grid input.initials {
+            width: 40px;
+            text-align: center;
+        }
+        .talent-grid .initials {
+            padding: 6px 6px 6px 25px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'/%3E%3Cpath d='m15 5 4 4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 6px center;
+            background-size: 14px 14px;
+        }
+        
+        .talent-grid .initials:hover {
+            background-color: #e9ecef;
+            border-color: #007acc;
+        }
+
+        .talent-grid .totals-row {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            border-top: 2px solid #333;
+        }
+        .talent-grid .totals-row td {
+            border-top: 2px solid #333;
+        }
+        .talent-grid .talent-grid-output-name {
+            width: 200px;
+        }
+        .talent-grid .talent-grid-output-number {
+            width: 100px;
+        }
+        
+        /* Calculated values */
+        .calculated {
+            background-color: #e8f4fd;
+            color: #0066cc;
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #b3d9ff;
+        }
+        .key-output {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ffeaa7;
+            font-size: 15px;
+        }
+        
+        .note {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+            margin-left: 195px;
+        }
+        
+        .note-left {
+          font-size: 12px;
+          color: #666;
+          font-style: italic;
+          margin-top: 5px;
+          margin-left: 10px;         
+        }
+
+        .add-talent-btn {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .add-talent-btn:hover {
+            background-color: #005fa3;
+        }
+        .add-talent-btn:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .final-check {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        #generate {
+            background: green;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-input').value = today;
+
+            // show final table on clicking generate button
+            document.addEventListener('click', function(event) {
+                if (event.target && event.target.id === 'generate') {
+                    const thisButton = document.querySelector('#generate');
+                    const talentGrid = document.querySelector('#final-talent-grid');
+                    thisButton.style.display = 'none';
+                    talentGrid.style.display = 'table';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="worksheet">
+        <h1>Contra Worksheet</h1>
+        
+        <!-- Event Information -->
+        <div class="event-info">
+            <div class="info-group">
+                <h3>Event Details</h3>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="date" id="date-input">
+                </div>
+                <div class="form-group">
+                    <label>Band name:</label>
+                    <input type="text" class="wide">
+                </div>
+                <div class="form-group">
+                    <label>Location:</label>
+                    <input type="text" value="Fulton" class="wide">
+                </div>
+                <div class="form-group">
+                    <label>Hall rental:</label>
+                    <input type="number" value="330">
+                </div>
+            </div>
+            
+            <div class="info-group">
+                <h3>Attendance</h3>
+                <div class="form-group">
+                    <label># paid attendees:</label>
+                    <input type="number">
+                </div>
+                <div class="form-group">
+                    <label># unpaid attendees:</label>
+                    <input type="number">
+                </div>
+                <div class="form-group">
+                    <label># newcomers:</label>
+                    <input type="number">
+                </div>
+                <div class="form-group">
+                    <label># 2nd dance cards:</label>
+                    <input type="number">
+                </div>
+            </div>
+            
+            <div class="info-group">
+                <h3>Staff</h3>
+                <div class="form-group">
+                    <label>CMIC:</label>
+                    <input type="text" class="wide">
+                </div>
+                <div class="form-group">
+                    <label>Door volunteer:</label>
+                    <input type="text" class="wide">
+                </div>
+                <div class="form-group">
+                    <label>Floor host:</label>
+                    <input type="text" class="wide">
+                </div>
+                <div class="form-group">
+                    <label>Raffle prize:</label>
+                    <input type="text" class="wide">
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+            <label>Notes (for spreadsheet):</label>
+            <textarea></textarea>
+        </div>
+
+        <!-- Cash Breakdown -->
+        <div class="section">
+            <h2>Cash Breakdown</h2>
+            <div class="note" style="margin-left: 0; margin-bottom: 15px;">Count all cash in box, including donations, memberships, starting cash</div>
+            
+            <div class="bill-breakdown">
+                <div class="bill-item">
+                    <label>$1:</label>
+                    <input type="number">
+                    <span class="amount">× $1 = $0</span>
+                </div>
+                <div class="bill-item">
+                    <label>$5:</label>
+                    <input type="number">
+                    <span class="amount">× $5 = $0</span>
+                </div>
+                <div class="bill-item">
+                    <label>$10:</label>
+                    <input type="number">
+                    <span class="amount">× $10 = $0</span>
+                </div>
+                <div class="bill-item">
+                    <label>$20:</label>
+                    <input type="number">
+                    <span class="amount">× $20 = $0</span>
+                </div>
+                <div class="bill-item">
+                    <label>$50:</label>
+                    <input type="number">
+                    <span class="amount">× $50 = $0</span>
+                </div>
+                <div class="bill-item">
+                    <label>$100:</label>
+                    <input type="number">
+                    <span class="amount">× $100 = $0</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Coins total:</label>
+                <input type="number" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Total cash in box:</label>
+                <span class="calculated">$0</span>
+            </div>
+        </div>
+
+        <!-- Other Payments -->
+        <div class="section">
+            <h2>Other Payment Methods</h2>
+              <div class="note" style="margin-left: 0; margin-bottom: 15px;">
+                Include donations & memberships
+            </div>
+
+            <div class="form-group">
+                <label>Total checks:</label>
+                <input type="number" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Total electronic:</label>
+                <input type="number" step="0.01">
+            </div>
+        </div>
+
+        <!-- Donations & Memberships -->
+        <div class="section">
+            <h2>Donations & Memberships</h2>
+            <div class="form-group">
+                <label>Total donations:</label>
+                <input type="number" step="0.01">
+            </div>
+            
+            <div class="form-group" style="margin-top: 25px;">
+                <label>Memberships:</label>
+            </div>
+            <div class="membership-row">
+                <input type="text" placeholder="Name">
+                <input type="number" placeholder="Amount" step="0.01">
+                <button class="add-btn">+</button>
+            </div>
+        </div>
+
+        <!-- Cash Processing -->
+        <div class="section">
+            <h2>Cash Processing</h2>
+            <div class="form-group">
+                <label>Starting cash:</label>
+                <input type="number" value="200" step="0.01">
+            </div>
+            
+            <div class="form-group" style="margin-top: 25px;">
+                <label>Petty cash expenses:</label>
+            </div>
+            <div class="expense-row">
+                <input type="text" placeholder="Item">
+                <input type="number" placeholder="Amount" step="0.01">
+                <button class="add-btn">+</button>
+            </div>
+        </div>
+
+        <!-- Financial Summary -->
+        <div class="section key-section">
+            <h2>Financial Summary</h2>
+            <div class="form-group">
+                <label>Total cash in box:</label>
+                <span class="key-output">$0</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Cash payments:</label>
+                <span class="calculated">$0</span>
+                <div class="note-left">(total minus starting)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Petty cash:</label>
+                <span class="key-output">$0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Checks:</label>
+                <span class="calculated">$0</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Electronic:</label>
+                <span class="calculated">$0</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Donations:</label>
+                <span class="calculated">$0</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Memberships:</label>
+                <span class="calculated">$0</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Total payments:</label>
+                <span class="calculated">$0</span>
+                <div class="note-left">(cash payments + checks + electronic)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Evening deposits:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(total cash in box + checks)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Admissions:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(total payments - donations - memberships)</div>
+            </div>
+        </div>
+
+
+        <!-- Talent Payment -->
+        <div class="section">
+            <h2>Talent Payment Calculations</h2>
+            <div class="note" style="margin-left: 0; margin-bottom: 15px;">
+                Total Pay = Travel + (Guarantee + Share). Share calculated after all travel entered.
+            </div>
+            
+            <div class="form-group">
+                <label>Sound person used our gear:</label>
+                <input type="checkbox">
+            </div>
+            
+            <div class="form-group">
+                <label>Talent guarantee:</label>
+                <input type="number" step="1" value="90" disabled>
+            </div>
+
+            <table class="talent-grid">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Travel</th>
+                        <th>$90 + Share</th>
+                        <th>Total Pay</th>
+                        <!-- <th>Initials</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="name"></td>
+                        <td>
+                            <select>
+                                <option>Sound</option>
+                                <option>Caller</option>
+                                <option>Musician</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="0.01"></td>
+                        <td class="calculated">$150</td>
+                        <td class="calculated">$150</td>
+                        <!-- <td><input type="text" class="initials"></td> -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="name"></td>
+                        <td>
+                            <select>
+                                <option>Caller</option>
+                                <option>Musician</option>
+                                <option>Sound</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="0.01"></td>
+                        <td class="calculated">$0</td>
+                        <td class="calculated">$0</td>
+                        <!-- <td><input type="text" class="initials"></td> -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="name"></td>
+                        <td>
+                            <select>
+                                <option>Musician</option>
+                                <option>Caller</option>
+                                <option>Sound</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="0.01"></td>
+                        <td class="calculated">$0</td>
+                        <td class="calculated">$0</td>
+                        <!-- <td><input type="text" class="initials"></td> -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="name"></td>
+                        <td>
+                            <select>
+                                <option>Musician</option>
+                                <option>Caller</option>
+                                <option>Sound</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="0.01"></td>
+                        <td class="calculated">$0</td>
+                        <td class="calculated">$0</td>
+                        <!-- <td><input type="text" class="initials"></td> -->
+                    </tr>
+                    <tr class="totals-row">
+                        <td></td>
+                        <td></td>
+                        <td class="calculated">Total: $0</td>
+                        <td class="calculated">Total: $0</td>
+                        <td class="calculated">Total: $150</td>
+                        <!-- <td></td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" class="add-talent-btn">+ Add Talent</button>
+
+            <div class="form-group" style="margin-top: 25px;">
+                <label>Talent pay basis:</label>
+                <span class="calculated">$0</span>
+                <div class="note-left">(admissions minus total travel; used to calculate shares)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Talent share:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(calculated based on talent pay basis, talent guarantee, # of musicians)</div>
+            </div>
+        </div>
+
+        <!-- Key Outputs -->
+        <div class="section key-section">
+            <h2>Final Calculations</h2>
+            <div class="form-group">
+                <label>PCDC profit:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(talent guarantee + talent share)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Dance profit/loss:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(admissions - total pay to talent - hall rental)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Check to PCDC:</label>
+                <span class="key-output">$0</span>
+                <div class="note-left">(cash payments - total pay to talent - petty cash)</div>
+            </div>
+            <div class="note-left"><strong>Confirm <em>Check to PCDC</em> amount == <em>remaining cash</em> (after paying talent and petty cash, excluding starting cash)</strong></div>
+        </div>
+
+        <!-- Final Verification -->
+        <!-- <div class="final-check">
+            <div class="form-group">
+                <label><strong>Cash verification:</strong></label>
+                <input type="checkbox">
+                <span style="margin-left: 10px;"><em>Remaining cash</em> matches <em>Check to PCDC</em> amount?</span>
+            </div>
+            <div class="note" style="margin-left: 0;">
+                (remaining cash = cash left after paying talent and petty cash, excluding starting cash)
+            </div>
+        </div> -->
+
+
+        <button type="button" class="add-talent-btn" id="generate">Generate final talent payment grid for signing...</button>
+
+        <div class="section" id="final-talent-grid" style="margin-top: 30px; display: none; width: 95%">
+            <h2>Talent Payments (final)</h2>
+            <table class="talent-grid">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Travel</th>
+                        <th>$90 + Share</th>
+                        <th>Total Pay</th>
+                        <th>Initials</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="talent-grid-output-name"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td><input type="text" class="initials"></td>
+                    </tr>
+                    <tr>
+                        <td class="talent-grid-output-name"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td><input type="text" class="initials"></td>
+                    </tr>
+                    <tr>
+                        <td class="talent-grid-output-name"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td><input type="text" class="initials"></td>
+                    </tr>
+                    <tr>
+                        <td class="talent-grid-output-name"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td class="talent-grid-output-number"></td>
+                        <td><input type="text" class="initials"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" disabled class="add-talent-btn">Submit</button>
+        </div>
+        
+    </div>
+</body>
+</html>
