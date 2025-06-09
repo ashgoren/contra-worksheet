@@ -263,6 +263,109 @@
         #generate {
             background: green;
         }
+
+        @media (max-width: 767px) {
+            body {
+                padding: 10px;
+            }
+            
+            .worksheet {
+                padding: 15px;
+            }
+            
+            /* Stack event info vertically */
+            .event-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            /* Make form groups stack vertically */
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-group label {
+                min-width: auto;
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            
+            .form-group input, .form-group textarea, .form-group select {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            /* Stack bill breakdown */
+            .bill-breakdown {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            /* Make talent grid scrollable horizontally */
+            .talent-grid {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .talent-grid thead,
+            .talent-grid tbody,
+            .talent-grid th,
+            .talent-grid td,
+            .talent-grid tr {
+                display: block;
+            }
+            
+            .talent-grid thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            .talent-grid tr {
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+                padding: 10px;
+                background: #f9f9f9;
+            }
+            
+            .talent-grid td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+                white-space: normal;
+            }
+            
+            .talent-grid td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+            
+            /* Adjust notes positioning */
+            .note, .note-left {
+                margin-left: 0;
+                margin-top: 8px;
+            }
+
+            /* Override the data-label content for totals row */
+
+            .totals-row td:nth-child(3):before {
+                content: "Travel";
+            }
+            .totals-row td:nth-child(4):before {
+                content: "$90 + Share";
+            }
+            .totals-row td:nth-child(5):before {
+                content: "Pay";
+            }
+        }
     </style>
 
     <script>
@@ -547,59 +650,59 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="text" class="name"></td>
-                        <td>
+                        <td data-label="Name"><input type="text" class="name"></td>
+                        <td data-label="Role">
                             <select>
                                 <option>Sound</option>
                                 <option>Caller</option>
                                 <option>Musician</option>
                             </select>
                         </td>
-                        <td><input type="number" step="0.01"></td>
-                        <td class="calculated">$150</td>
-                        <td class="calculated">$150</td>
+                        <td data-label="Travel"><input type="number" step="0.01"></td>
+                        <td data-label="$90 + Share"class="calculated">$150</td>
+                        <td data-label="Total Pay" class="calculated">$150</td>
                         <!-- <td><input type="text" class="initials"></td> -->
                     </tr>
                     <tr>
-                        <td><input type="text" class="name"></td>
-                        <td>
+                        <td data-label="Name"><input type="text" class="name"></td>
+                        <td data-label="Role">
                             <select>
                                 <option>Caller</option>
-                                <option>Musician</option>
                                 <option>Sound</option>
+                                <option>Musician</option>
                             </select>
                         </td>
-                        <td><input type="number" step="0.01"></td>
-                        <td class="calculated">$0</td>
-                        <td class="calculated">$0</td>
+                        <td data-label="Travel"><input type="number" step="0.01"></td>
+                        <td data-label="$90 + Share"class="calculated">$0</td>
+                        <td data-label="Total Pay" class="calculated">$0</td>
                         <!-- <td><input type="text" class="initials"></td> -->
                     </tr>
                     <tr>
-                        <td><input type="text" class="name"></td>
-                        <td>
+                        <td data-label="Name"><input type="text" class="name"></td>
+                        <td data-label="Role">
                             <select>
                                 <option>Musician</option>
-                                <option>Caller</option>
                                 <option>Sound</option>
+                                <option>Caller</option>
                             </select>
                         </td>
-                        <td><input type="number" step="0.01"></td>
-                        <td class="calculated">$0</td>
-                        <td class="calculated">$0</td>
+                        <td data-label="Travel"><input type="number" step="0.01"></td>
+                        <td data-label="$90 + Share"class="calculated">$0</td>
+                        <td data-label="Total Pay" class="calculated">$0</td>
                         <!-- <td><input type="text" class="initials"></td> -->
                     </tr>
                     <tr>
-                        <td><input type="text" class="name"></td>
-                        <td>
+                        <td data-label="Name"><input type="text" class="name"></td>
+                        <td data-label="Role">
                             <select>
                                 <option>Musician</option>
-                                <option>Caller</option>
                                 <option>Sound</option>
+                                <option>Caller</option>
                             </select>
                         </td>
-                        <td><input type="number" step="0.01"></td>
-                        <td class="calculated">$0</td>
-                        <td class="calculated">$0</td>
+                        <td data-label="Travel"><input type="number" step="0.01"></td>
+                        <td data-label="$90 + Share"class="calculated">$0</td>
+                        <td data-label="Total Pay" class="calculated">$0</td>
                         <!-- <td><input type="text" class="initials"></td> -->
                     </tr>
                     <tr class="totals-row">
@@ -681,36 +784,36 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="talent-grid-output-name"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td><input type="text" class="initials"></td>
+                        <td data-label="Name" class="talent-grid-output-name"></td>
+                        <td data-label="Role" class="talent-grid-output-number"></td>
+                        <td data-label="Travel" class="talent-grid-output-number"></td>
+                        <td data-label="$90 + Share" class="talent-grid-output-number"></td>
+                        <td data=label="Total Pay" class="talent-grid-output-number"></td>
+                        <td data-label="Initials"><input type="text" class="initials"></td>
                     </tr>
                     <tr>
-                        <td class="talent-grid-output-name"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td><input type="text" class="initials"></td>
+                        <td data-label="Name" class="talent-grid-output-name"></td>
+                        <td data-label="Role" class="talent-grid-output-number"></td>
+                        <td data-label="Travel" class="talent-grid-output-number"></td>
+                        <td data-label="$90 + Share" class="talent-grid-output-number"></td>
+                        <td data=label="Total Pay" class="talent-grid-output-number"></td>
+                        <td data-label="Initials"><input type="text" class="initials"></td>
                     </tr>
                     <tr>
-                        <td class="talent-grid-output-name"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td><input type="text" class="initials"></td>
+                        <td data-label="Name" class="talent-grid-output-name"></td>
+                        <td data-label="Role" class="talent-grid-output-number"></td>
+                        <td data-label="Travel" class="talent-grid-output-number"></td>
+                        <td data-label="$90 + Share" class="talent-grid-output-number"></td>
+                        <td data=label="Total Pay" class="talent-grid-output-number"></td>
+                        <td data-label="Initials"><input type="text" class="initials"></td>
                     </tr>
                     <tr>
-                        <td class="talent-grid-output-name"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td class="talent-grid-output-number"></td>
-                        <td><input type="text" class="initials"></td>
+                        <td data-label="Name" class="talent-grid-output-name"></td>
+                        <td data-label="Role" class="talent-grid-output-number"></td>
+                        <td data-label="Travel" class="talent-grid-output-number"></td>
+                        <td data-label="$90 + Share" class="talent-grid-output-number"></td>
+                        <td data=label="Total Pay" class="talent-grid-output-number"></td>
+                        <td data-label="Initials"><input type="text" class="initials"></td>
                     </tr>
                 </tbody>
             </table>
