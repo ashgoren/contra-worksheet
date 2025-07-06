@@ -1,34 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useForm } from 'react-hook-form';
+import { Container, TextField, Typography } from '@mui/material';
+import type { WorksheetFormData } from './types/worksheet';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { register, handleSubmit, watch } = useForm<WorksheetFormData>({
+    defaultValues: {
+      date: new Date().toISOString().split('T')[0],
+      band: '',
+      location: 'Fulton',
+      rent: 330,
+    }
+  });
+
+  const onSubmit = (data: WorksheetFormData) => {
+    console.log('Submitted!', data);
+  };
+
+  // for dev purposes, but re-renders entire form on every change
+  const formData = watch();
+  console.log('Current form data:', formData);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Container maxWidth='xs' sx={{ mt: 4 }}>
+      <Typography variant='h4' component='h1' gutterBottom>
+        Worksheet
+      </Typography>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          {...register('date')}
+          type='date'
+          label='Date'
+          fullWidth
+          margin='normal'
+        />
+        <TextField
+          {...register('band')}
+          label='Band'
+          fullWidth
+          margin='normal'
+        />
+        <TextField
+          {...register('location')}
+          label='Location'
+          fullWidth
+          margin='normal'
+        />
+        <TextField
+          {...register('rent', { valueAsNumber: true })}
+          label='Rent'
+          type='number'
+          fullWidth
+          margin='normal'
+        />
+      </form>
+
+    </Container>
   )
 }
 
