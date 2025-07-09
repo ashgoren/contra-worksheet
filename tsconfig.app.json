@@ -27,7 +27,13 @@
     "paths": {
       "src/*": ["src/*"],
       "components/*": ["src/components/*"],
-      "types/*": ["src/types/*"]
+      "types/*": ["src/types/*"],
+      "sections/*": ["src/components/sections/*"],
+      "hooks/*": ["src/hooks/*"],
+      "utils/*": ["src/utils/*"],
+      "services/*": ["src/services/*"],
+      "contexts/*": ["src/contexts/*"],
+      "constants/*": ["src/constants/*"]
     }
   },
   "include": ["src"]

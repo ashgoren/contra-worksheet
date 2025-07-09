@@ -18,6 +18,12 @@ export default defineConfig({
       src: "/src",
       components: "/src/components",
       types: "/src/types",
+      sections: "/src/components/sections",
+      hooks: "/src/hooks",
+      utils: "/src/utils",
+      services: "/src/services",
+      contexts: "/src/contexts",
+      constants: "/src/constants",
     }
   }
 })
