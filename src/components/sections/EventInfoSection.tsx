@@ -1,125 +1,185 @@
-import { useForm } from 'react-hook-form';
-import { Container, TextField, Typography, Grid, Paper, Box } from '@mui/material';
-import type { WorksheetFormData } from 'types/worksheet';
+import { TextField, Typography, Grid, Paper, Box } from '@mui/material';
+import { Controller, type Control } from 'react-hook-form';
+import type { WorksheetFormData } from 'src/types/worksheet';
 
-export const EventInfoSection = () => {
-  const { register, handleSubmit, watch } = useForm<WorksheetFormData>({
-    defaultValues: {
-      date: new Date().toISOString().split('T')[0],
-      band: '',
-      location: 'Fulton',
-      rent: 330,
-    }
-  });
+interface EventInfoSectionProps {
+  control: Control<WorksheetFormData>;
+}
 
-  const onSubmit = (data: WorksheetFormData) => {
-    console.log('Submitted!', data);
-  };
-
-  // for dev purposes, but re-renders entire form on every change
-  const formData = watch();
-  console.log('Current form data:', formData);
-
+export const EventInfoSection = ({ control }: EventInfoSectionProps) => {
   return (
-    <Container maxWidth='lg' sx={{ mt: 4 }}>
-      <Typography variant='h4' component='h1' gutterBottom align='center'>
-        PCDC Contra Worksheet
+    <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
+      <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
+        Event Information
       </Typography>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-          <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
-            Event Information
-          </Typography>
-
-          <Grid container spacing={3}>
-            {/* Column 1: Event Details */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1 }}>
-                  Event Details
-                </Typography>
+      <Grid container spacing={3}>
+        {/* Column 1: Event Details */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1 }}>
+              Event Details
+            </Typography>
+            <Controller
+              name='date'
+              control={control}
+              render={({ field }) => (
                 <TextField
-                  {...register('date')}
+                  {...field}
                   type='date'
                   label='Date'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='band'
+              control={control}
+              render={({ field }) => (
                 <TextField
-                  {...register('band')}
+                  {...field}
                   label='Band Name'
                   size='small'
                 />
+              )}
+            />
+
+            <Controller
+              name='location'
+              control={control}
+              render={({ field }) => (
                 <TextField
-                  {...register('location')}
+                  {...field}
                   label='Location'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='rent'
+              control={control}
+              render={({ field }) => (
                 <TextField
-                  {...register('rent', { valueAsNumber: true })}
+                  {...field}
                   label='Hall Rental'
                   type='number'
                   size='small'
                 />
-              </Box>
-            </Grid>
+              )}
+            />
+          </Box>
+        </Grid>
 
-            {/* Column 2: Attendance */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1, mt: { xs: 3, md: 0 } }}>
-                  Attendance
-                </Typography>
+        {/* Column 2: Attendance */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1, mt: { xs: 3, md: 0 } }}>
+              Attendance
+            </Typography>
+            <Controller
+              name='paidAttendees'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='# Paid Attendees'
                   type='number'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='unpaidAttendees'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='# Unpaid Attendees'
                   type='number'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='newcomers'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='# Newcomers'
                   type='number'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='secondDanceCards'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='# 2nd Dance Cards'
                   type='number'
                   size='small'
                 />
-              </Box>
-            </Grid>
+              )}
+            />
+          </Box>
+        </Grid>
 
-            {/* Column 3: Staff */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1, mt: { xs: 3, md: 0 } }}>
-                  Staff
-                </Typography>
+        {/* Column 3: Staff */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant='subtitle2' sx={{ fontWeight: 'bold', mb: 1, mt: { xs: 3, md: 0 } }}>
+              Staff
+            </Typography>
+            <Controller
+              name='cmic'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='CMIC'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='doorVolunteer'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='Door Volunteer'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='floorHost'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='Floor Host'
                   size='small'
                 />
+              )}
+            />
+            <Controller
+              name='rafflePrize'
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   label='Raffle Prize'
                   size='small'
                 />
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
-      </form>
-    </Container>
-  )
+              )}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
+  );
 };

@@ -5,6 +5,15 @@
     band: string;
     location: string;
     rent: number;
+    paidAttendees: number;
+    unpaidAttendees: number;
+    newcomers: number;
+    secondDanceCards: number;
+    cmic: string;
+    doorVolunteer: string;
+    floorHost: string;
+    rafflePrize: string;
+    notes: string;
 
     // Cash
     ones: number;
