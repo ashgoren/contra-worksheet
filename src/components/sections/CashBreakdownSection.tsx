@@ -1,6 +1,6 @@
-import { Grid, Paper, Typography, InputAdornment } from '@mui/material';
+import { Grid, Paper, Typography, InputAdornment, Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { SectionHeader } from 'ui';
+import { SectionHeader, StandoutBox } from 'ui';
 import { RHFTextField } from 'inputs';
 import type { WorksheetFormData } from 'src/types/worksheet';
 
@@ -50,9 +50,13 @@ export const CashBreakdownSection = () => {
           </InputAdornment>
         </Grid>
       </Grid>
-      <Typography variant='body1' sx={{ mt: 2 }}>
-        Total cash in box: $ {allValuesPresent ? totalCash : ''}
-      </Typography>
+      <Box sx={{ mt: 2 }}>
+        <StandoutBox>
+          <Typography variant='body1'>
+            Total cash in box: {allValuesPresent ? `$ ${totalCash}` : ''}
+          </Typography>
+        </StandoutBox>
+      </Box>
     </Paper>
   );
 };
