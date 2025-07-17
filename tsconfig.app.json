@@ -33,7 +33,9 @@
       "utils/*": ["src/utils/*"],
       "services/*": ["src/services/*"],
       "contexts/*": ["src/contexts/*"],
-      "constants/*": ["src/constants/*"]
+      "constants/*": ["src/constants/*"],
+      "inputs": ["src/components/inputs.tsx"],
+      "ui": ["src/components/ui.tsx"],
     }
   },
   "include": ["src"]

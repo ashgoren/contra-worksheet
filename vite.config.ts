@@ -1,3 +1,5 @@
+// README: Also update aliases in tsconfig.app.json if you change them here.
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import eslint from 'vite-plugin-eslint2'
@@ -24,6 +26,8 @@ export default defineConfig({
       services: "/src/services",
       contexts: "/src/contexts",
       constants: "/src/constants",
+      inputs: "/src/components/inputs",
+      ui: "/src/components/ui",
     }
   }
 })
