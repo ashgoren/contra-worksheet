@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { EventInfoSection } from 'sections/EventInfoSection';
 import type { WorksheetFormData } from 'types/worksheet';
@@ -23,17 +23,13 @@ function App() {
   console.log('Current form data:', formData);
 
   return (
-    <Layout>
-      <Container maxWidth='lg' sx={{ mt: 4 }}>
-        <Typography variant='h4' component='h1' gutterBottom align='center'>
-          PCDC Contra Worksheet
-        </Typography>
-
+    <Container maxWidth='lg' sx={{ mt: 4 }}>
+      <Layout>
         <form onSubmit={handleSubmit(onSubmit)}>
           <EventInfoSection control={control} />
         </form>
-      </Container>
-    </Layout>
+      </Layout>
+    </Container>
   )
 }
 

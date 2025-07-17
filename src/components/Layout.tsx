@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { createTheme, ThemeProvider, type Theme } from '@mui/material/styles';
-import { CssBaseline, useMediaQuery } from '@mui/material';
+import { CssBaseline, useMediaQuery, Box, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -38,20 +38,28 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {USE_SYSTEM_COLOR_MODE && <ColorModeToggle theme={theme} toggleColorMode={toggleColorMode} />}
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Box sx={{ flex: 1 }} /> {/* spacer */}
+        <Title />
+        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <ColorModeToggle theme={theme} toggleColorMode={toggleColorMode} />
+        </Box>
+      </Box>
+
       {children}
     </ThemeProvider>
   );
 }
 
-interface ColorModeToggleProps {
-  theme: Theme;
-  toggleColorMode: () => void;
-}
+const Title = () => (
+  <Typography variant='h4' component='h1'>
+    PCDC Contra Worksheet
+  </Typography>
+);
 
-const ColorModeToggle = ({ theme, toggleColorMode }: ColorModeToggleProps) => {
+const ColorModeToggle = ({ theme, toggleColorMode }: { theme: Theme; toggleColorMode: () => void; }) => {
   return (
-    <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color='inherit'>
+    <IconButton sx={{ mr: 0 }} onClick={toggleColorMode} color='inherit'>
       {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
     </IconButton>
   );
