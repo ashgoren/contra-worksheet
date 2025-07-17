@@ -5,10 +5,10 @@
     band: string;
     location: string;
     rent: number;
-    paidAttendees: number;
-    unpaidAttendees: number;
-    newcomers: number;
-    secondDanceCards: number;
+    paidAttendees: number | null;
+    unpaidAttendees: number | null;
+    newcomers: number | null;
+    secondDanceCards: number | null;
     cmic: string;
     doorVolunteer: string;
     floorHost: string;
@@ -16,10 +16,13 @@
     notes: string;
 
     // Cash
-    ones: number;
-    fives: number;
-    tens: number;
-    coins: number;
+    ones: number | null;
+    fives: number | null;
+    tens: number | null;
+    twenties: number | null;
+    fifties: number | null;
+    hundreds: number | null;
+    coins: number | null;
     startingCash: number;
 
   }

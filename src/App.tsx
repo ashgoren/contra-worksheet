@@ -2,6 +2,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { EventInfoSection } from 'sections/EventInfoSection';
+import { CashBreakdownSection } from './components/sections/CashBreakdownSection';
 import type { WorksheetFormData } from 'types/worksheet';
 
 function App() {
@@ -11,6 +12,22 @@ function App() {
       band: '',
       location: 'Fulton',
       rent: 330,
+      paidAttendees: null,
+      unpaidAttendees: null,
+      newcomers: null,
+      secondDanceCards: null,
+      cmic: '',
+      doorVolunteer: '',
+      floorHost: '',
+      rafflePrize: '',
+      notes: '',
+      ones: null,
+      fives: null,
+      tens: null,
+      twenties: null,
+      fifties: null,
+      hundreds: null,
+      coins: null,
     }
   });
 
@@ -28,6 +45,7 @@ function App() {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <EventInfoSection />
+            <CashBreakdownSection />
           </form>
         </FormProvider>
       </Layout>

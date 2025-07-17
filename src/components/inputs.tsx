@@ -19,6 +19,15 @@ export const RHFTextField = ({ name, label, type = 'text', size = 'small', ...re
           label={label}
           type={type}
           size={size}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (type === 'number') {
+              field.onChange(value === '' ? null : Number(value));
+            } else {
+              field.onChange(value);
+            }
+          }}
+          value={field.value ?? ''}
           {...rest}
         />
       )}

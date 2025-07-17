@@ -1,4 +1,4 @@
-import { Grid, Paper, Box } from '@mui/material';
+import { Grid, Paper, Box, InputAdornment } from '@mui/material';
 import { SectionHeader, ColumnHeader } from 'ui';
 import { RHFTextField } from 'inputs';
 
@@ -15,7 +15,11 @@ export const EventInfoSection = () => {
             <RHFTextField name='date' label='Date' type='date' />
             <RHFTextField name='band' label='Band Name' />
             <RHFTextField name='location' label='Location' />
-            <RHFTextField name='rent' label='Hall Rental' type='number' />
+            <RHFTextField name='rent' label='Hall Rental' type='number' slotProps={{
+              input: {
+                startAdornment: <InputAdornment position='start'>$</InputAdornment>
+              }
+            }} />
           </Box>
         </Grid>
 
