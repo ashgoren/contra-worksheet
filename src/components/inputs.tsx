@@ -1,13 +1,14 @@
-import { Controller, type Control } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
 import { TextField, type TextFieldProps } from '@mui/material';
 import type { WorksheetFormData } from 'src/types/worksheet';
 
 type RHFTextFieldProps = Omit<TextFieldProps, 'name'> & {
   name: keyof WorksheetFormData;
-  control: Control<WorksheetFormData>;
 };
 
-export const RHFTextField = ({ name, control, label, type = 'text', size = 'small', ...rest }: RHFTextFieldProps) => {
+export const RHFTextField = ({ name, label, type = 'text', size = 'small', ...rest }: RHFTextFieldProps) => {
+  const { control } = useFormContext();
+
   return (
     <Controller
       name={name}
