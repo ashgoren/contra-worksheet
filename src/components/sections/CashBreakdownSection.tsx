@@ -29,7 +29,7 @@ export const CashBreakdownSection = () => {
         Count all cash in box, including donations, memberships, starting cash
       </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <CashField name='ones' denomination={1} />
         <CashField name='fives' denomination={5} />
         <CashField name='tens' denomination={10} />
@@ -38,12 +38,12 @@ export const CashBreakdownSection = () => {
         <CashField name='hundreds' denomination={100} />
         <Grid size={{ xs: 12, sm: 4 }}>
           <InputAdornment position='start'>
-            <RHFTextField name='coins' label='Coins total (in dollars)' type='number' fullWidth slotProps={{
+            <RHFTextField name='coins' label='Coins total (in dollars)' placeholder='Coins total (in dollars)' type='number' fullWidth slotProps={{
               input: {
                 startAdornment: <InputAdornment position='start'>$</InputAdornment>
               },
               htmlInput: {
-                step: '0.01',
+                step: '0.01'
               }
             }} 
             />
@@ -67,8 +67,14 @@ const CashField = ({ name, denomination }: { name: keyof WorksheetFormData; deno
       <RHFTextField
         name={name}
         label={<><strong>{denomination}</strong> ({name})</>}
+        placeholder={`of $${denomination} bills`}
         type='number'
         fullWidth
+        slotProps={{
+          input: {
+            startAdornment: <InputAdornment position='start'>#</InputAdornment>
+          }
+        }}
       />
     </Grid>
   );
