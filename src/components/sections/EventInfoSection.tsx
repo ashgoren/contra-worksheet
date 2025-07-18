@@ -1,6 +1,6 @@
-import { Grid, Paper, Box, InputAdornment } from '@mui/material';
+import { Grid, Paper, Box } from '@mui/material';
 import { SectionHeader, ColumnHeader } from 'ui';
-import { RHFTextField } from 'inputs';
+import { RHFTextField, RHFAdornedField } from 'inputs';
 
 export const EventInfoSection = () => {
   return (
@@ -15,11 +15,7 @@ export const EventInfoSection = () => {
             <RHFTextField name='date' label='Date' type='date' />
             <RHFTextField name='band' label='Band Name' />
             <RHFTextField name='location' label='Location' />
-            <RHFTextField name='rent' label='Hall Rental' type='number' slotProps={{
-              input: {
-                startAdornment: <InputAdornment position='start'>$</InputAdornment>
-              }
-            }} />
+            <RHFAdornedField name='rent' label='Hall Rental' adornment='$' fullWidth />
           </Box>
         </Grid>
 
@@ -27,10 +23,10 @@ export const EventInfoSection = () => {
         <Grid size={{ xs: 12, md: 4 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <ColumnHeader title='Attendance' />
-            <RHFTextField name='paidAttendees' label='# Paid Attendees' type='number' />
-            <RHFTextField name='unpaidAttendees' label='# Unpaid Attendees' type='number' />
-            <RHFTextField name='newcomers' label='# Newcomers' type='number' />
-            <RHFTextField name='secondDanceCards' label='# 2nd Dance Cards' type='number' />
+            <RHFAdornedField name='paidAttendees' label='Paid Attendees' adornment='#' fullWidth />
+            <RHFAdornedField name='unpaidAttendees' label='Unpaid Attendees' adornment='#' fullWidth />
+            <RHFAdornedField name='newcomers' label='Newcomers' adornment='#' fullWidth />
+            <RHFAdornedField name='secondDanceCards' label='2nd Dance Cards' adornment='#' fullWidth />
           </Box>
         </Grid>
 

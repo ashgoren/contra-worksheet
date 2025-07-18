@@ -1,8 +1,7 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
-import { EventInfoSection } from 'sections/EventInfoSection';
-import { CashBreakdownSection } from './components/sections/CashBreakdownSection';
+import { EventInfoSection, CashBreakdownSection } from 'components/sections';
 import type { WorksheetFormData } from 'types/worksheet';
 
 function App() {
@@ -36,8 +35,8 @@ function App() {
   };
 
   // for dev purposes, but re-renders entire form on every change
-  const formData = methods.watch();
-  console.log('Current form data:', formData);
+  // const formData = methods.watch();
+  // console.log('Current form data:', formData);
 
   return (
     <Container maxWidth='lg' sx={{ mt: 4 }}>

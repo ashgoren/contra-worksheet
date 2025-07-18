@@ -1,7 +1,7 @@
-import { Grid, Paper, Typography, InputAdornment, Box } from '@mui/material';
+import { Grid, Paper, Typography, Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { SectionHeader, StandoutBox } from 'ui';
-import { RHFTextField } from 'inputs';
+import { RHFAdornedField } from 'inputs';
 import type { WorksheetFormData } from 'src/types/worksheet';
 
 export const CashBreakdownSection = () => {
@@ -9,7 +9,7 @@ export const CashBreakdownSection = () => {
   const [ones, fives, tens, twenties, fifties, hundreds, coins] = watch([
     'ones', 'fives', 'tens', 'twenties', 'fifties', 'hundreds', 'coins'
   ]);
-  console.log('Current cash breakdown:', { ones, fives, tens, twenties, fifties, hundreds, coins });
+  // console.log('Current cash breakdown:', { ones, fives, tens, twenties, fifties, hundreds, coins });
 
   const allValuesPresent = [ones, fives, tens, twenties, fifties, hundreds, coins].every(v => v !== null);
   const totalCash = (
@@ -30,27 +30,21 @@ export const CashBreakdownSection = () => {
       </Typography>
 
       <Grid container spacing={3}>
-        <CashField name='ones' denomination={1} />
-        <CashField name='fives' denomination={5} />
-        <CashField name='tens' denomination={10} />
-        <CashField name='twenties' denomination={20} />
-        <CashField name='fifties' denomination={50} />
-        <CashField name='hundreds' denomination={100} />
+        <CashField name='ones' />
+        <CashField name='fives' />
+        <CashField name='tens' />
+        <CashField name='twenties' />
+        <CashField name='fifties' />
+        <CashField name='hundreds' />
         <Grid size={{ xs: 12, sm: 4 }}>
-          <InputAdornment position='start'>
-            <RHFTextField name='coins' label='Coins total (in dollars)' placeholder='Coins total (in dollars)' type='number' fullWidth slotProps={{
-              input: {
-                startAdornment: <InputAdornment position='start'>$</InputAdornment>
-              },
-              htmlInput: {
-                step: '0.01'
-              }
-            }} 
-            />
-          </InputAdornment>
+          <RHFAdornedField name='coins' label='Coins Total' adornment='$' fullWidth slotProps={{
+            htmlInput: {
+              step: '0.01'
+            }
+          }} />
         </Grid>
       </Grid>
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 3 }}>
         <StandoutBox>
           <Typography variant='body1'>
             Total cash in box: {allValuesPresent ? `$ ${totalCash}` : ''}
@@ -61,21 +55,10 @@ export const CashBreakdownSection = () => {
   );
 };
 
-const CashField = ({ name, denomination }: { name: keyof WorksheetFormData; denomination: number; }) => {
+const CashField = ({ name }: { name: keyof WorksheetFormData; }) => {
   return (
     <Grid size={{ xs: 12, sm: 4 }}>
-      <RHFTextField
-        name={name}
-        label={<><strong>{denomination}</strong> ({name})</>}
-        placeholder={`of $${denomination} bills`}
-        type='number'
-        fullWidth
-        slotProps={{
-          input: {
-            startAdornment: <InputAdornment position='start'>#</InputAdornment>
-          }
-        }}
-      />
+      <RHFAdornedField name={name} label={<strong>{name}</strong>} adornment='#' fullWidth />
     </Grid>
   );
 };
