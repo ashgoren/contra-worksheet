@@ -25,4 +25,7 @@
     coins: number | null;
     startingCash: number;
 
+    // Other payment methods
+    checks: number | null;
+    electronic: number | null;
   }
