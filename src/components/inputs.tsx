@@ -1,13 +1,14 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { Box, Stack, Typography, TextField, type TextFieldProps } from '@mui/material';
-import type { WorksheetFormData } from 'src/types/worksheet';
+import type { Path, FieldValues } from 'react-hook-form';
 
-interface RHFTextFieldProps extends Omit<TextFieldProps, 'name'> {
-  name: keyof WorksheetFormData;
+export interface RHFTextFieldProps<TFieldValues extends FieldValues>
+  extends Omit<TextFieldProps, 'name' | 'defaultValue'> {
+    name: Path<TFieldValues>;
 }
-export const RHFTextField = ({ name, label, type = 'text', size = 'small', ...rest }: RHFTextFieldProps) => {
-  const { control } = useFormContext();
 
+export const RHFTextField = <TFieldValues extends FieldValues>({ name, label, type = 'text', size = 'small', ...rest }: RHFTextFieldProps<TFieldValues>) => {
+  const { control } = useFormContext();
   return (
     <Controller
       name={name}
@@ -34,11 +35,12 @@ export const RHFTextField = ({ name, label, type = 'text', size = 'small', ...re
   );
 }
 
-interface RHFAdornedFieldProps extends Omit<RHFTextFieldProps, 'type'> {
-  adornment: string;
-  adornmentWidth?: string | number;
+interface RHFAdornedFieldProps<TFieldValues extends FieldValues>
+  extends Omit<RHFTextFieldProps<TFieldValues>, 'type'> {
+    adornment: string;
+    adornmentWidth?: string | number;
 }
-export const RHFAdornedField = ({ name, label, adornment, adornmentWidth, ...rest }: RHFAdornedFieldProps) => {
+export const RHFAdornedField = <TFieldValues extends FieldValues>({ name, label, adornment, adornmentWidth, ...rest }: RHFAdornedFieldProps<TFieldValues>) => {
   return (
     <Stack direction='row' alignItems='center'>
       <Box sx={{
