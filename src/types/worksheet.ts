@@ -1,5 +1,4 @@
   export interface WorksheetFormData {
-
     // Basics
     date: string;
     band: string;
@@ -28,4 +27,8 @@
     // Other payment methods
     checks: number | null;
     electronic: number | null;
+
+    // Donations & memberships
+    donations: number | null;
+    memberships: { name: string; amount: number | null }[];
   }
