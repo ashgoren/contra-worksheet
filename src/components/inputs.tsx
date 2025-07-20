@@ -36,11 +36,13 @@ export const RHFTextField = ({ name, label, type = 'text', size = 'small', ...re
 
 interface RHFAdornedFieldProps extends Omit<RHFTextFieldProps, 'type'> {
   adornment: string;
+  adornmentWidth?: string | number;
 }
-export const RHFAdornedField = ({ name, label, adornment,...rest }: RHFAdornedFieldProps) => {
+export const RHFAdornedField = ({ name, label, adornment, adornmentWidth, ...rest }: RHFAdornedFieldProps) => {
   return (
     <Stack direction='row' alignItems='center'>
       <Box sx={{
+        minWidth: adornmentWidth || 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
