@@ -2,6 +2,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { EventInfoSection, CashBreakdownSection, OtherPaymentMethodsSection, DonationMembershipSection, CashProcessingSection, FinancialSummary } from 'components/sections';
+import { CashProvider } from 'providers/CashProvider';
 import type { WorksheetFormData } from 'types/worksheet';
 
 function App() {
@@ -46,14 +47,16 @@ function App() {
     <Container maxWidth='lg' sx={{ mt: 4 }}>
       <Layout>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <EventInfoSection />
-            <CashBreakdownSection />
-            <OtherPaymentMethodsSection />
-            <DonationMembershipSection />
-            <CashProcessingSection />
-            <FinancialSummary />
-          </form>
+          <CashProvider>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <EventInfoSection />
+              <CashBreakdownSection />
+              <OtherPaymentMethodsSection />
+              <DonationMembershipSection />
+              <CashProcessingSection />
+              <FinancialSummary />
+            </form>
+          </CashProvider>
         </FormProvider>
       </Layout>
     </Container>

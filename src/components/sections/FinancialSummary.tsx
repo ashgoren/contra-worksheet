@@ -1,7 +1,10 @@
 import { Paper, Box, Typography, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { SectionHeader } from 'ui';
+import { useCashContext } from 'hooks/useCashContext';
 
 export const FinancialSummary = () => {
+  const { totalCashInBox } = useCashContext();
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Financial Summary' />
@@ -12,16 +15,16 @@ export const FinancialSummary = () => {
       }}>
         <Table>
           <TableBody sx={{ '& .MuiTableRow-root:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
-            <SummaryTableRow label='Total Cash In Box' value='$0' />
-            <SummaryTableRow label='Cash Payments' value='$0' description='total minus starting' />
-            <SummaryTableRow label='Misc Expenses' value='$0' />
-            <SummaryTableRow label='Checks' value='$0' />
-            <SummaryTableRow label='Electronic' value='$0' />
-            <SummaryTableRow label='Donations' value='$0' />
-            <SummaryTableRow label='Memberships' value='$0' />
-            <SummaryTableRow label='Total Payments' value='$0' description='cash payments + checks + electronic' />
-            <SummaryTableRow label='Evening Deposits' value='$0' description='total cash in box + checks' />
-            <SummaryTableRow label='Admissions' value='$0' description='total payments - donations - memberships' />
+            <SummaryTableRow label='Total Cash In Box' value={totalCashInBox} />
+            <SummaryTableRow label='Cash Payments' value={null} description='total minus starting' />
+            <SummaryTableRow label='Misc Expenses' value={null} />
+            <SummaryTableRow label='Checks' value={null} />
+            <SummaryTableRow label='Electronic' value={null} />
+            <SummaryTableRow label='Donations' value={null} />
+            <SummaryTableRow label='Memberships' value={null} />
+            <SummaryTableRow label='Total Payments' value={null} description='cash payments + checks + electronic' />
+            <SummaryTableRow label='Evening Deposits' value={null} description='total cash in box + checks' />
+            <SummaryTableRow label='Admissions' value={null} description='total payments - donations - memberships' />
           </TableBody>
         </Table>
       </Box>
@@ -29,7 +32,7 @@ export const FinancialSummary = () => {
   )
 };
 
-const SummaryTableRow = ({ label, value, description }: { label: string; value: string; description?: string }) => (
+const SummaryTableRow = ({ label, value, description }: { label: string; value: number | null; description?: string }) => (
   <TableRow>
     <TableCell>
       <Box>
@@ -41,8 +44,8 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
         )}
       </Box>
     </TableCell>
-    <TableCell align='right' sx={{ fontWeight: 'bold', pr: { xs: 2, sm: 4 } }}>
-      {value}
+    <TableCell align='right' sx={{ fontSize: '1.2rem', pr: { xs: 2, sm: 4 } }}>
+      {value ? (Number.isInteger(value) ? value : value.toFixed(2)) : '...'}
     </TableCell>
   </TableRow>
 );

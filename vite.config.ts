@@ -25,6 +25,7 @@ export default defineConfig({
       utils: "/src/utils",
       services: "/src/services",
       contexts: "/src/contexts",
+      providers: "/src/providers",
       constants: "/src/constants",
       inputs: "/src/components/inputs",
       ui: "/src/components/ui",

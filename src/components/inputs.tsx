@@ -65,6 +65,7 @@ export const RHFAdornedField = <TFieldValues extends FieldValues>({ name, label,
         name={name}
         label={label}
         type='number'
+        slotProps={{ htmlInput: { min: 0 } }}
         sx={{ '& .MuiOutlinedInput-root': { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } }}
         {...rest}
       />
