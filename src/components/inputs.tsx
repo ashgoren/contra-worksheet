@@ -17,12 +17,13 @@ export const RHFTextField = <TFieldValues extends FieldValues>({ name, label, ty
         <TextField
           {...field}
           label={label}
-          type={type}
+          type={type === 'number' ? 'text' : type}
           size={size}
           onChange={(e) => {
-            const value = e.target.value;
+            const { value } = e.target;
             if (type === 'number') {
-              field.onChange(value === '' ? null : Number(value));
+              const isUnsignedFloat = /^[0-9]*\.?[0-9]*$/.test(value);
+              if (isUnsignedFloat) field.onChange(value);
             } else {
               field.onChange(value);
             }
@@ -65,7 +66,7 @@ export const RHFAdornedField = <TFieldValues extends FieldValues>({ name, label,
         name={name}
         label={label}
         type='number'
-        slotProps={{ htmlInput: { min: 0 } }}
+        slotProps={{ htmlInput: { inputMode: 'decimal' } }}
         sx={{ '& .MuiOutlinedInput-root': { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } }}
         {...rest}
       />

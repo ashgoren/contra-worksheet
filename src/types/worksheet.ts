@@ -15,13 +15,13 @@
     notes: string;
 
     // Cash
-    ones: number | null;
-    fives: number | null;
-    tens: number | null;
-    twenties: number | null;
-    fifties: number | null;
-    hundreds: number | null;
-    coins: number | null;
+    ones: string;
+    fives: string;
+    tens: string;
+    twenties: string;
+    fifties: string;
+    hundreds: string;
+    coins: string;
 
     // Other payment methods
     checks: number | null;

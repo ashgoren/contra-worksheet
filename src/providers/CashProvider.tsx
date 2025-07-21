@@ -10,15 +10,15 @@ const useCash = () => {
     'ones', 'fives', 'tens', 'twenties', 'fifties', 'hundreds', 'coins'
   ]);
 
-  const allValuesEntered = [ones, fives, tens, twenties, fifties, hundreds, coins].every(v => v !== null);
+  const allValuesEntered = [ones, fives, tens, twenties, fifties, hundreds, coins].every(v => v !== '');
   const total =
-    (coins || 0) +
-    (ones || 0) +
-    (fives || 0) * 5 +
-    (tens || 0) * 10 +
-    (twenties || 0) * 20 +
-    (fifties || 0) * 50 +
-    (hundreds || 0) * 100;
+    (Number(coins) || 0) +
+    (Number(ones) || 0) +
+    (Number(fives) || 0) * 5 +
+    (Number(tens) || 0) * 10 +
+    (Number(twenties) || 0) * 20 +
+    (Number(fifties) || 0) * 50 +
+    (Number(hundreds) || 0) * 100;
 
   return { totalCashInBox: allValuesEntered ? total : null };
 };

@@ -32,9 +32,7 @@ export const CashBreakdownSection = () => {
         <RHFAdornedField name='hundreds' label='Hundreds' adornment="100's" adornmentWidth='70px' fullWidth />
       </Grid>
       <Grid size={{ xs: 12, sm: 4 }}>
-        <RHFAdornedField name='coins' label='Coins Total' adornment='$' fullWidth slotProps={{
-          htmlInput: { step: '0.01', min: 0 }
-        }} />
+        <RHFAdornedField name='coins' label='Coins Total' adornment='$' fullWidth />
       </Grid>
     </Grid>
     <Box sx={{ mt: 3 }}>
