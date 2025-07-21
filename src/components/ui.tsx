@@ -6,6 +6,12 @@ export const SectionHeader = ({ title }: { title: string }) => (
   </Typography>
 );
 
+export const Subtitle = ({ title }: { title: string }) => (
+  <Typography variant='subtitle2' component='h3' sx={{ fontWeight: 'bold', mb: 1 }}>
+    {title}
+  </Typography>
+);
+
 export const ColumnHeader = ({ title }: { title: string }) => (
   <Typography variant='subtitle2' component='h3' sx={{ fontWeight: 'bold', mb: 1, mt: { xs: 3, md: 0 } }}>
     {title}

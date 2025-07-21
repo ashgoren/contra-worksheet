@@ -22,7 +22,6 @@
     fifties: number | null;
     hundreds: number | null;
     coins: number | null;
-    startingCash: number;
 
     // Other payment methods
     checks: number | null;
@@ -31,4 +30,8 @@
     // Donations & memberships
     donations: number | null;
     memberships: { name: string; amount: number | null }[];
+
+    // Cash processing
+    startingCash: number;
+    pettyCash: { item: string; amount: number | null; }[];
   }
