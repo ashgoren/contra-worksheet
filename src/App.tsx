@@ -1,60 +1,50 @@
 import { useForm, FormProvider } from 'react-hook-form';
-import { Container } from '@mui/material';
+import { Container, Stack, Button, Paper } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { EventInfoSection, CashBreakdownSection, OtherPaymentMethodsSection, DonationMembershipSection, CashProcessingSection, FinancialSummary } from 'components/sections';
+import { defaults } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
 function App() {
-  const methods = useForm<WorksheetFormData>({
-    defaultValues: {
-      date: new Date().toISOString().split('T')[0],
-      band: '',
-      location: 'Fulton',
-      rent: '330',
-      paidAttendees: '',
-      unpaidAttendees: '',
-      newcomers: '',
-      secondDanceCards: '',
-      cmic: '',
-      doorVolunteer: '',
-      floorHost: '',
-      rafflePrize: '',
-      notes: '',
-      ones: '',
-      fives: '',
-      tens: '',
-      twenties: '',
-      fifties: '',
-      hundreds: '',
-      coins: '',
-      checks: '',
-      electronic: '',
-      donations: '',
-      memberships: [{ name: '', amount: '' }],
-      pettyCash: [{ item: '', amount: '' }],
-      startingCash: '200',
-    }
-  });
+  const stored = localStorage.getItem('worksheetData');
+  const defaultValues = stored ? JSON.parse(stored) : defaults;
+
+  const methods = useForm<WorksheetFormData>({ defaultValues });
+
+  const onBlur = () => {
+    const data = methods.getValues();
+    localStorage.setItem('worksheetData', JSON.stringify(data));
+  };
 
   const onSubmit = (data: WorksheetFormData) => {
     console.log('Submitted!', data);
   };
 
-  // for dev purposes, but re-renders entire form on every change
-  // const formData = methods.watch();
-  // console.log('Current form data:', formData);
-
   return (
     <Container maxWidth='lg' sx={{ mt: 4 }}>
       <Layout>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            onBlur={onBlur}
+          >
             <EventInfoSection />
             <CashBreakdownSection />
             <OtherPaymentMethodsSection />
             <DonationMembershipSection />
             <CashProcessingSection />
             <FinancialSummary />
+
+            <Paper sx={{ p: 2, mt: 2, mb: 2 }}>
+              <Stack direction='row' spacing={2} justifyContent='space-between'>
+                <Button variant='text'
+                  onClick={() => methods.reset(defaults)}
+                >
+                  Reset Form
+                </Button>
+                  <Button type='submit' variant='contained' color='secondary'>Submit Form</Button>
+              </Stack>
+            </Paper>
           </form>
         </FormProvider>
       </Layout>
