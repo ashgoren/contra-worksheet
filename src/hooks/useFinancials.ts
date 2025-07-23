@@ -11,8 +11,14 @@ export const useFinancials = () => {
     'startingCash',
     'checks',
     'electronic',
-    'donations',
+    'donations'
   ]).map(parse);
+
+  const [rawMemberships, rawPettyCash] = watch(['memberships', 'pettyCash']);
+  const memberships = rawMemberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount) }));
+  const pettyCash = rawPettyCash.filter(el => el.amount !== '').map(el => ({ item: el.item, amount: Number(el.amount) }));
+  const totalMemberships = memberships.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalPettyCash = pettyCash.reduce((acc, curr) => acc + curr.amount, 0);
 
   const cashPayments =
     typeof totalCashInBox === 'number' && typeof startingCash === 'number'
@@ -29,16 +35,21 @@ export const useFinancials = () => {
       ? totalCashInBox + checks
       : null;
 
+  const admissions =
+    typeof totalPayments === 'number' && typeof totalMemberships === 'number' && typeof totalPettyCash === 'number'
+      ? totalPayments - totalMemberships - totalPettyCash
+      : null;
+
   return {
     totalCashInBox,
     cashPayments,
-    miscExpenses: null, // placeholder
+    miscExpenses: totalPettyCash,
     checks,
     electronic,
     donations,
-    memberships: null, // placeholder
+    memberships: totalMemberships,
     totalPayments,
     eveningDeposits,
-    admissions: null // placeholder
+    admissions
   };
 };
