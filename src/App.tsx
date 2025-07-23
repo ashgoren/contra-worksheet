@@ -2,7 +2,6 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { EventInfoSection, CashBreakdownSection, OtherPaymentMethodsSection, DonationMembershipSection, CashProcessingSection, FinancialSummary } from 'components/sections';
-import { CashProvider } from 'providers/CashProvider';
 import type { WorksheetFormData } from 'types/worksheet';
 
 function App() {
@@ -11,11 +10,11 @@ function App() {
       date: new Date().toISOString().split('T')[0],
       band: '',
       location: 'Fulton',
-      rent: 330,
-      paidAttendees: null,
-      unpaidAttendees: null,
-      newcomers: null,
-      secondDanceCards: null,
+      rent: '330',
+      paidAttendees: '',
+      unpaidAttendees: '',
+      newcomers: '',
+      secondDanceCards: '',
       cmic: '',
       doorVolunteer: '',
       floorHost: '',
@@ -28,10 +27,12 @@ function App() {
       fifties: '',
       hundreds: '',
       coins: '',
-      donations: null,
-      memberships: [{ name: '', amount: null }],
-      pettyCash: [{ item: '', amount: null }],
-      startingCash: 200,
+      checks: '',
+      electronic: '',
+      donations: '',
+      memberships: [{ name: '', amount: '' }],
+      pettyCash: [{ item: '', amount: '' }],
+      startingCash: '200',
     }
   });
 
@@ -47,16 +48,14 @@ function App() {
     <Container maxWidth='lg' sx={{ mt: 4 }}>
       <Layout>
         <FormProvider {...methods}>
-          <CashProvider>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
-              <EventInfoSection />
-              <CashBreakdownSection />
-              <OtherPaymentMethodsSection />
-              <DonationMembershipSection />
-              <CashProcessingSection />
-              <FinancialSummary />
-            </form>
-          </CashProvider>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <EventInfoSection />
+            <CashBreakdownSection />
+            <OtherPaymentMethodsSection />
+            <DonationMembershipSection />
+            <CashProcessingSection />
+            <FinancialSummary />
+          </form>
         </FormProvider>
       </Layout>
     </Container>

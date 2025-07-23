@@ -3,11 +3,11 @@
     date: string;
     band: string;
     location: string;
-    rent: number;
-    paidAttendees: number | null;
-    unpaidAttendees: number | null;
-    newcomers: number | null;
-    secondDanceCards: number | null;
+    rent: string;
+    paidAttendees: string;
+    unpaidAttendees: string;
+    newcomers: string;
+    secondDanceCards: string;
     cmic: string;
     doorVolunteer: string;
     floorHost: string;
@@ -24,14 +24,14 @@
     coins: string;
 
     // Other payment methods
-    checks: number | null;
-    electronic: number | null;
+    checks: string;
+    electronic: string;
 
     // Donations & memberships
-    donations: number | null;
-    memberships: { name: string; amount: number | null }[];
+    donations: string;
+    memberships: { name: string; amount: string }[];
 
     // Cash processing
-    startingCash: number;
-    pettyCash: { item: string; amount: number | null; }[];
+    startingCash: string;
+    pettyCash: { item: string; amount: string; }[];
   }

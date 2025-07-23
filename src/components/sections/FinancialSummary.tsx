@@ -1,9 +1,9 @@
 import { Paper, Box, Typography, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { SectionHeader } from 'ui';
-import { useCashContext } from 'hooks/useCashContext';
+import { useFinancials } from 'hooks/useFinancials';
 
 export const FinancialSummary = () => {
-  const { totalCashInBox } = useCashContext();
+  const { totalCashInBox, cashPayments, miscExpenses, checks, electronic, donations, memberships, totalPayments, eveningDeposits, admissions } = useFinancials();
 
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
@@ -16,15 +16,15 @@ export const FinancialSummary = () => {
         <Table>
           <TableBody sx={{ '& .MuiTableRow-root:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
             <SummaryTableRow label='Total Cash In Box' value={totalCashInBox} />
-            <SummaryTableRow label='Cash Payments' value={null} description='total minus starting' />
-            <SummaryTableRow label='Misc Expenses' value={null} />
-            <SummaryTableRow label='Checks' value={null} />
-            <SummaryTableRow label='Electronic' value={null} />
-            <SummaryTableRow label='Donations' value={null} />
-            <SummaryTableRow label='Memberships' value={null} />
-            <SummaryTableRow label='Total Payments' value={null} description='cash payments + checks + electronic' />
-            <SummaryTableRow label='Evening Deposits' value={null} description='total cash in box + checks' />
-            <SummaryTableRow label='Admissions' value={null} description='total payments - donations - memberships' />
+            <SummaryTableRow label='Cash Payments' value={cashPayments} description='total minus starting' />
+            <SummaryTableRow label='Misc Expenses' value={miscExpenses} />
+            <SummaryTableRow label='Checks' value={checks} />
+            <SummaryTableRow label='Electronic' value={electronic} />
+            <SummaryTableRow label='Donations' value={donations} />
+            <SummaryTableRow label='Memberships' value={memberships} />
+            <SummaryTableRow label='Total Payments' value={totalPayments} description='cash payments + checks + electronic' />
+            <SummaryTableRow label='Evening Deposits' value={eveningDeposits} description='total cash in box + checks' />
+            <SummaryTableRow label='Admissions' value={admissions} description='total payments - donations - memberships' />
           </TableBody>
         </Table>
       </Box>
@@ -45,7 +45,7 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
       </Box>
     </TableCell>
     <TableCell align='right' sx={{ fontSize: '1.2rem', pr: { xs: 2, sm: 4 } }}>
-      {value ? (Number.isInteger(value) ? value : value.toFixed(2)) : '...'}
+      {value ? (Number.isInteger(value) ? value : value.toFixed(2)) : '-'}
     </TableCell>
   </TableRow>
 );

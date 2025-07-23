@@ -30,7 +30,7 @@
       "types/*": ["src/types/*"],
       "sections/*": ["src/components/sections/*"],
       "hooks/*": ["src/hooks/*"],
-      "utils/*": ["src/utils/*"],
+      "utils": ["src/utils.ts"],
       "services/*": ["src/services/*"],
       "contexts/*": ["src/contexts/*"],
       "providers/*": ["src/providers/*"],

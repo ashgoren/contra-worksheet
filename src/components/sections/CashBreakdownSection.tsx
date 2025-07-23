@@ -1,10 +1,10 @@
 import { Grid, Paper, Typography, Box } from '@mui/material';
 import { SectionHeader, StandoutBox } from 'ui';
 import { RHFAdornedField } from 'inputs';
-import { useCashContext } from 'hooks/useCashContext';
+import { useCash } from 'hooks/useCash';
 
 export const CashBreakdownSection = () => {
-  const { totalCashInBox } = useCashContext();
+  const { totalCashInBox } = useCash();
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
       <SectionHeader title='Cash Breakdown' />

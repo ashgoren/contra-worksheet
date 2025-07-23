@@ -31,7 +31,7 @@ export const CashProcessingSection = () => {
               </Grid>
               {index === fields.length - 1 &&
                 <Grid size={1}>
-                  <IconButton onClick={() => append({ item: '', amount: null })}>
+                  <IconButton onClick={() => append({ item: '', amount: '' })}>
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </Grid>

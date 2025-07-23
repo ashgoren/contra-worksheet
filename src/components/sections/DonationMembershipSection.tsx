@@ -31,7 +31,7 @@ export const DonationMembershipSection = () => {
               </Grid>
               {index === fields.length - 1 &&
                 <Grid size={1}>
-                  <IconButton onClick={() => append({ name: '', amount: null })}>
+                  <IconButton onClick={() => append({ name: '', amount: '' })}>
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </Grid>
