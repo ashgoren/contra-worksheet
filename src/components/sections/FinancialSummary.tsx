@@ -45,7 +45,7 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
       </Box>
     </TableCell>
     <TableCell align='right' sx={{ fontSize: '1.2rem', pr: { xs: 2, sm: 4 } }}>
-      {value ? (Number.isInteger(value) ? value : value.toFixed(2)) : '-'}
+      {value != null ? (Number.isInteger(value) ? value : value.toFixed(2)) : '-'}
     </TableCell>
   </TableRow>
 );
