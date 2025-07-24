@@ -1,8 +1,9 @@
+import { useLocalStorage } from 'hooks/useLocalStorage';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Box, Stack, Typography, TextField, type TextFieldProps } from '@mui/material';
+import { Box, Stack, Typography, TextField, FormControlLabel, Checkbox, type TextFieldProps } from '@mui/material';
 import type { Path, FieldValues } from 'react-hook-form';
 
-export interface RHFTextFieldProps<TFieldValues extends FieldValues>
+interface RHFTextFieldProps<TFieldValues extends FieldValues>
   extends Omit<TextFieldProps, 'name' | 'defaultValue'> {
     name: Path<TFieldValues>;
 }
@@ -71,5 +72,38 @@ export const RHFAdornedField = <TFieldValues extends FieldValues>({ name, label,
         {...rest}
       />
     </Stack>
+  );
+};
+
+interface RHFCheckboxProps<TFieldValues extends FieldValues>
+  extends Omit<React.ComponentProps<typeof Checkbox>, 'name' | 'checked'> {
+    name: Path<TFieldValues>;
+    label: string;
+}
+
+export const RHFCheckbox = <TFieldValues extends FieldValues>({ name, label, ...rest }: RHFCheckboxProps<TFieldValues>) => {
+  const { control } = useFormContext<TFieldValues>();
+  const { saveToLocalStorage } = useLocalStorage();
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              {...field}
+              checked={field.value}
+              onChange={(e) => {
+                field.onChange(e.target.checked);
+                saveToLocalStorage();
+              }}
+              {...rest}
+            />
+          }
+          label={label}
+        />
+      )}
+    />
   );
 };

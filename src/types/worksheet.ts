@@ -34,4 +34,7 @@
     // Cash processing
     startingCash: string;
     pettyCash: { item: string; amount: string; }[];
+
+    // Talent
+    gearRental: boolean;
   }
