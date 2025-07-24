@@ -37,4 +37,5 @@
 
     // Talent
     gearRental: boolean;
+    guarantee: string;
   }

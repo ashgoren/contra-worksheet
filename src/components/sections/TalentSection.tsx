@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import { SectionHeader } from 'ui';
-import { RHFCheckbox } from 'inputs';
+import { RHFCheckbox, RHFAdornedField } from 'inputs';
 
 export const TalentSection = () => {
   return (
@@ -14,6 +14,7 @@ export const TalentSection = () => {
         <RHFCheckbox name='gearRental' label='Sound person used our gear?' />
       </Typography>
 
+      <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' />
 
 
     </Paper>

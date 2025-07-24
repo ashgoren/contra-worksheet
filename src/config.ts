@@ -27,4 +27,6 @@ export const defaults = {
   memberships: [{ name: '', amount: '' }],
   pettyCash: [{ item: '', amount: '' }],
   startingCash: '200',
+  gearRental: false,
+  guarantee: '90',
 };
