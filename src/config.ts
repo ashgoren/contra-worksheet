@@ -29,4 +29,10 @@ export const defaults = {
   startingCash: '200',
   gearRental: false,
   guarantee: '90',
+  talent: [
+    { name: '', role: 'sound', travel: '' },
+    { name: '', role: 'caller', travel: '' },
+    { name: '', role: 'musician', travel: '' },
+    { name: '', role: 'musician', travel: '' },
+  ],
 };

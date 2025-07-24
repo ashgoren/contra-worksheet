@@ -1,8 +1,44 @@
-import { Paper, Typography } from '@mui/material';
-import { SectionHeader } from 'ui';
-import { RHFCheckbox, RHFAdornedField } from 'inputs';
+import { useConfirm } from 'material-ui-confirm';
+import { useFormContext, useFieldArray } from 'react-hook-form';
+import { Paper, Typography, Grid, Button, IconButton, Stack, Box } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
+import { SectionHeader, Subtitle } from 'ui';
+import { RHFCheckbox, RHFTextField, RHFAdornedField } from 'inputs';
+import { useLocalStorage } from 'hooks/useLocalStorage';
+import type { WorksheetFormData } from 'types/worksheet';
 
 export const TalentSection = () => {
+  const confirm = useConfirm();
+  const { saveToLocalStorage } = useLocalStorage();
+  const { control, getValues } = useFormContext<WorksheetFormData>();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'talent',
+  });
+
+  const addLine = () => {
+    append({ name: '', role: 'musician', travel: '' });
+    saveToLocalStorage();
+  };
+
+  const removeLine = async (index: number) => {
+    const field = getValues(`talent.${index}`);
+    const shouldConfirm = field.name || field.travel;
+
+    if (shouldConfirm) {
+      const { confirmed } = await confirm({
+        title: 'Remove line',
+        description: 'Are you sure you want to remove this line?',
+      });
+      if (!confirmed) return;
+    }
+
+    remove(index);
+    saveToLocalStorage();
+  };
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Talent Pay Calculations' />
@@ -16,7 +52,35 @@ export const TalentSection = () => {
 
       <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' />
 
-
+      <Box sx = {(theme) => ({ mt: 2, [theme.breakpoints.up('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
+        <Subtitle title='Talent' />
+        <Stack direction='column' spacing={2} sx={{ mt: 2 }}>
+          {fields.map((field, index) => (
+            <Grid container spacing={2} key={field.id} sx = {(theme) => ({ mt: 2, [theme.breakpoints.down('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
+              <Grid size={{ xs: 12, sm: 5 }}>
+                <RHFTextField name={`talent.${index}.name`} label='Name' fullWidth />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 3 }}>
+                <RHFTextField name={`talent.${index}.role`} label='Role' fullWidth />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 3 }}>
+                <RHFAdornedField name={`talent.${index}.travel`} label='Travel' adornment='$' fullWidth />
+              </Grid>
+              <Grid size={1}>
+                <IconButton onClick={() => removeLine(index)} disabled={fields.length === 1} sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
+                  <RemoveCircle />
+                </IconButton>
+                <Button variant='text' size='small' color='inherit' onClick={() => removeLine(index)} disabled={fields.length === 1} sx={{ mt: 1, display: { xs: 'inline-flex', sm: 'none' } }}>
+                  <RemoveCircleOutlineIcon sx={{ mr: 1 }} />Remove
+                </Button>
+              </Grid>
+            </Grid>
+          ))}
+        </Stack>
+        <Button variant='contained' size='small' color='primary' sx={{ mt: 2, display: 'flex-inline' }} onClick={addLine}>
+          <AddCircleOutlineIcon sx={{ mr: 1 }} />Add line
+        </Button>
+      </Box>
     </Paper>
   );
 };
