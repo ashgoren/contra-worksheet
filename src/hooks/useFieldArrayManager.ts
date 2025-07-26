@@ -28,7 +28,6 @@ export const useFieldArrayManager = <TFieldValues extends FieldValues, TFieldNam
   const removeLine = useCallback(async (index: number) => {
     const fieldArray = getValues(fieldName as Path<TFieldValues>);
     const field = fieldArray[index];
-    console.log('Removing line:', field);
     if (shouldConfirmRemoval(field)) {
       const { confirmed } = await confirm({
         title: 'Remove line',
@@ -36,6 +35,7 @@ export const useFieldArrayManager = <TFieldValues extends FieldValues, TFieldNam
       });
       if (!confirmed) return;
     }
+    console.log('Removing line:', field);
     remove(index);
     saveToLocalStorage();
   }, [fieldName, confirm, getValues, remove, saveToLocalStorage, shouldConfirmRemoval]);

@@ -1,22 +1,31 @@
-import { useFormContext } from 'react-hook-form';
-import type { WorksheetFormData } from 'types/worksheet';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useCash } from 'hooks/useCash';
 import { parse } from 'utils';
+import type { WorksheetFormData } from 'types/worksheet';
 
 export const useFinancials = () => {
   const { totalCashInBox } = useCash();
-  const { watch } = useFormContext<WorksheetFormData>();
+  const { control } = useFormContext<WorksheetFormData>();
 
-  const [startingCash, checks, electronic, donations] = watch([
+  const [rawStartingCash, rawChecks, rawElectronic, rawDonations, rawMemberships, rawPettyCash] = useWatch({
+    name: [
     'startingCash',
     'checks',
     'electronic',
-    'donations'
-  ]).map(parse);
+    'donations',
+    'memberships',
+    'pettyCash'
+    ],
+    control
+  });
 
-  const [rawMemberships, rawPettyCash] = watch(['memberships', 'pettyCash']);
+  const startingCash = parse(rawStartingCash);
+  const checks = parse(rawChecks);
+  const electronic = parse(rawElectronic);
+  const donations = parse(rawDonations);
   const memberships = rawMemberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount) }));
   const pettyCash = rawPettyCash.filter(el => el.amount !== '').map(el => ({ item: el.item, amount: Number(el.amount) }));
+
   const totalMemberships = memberships.reduce((acc, curr) => acc + curr.amount, 0);
   const totalPettyCash = pettyCash.reduce((acc, curr) => acc + curr.amount, 0);
 

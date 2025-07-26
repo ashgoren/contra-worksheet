@@ -1,11 +1,14 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import type { WorksheetFormData } from 'types/worksheet';
 import { parse } from 'utils';
 
 export const useCash = () => {
-  const { watch } = useFormContext<WorksheetFormData>();
+  const { control } = useFormContext<WorksheetFormData>();
 
-  const cashValues = watch(['ones', 'fives', 'tens', 'twenties', 'fifties', 'hundreds', 'coins']).map(parse);
+  const cashValues = useWatch({
+    name: ['ones', 'fives', 'tens', 'twenties', 'fifties', 'hundreds', 'coins'],
+    control
+  }).map(parse);
 
   if (cashValues.every(v => typeof v === 'number')) {
     const [ones, fives, tens, twenties, fifties, hundreds, coins] = cashValues;
