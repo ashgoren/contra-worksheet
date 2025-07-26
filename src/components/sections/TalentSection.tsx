@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import { SectionHeader, Subtitle } from 'ui';
-import { RHFCheckbox, RHFTextField, RHFAdornedField } from 'inputs';
+import { RHFCheckbox, RHFTextField, RHFAdornedField, RHFSelect } from 'inputs';
 import { useFieldArrayManager } from 'hooks/useFieldArrayManager';
 import type { WorksheetFormData } from 'types/worksheet';
 
@@ -45,7 +45,16 @@ export const TalentSection = () => {
                 <RHFTextField name={`talent.${index}.name`} label='Name' fullWidth />
               </Grid>
               <Grid size={{ xs: 12, sm: 3 }}>
-                <RHFTextField name={`talent.${index}.role`} label='Role' fullWidth />
+                <RHFSelect
+                  name={`talent.${index}.role`}
+                  label='Role'
+                  options={[
+                    { value: 'musician', label: 'musician' },
+                    { value: 'sound', label: 'sound' },
+                    { value: 'caller', label: 'caller' }
+                  ]}
+                  fullWidth
+                />
               </Grid>
               <Grid size={{ xs: 12, sm: 3 }}>
                 <RHFAdornedField name={`talent.${index}.travel`} label='Travel' adornment='$' fullWidth />

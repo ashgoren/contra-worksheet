@@ -1,6 +1,7 @@
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Box, Stack, Typography, TextField, FormControlLabel, Checkbox, type TextFieldProps } from '@mui/material';
+import { Box, Stack, Typography, TextField, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
+import type { TextFieldProps } from '@mui/material';
 import type { Path, FieldValues } from 'react-hook-form';
 
 interface RHFTextFieldProps<TFieldValues extends FieldValues>
@@ -103,6 +104,33 @@ export const RHFCheckbox = <TFieldValues extends FieldValues>({ name, label, ...
           }
           label={label}
         />
+      )}
+    />
+  );
+};
+
+export const RHFSelect = <TFieldValues extends FieldValues>({ name, label, options, ...rest }: Omit<RHFTextFieldProps<TFieldValues>, 'type'> & { options: { value: string; label: string }[] }) => {
+  const { control } = useFormContext<TFieldValues>();
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextField
+          {...field}
+          select
+          label={label}
+          size='small'
+          value={field.value ?? ''}
+          onChange={(e) => field.onChange(e.target.value)}
+          {...rest}
+        >
+          {options.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
       )}
     />
   );
