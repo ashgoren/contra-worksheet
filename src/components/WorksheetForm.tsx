@@ -13,6 +13,7 @@ import {
 } from 'components/sections';
 
 export const WorksheetForm = () => {
+  console.log('Rendering WorksheetForm');
   const { saveToLocalStorage } = useLocalStorage();
   const methods = useFormContext<WorksheetFormData>();
 

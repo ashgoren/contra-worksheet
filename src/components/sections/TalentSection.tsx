@@ -1,4 +1,3 @@
-import { useConfirm } from 'material-ui-confirm';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Paper, Typography, Grid, Button, IconButton, Stack, Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -6,38 +5,23 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import { SectionHeader, Subtitle } from 'ui';
 import { RHFCheckbox, RHFTextField, RHFAdornedField } from 'inputs';
-import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useFieldArrayManager } from 'hooks/useFieldArrayManager';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const TalentSection = () => {
-  const confirm = useConfirm();
-  const { saveToLocalStorage } = useLocalStorage();
   const { control, getValues } = useFormContext<WorksheetFormData>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'talent',
   });
 
-  const addLine = () => {
-    append({ name: '', role: 'musician', travel: '' });
-    saveToLocalStorage();
-  };
-
-  const removeLine = async (index: number) => {
-    const field = getValues(`talent.${index}`);
-    const shouldConfirm = field.name || field.travel;
-
-    if (shouldConfirm) {
-      const { confirmed } = await confirm({
-        title: 'Remove line',
-        description: 'Are you sure you want to remove this line?',
-      });
-      if (!confirmed) return;
-    }
-
-    remove(index);
-    saveToLocalStorage();
-  };
+  const { addLine, removeLine } = useFieldArrayManager({
+    fieldName: 'talent',
+    append,
+    remove,
+    getValues,
+    shouldConfirmRemoval: (field) => !!field.name || !!field.travel
+  });
 
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
@@ -77,7 +61,13 @@ export const TalentSection = () => {
             </Grid>
           ))}
         </Stack>
-        <Button variant='contained' size='small' color='primary' sx={{ mt: 2, display: 'flex-inline' }} onClick={addLine}>
+        <Button
+          variant='contained'
+          size='small'
+          color='primary'
+          sx={{ mt: 2, display: 'flex-inline' }}
+          onClick={() => addLine({ name: '', role: 'musician', travel: '' })}
+        >
           <AddCircleOutlineIcon sx={{ mr: 1 }} />Add line
         </Button>
       </Box>
