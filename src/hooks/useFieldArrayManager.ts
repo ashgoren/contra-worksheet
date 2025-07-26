@@ -31,7 +31,7 @@ export const useFieldArrayManager = <TFieldValues extends FieldValues, TFieldNam
     if (shouldConfirmRemoval(field)) {
       const { confirmed } = await confirm({
         title: 'Remove line',
-        description: 'Are you sure you want to remove this line?',
+        description: 'Are you sure you want to remove this line? ' + JSON.stringify(field),
       });
       if (!confirmed) return;
     }
