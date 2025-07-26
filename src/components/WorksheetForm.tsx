@@ -9,6 +9,7 @@ import {
   CashProcessingSection,
   FinancialSummary,
   TalentSection,
+  TalentCalculationsSection,
   FormButtons
 } from 'components/sections';
 
@@ -37,6 +38,7 @@ export const WorksheetForm = () => {
       <CashProcessingSection />
       <FinancialSummary />
       <TalentSection />
+      <TalentCalculationsSection />
 
       <FormButtons />
     </form>

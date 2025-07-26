@@ -5,4 +5,5 @@ export { DonationMembershipSection } from './DonationMembershipSection';
 export { CashProcessingSection } from './CashProcessingSection';
 export { FinancialSummary } from './FinancialSummary';
 export { TalentSection } from './TalentSection';
+export { TalentCalculationsSection } from './TalentCalculationsSection';
 export { FormButtons } from './FormButtons';
