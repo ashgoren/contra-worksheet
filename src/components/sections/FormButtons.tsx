@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useConfirm } from 'material-ui-confirm';
 import { Stack, Button, Paper } from '@mui/material';
-import { defaults } from 'src/config';
+import { DEFAULTS } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const FormButtons = () => {
@@ -15,7 +15,7 @@ export const FormButtons = () => {
     });
     if (confirmed) {
       localStorage.removeItem('worksheetData');
-      reset(defaults);
+      reset(DEFAULTS);
     }
   };
 

@@ -1,14 +1,9 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useFinancials } from 'hooks/useFinancials';
 import { isNum } from 'utils';
-import { SOUND_GUARANTEE, GEAR_RENTAL } from 'src/config';
+import { SOUND_GUARANTEE, GEAR_RENTAL, MAX_SHARES_PER_ROLE } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
-const maxSharesPerRole: Record<string, number> = {
-  sound: 1,
-  caller: 1,
-  musician: 4
-}
 
 export const useTalent = () => {
   const { control } = useFormContext<WorksheetFormData>();
@@ -69,8 +64,8 @@ export const useTalent = () => {
 
   // at this point we know payBasis is a positive number, which means share below is guaranteed to be a positive number too
 
-  const numCallerShares = Math.min(maxSharesPerRole.caller, talent.filter(t => t.role === 'caller').length);
-  const numMusicianShares = Math.min(maxSharesPerRole.musician, talent.filter(t => t.role === 'musician').length);
+  const numCallerShares = Math.min(MAX_SHARES_PER_ROLE.caller, talent.filter(t => t.role === 'caller').length);
+  const numMusicianShares = Math.min(MAX_SHARES_PER_ROLE.musician, talent.filter(t => t.role === 'musician').length);
   const numShares = numCallerShares + numMusicianShares + 1; // pcdc gets a share too
   const pcdcShare = payBasis / numShares;
   console.log('pcdcShare', pcdcShare, 'numShares', numShares, 'payBasis', payBasis);
@@ -99,7 +94,7 @@ const calculatePortions = (amount: number, talent: { role: string }[]) => {
   const roles = ['sound', 'caller', 'musician'];
   return roles.reduce((acc, role) => {
     const numPeople = talent.filter(t => t.role === role).length;
-    const maxShares = maxSharesPerRole[role];
+    const maxShares = MAX_SHARES_PER_ROLE[role];
     return { ...acc, [role]: numPeople <= maxShares ? amount : amount * maxShares / numPeople };
   }, {} as Record<'sound' | 'caller' | 'musician', number>);
 };

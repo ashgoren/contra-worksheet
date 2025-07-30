@@ -4,11 +4,11 @@ import { ConfirmProvider } from 'material-ui-confirm';
 import { Container } from '@mui/material';
 import { Layout } from 'components/Layout';
 import { WorksheetForm } from 'components/WorksheetForm';
-import { defaults } from 'src/config';
+import { DEFAULTS } from 'src/config';
 import { loadFromLocalStorage } from 'utils';
 
 function App() {
-  const defaultValues = loadFromLocalStorage() || defaults;
+  const defaultValues = loadFromLocalStorage() || DEFAULTS;
   const methods = useForm<WorksheetFormData>({ defaultValues });
   return (
     <Container maxWidth='lg' sx={{ mt: 4 }}>
