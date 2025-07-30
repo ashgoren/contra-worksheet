@@ -6,4 +6,5 @@ export { CashProcessingSection } from './CashProcessingSection';
 export { FinancialSummary } from './FinancialSummary';
 export { TalentSection } from './TalentSection';
 export { TalentCalculationsSection } from './TalentCalculationsSection';
+export { FinalCalculationsSection } from './FinalCalculationsSection';
 export { FormButtons } from './FormButtons';

@@ -10,6 +10,7 @@ import {
   FinancialSummary,
   TalentSection,
   TalentCalculationsSection,
+  FinalCalculationsSection,
   FormButtons
 } from 'components/sections';
 
@@ -39,6 +40,7 @@ export const WorksheetForm = () => {
       <FinancialSummary />
       <TalentSection />
       <TalentCalculationsSection />
+      <FinalCalculationsSection />
 
       <FormButtons />
     </form>
