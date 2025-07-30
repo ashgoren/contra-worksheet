@@ -1,6 +1,6 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useCash } from 'hooks/useCash';
-import { parse } from 'utils';
+import { parse, isNum } from 'utils';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const useFinancials = () => {
@@ -30,22 +30,22 @@ export const useFinancials = () => {
   const totalPettyCash = pettyCash.reduce((acc, curr) => acc + curr.amount, 0);
 
   const cashPayments =
-    typeof totalCashInBox === 'number' && typeof startingCash === 'number'
+    isNum(totalCashInBox) && isNum(startingCash)
       ? totalCashInBox - startingCash
       : null;
 
   const totalPayments =
-    typeof cashPayments === 'number' && typeof checks === 'number' && typeof electronic === 'number'
+    isNum(cashPayments) && isNum(checks) && isNum(electronic)
       ? cashPayments + checks + electronic
       : null;
 
   const eveningDeposits =
-    typeof totalCashInBox === 'number' && typeof checks === 'number'
+    isNum(totalCashInBox) && isNum(checks)
       ? totalCashInBox + checks
       : null;
 
   const admissions =
-    typeof totalPayments === 'number' && typeof totalMemberships === 'number' && typeof totalPettyCash === 'number'
+    isNum(totalPayments) && isNum(totalMemberships) && isNum(totalPettyCash)
       ? totalPayments - totalMemberships - totalPettyCash
       : null;
 
