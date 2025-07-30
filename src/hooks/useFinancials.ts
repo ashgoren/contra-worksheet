@@ -7,12 +7,13 @@ export const useFinancials = () => {
   const { totalCashInBox } = useCash();
   const { control } = useFormContext<WorksheetFormData>();
 
-  const [rawStartingCash, rawChecks, rawElectronic, rawDonations, rawMemberships, rawPettyCash] = useWatch({
+  const [rawStartingCash, rawChecks, rawElectronic, rawDonations, rawRent, rawMemberships, rawPettyCash] = useWatch({
     name: [
     'startingCash',
     'checks',
     'electronic',
     'donations',
+    'rent',
     'memberships',
     'pettyCash'
     ],
@@ -23,6 +24,7 @@ export const useFinancials = () => {
   const checks = parse(rawChecks);
   const electronic = parse(rawElectronic);
   const donations = parse(rawDonations);
+  const rent = Number(rawRent) || 0;
   const memberships = rawMemberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount) }));
   const pettyCash = rawPettyCash.filter(el => el.amount !== '').map(el => ({ item: el.item, amount: Number(el.amount) }));
 
@@ -45,8 +47,8 @@ export const useFinancials = () => {
       : null;
 
   const admissions =
-    isNum(totalPayments) && isNum(totalMemberships) && isNum(totalPettyCash)
-      ? totalPayments - totalMemberships - totalPettyCash
+    isNum(totalPayments) && isNum(donations) && isNum(totalMemberships)
+      ? totalPayments - donations - totalMemberships
       : null;
 
   return {
@@ -56,6 +58,7 @@ export const useFinancials = () => {
     checks,
     electronic,
     donations,
+    rent,
     memberships: totalMemberships,
     totalPayments,
     eveningDeposits,

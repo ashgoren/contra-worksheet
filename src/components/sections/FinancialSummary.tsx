@@ -1,5 +1,6 @@
 import { Paper, Box, Typography, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { SectionHeader } from 'ui';
+import { formatCurrency } from 'utils';
 import { useFinancials } from 'hooks/useFinancials';
 
 export const FinancialSummary = () => {
@@ -8,11 +9,7 @@ export const FinancialSummary = () => {
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Financial Summary' />
-      <Box sx={{
-        maxWidth: { xs: '100%', md: '735px' },
-        border: '1px solid',
-        borderRadius: 1
-      }}>
+      <Box sx={{ maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
         <Table>
           <TableBody sx={{ '& .MuiTableRow-root:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
             <SummaryTableRow label='Total Cash In Box' value={totalCashInBox} />
@@ -45,7 +42,7 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
       </Box>
     </TableCell>
     <TableCell align='right' sx={{ fontSize: '1.2rem', pr: { xs: 2, sm: 4 } }}>
-      {value != null ? (Number.isInteger(value) ? value : value.toFixed(2)) : '-'}
+      {formatCurrency(value)}
     </TableCell>
   </TableRow>
 );

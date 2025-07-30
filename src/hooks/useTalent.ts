@@ -8,12 +8,11 @@ import type { WorksheetFormData } from 'types/worksheet';
 export const useTalent = () => {
   // 1. Parse Raw Values
   const { control } = useFormContext<WorksheetFormData>();
-  const { admissions, miscExpenses } = useFinancials();
-  const [rawTalent, rawGuarantee, rawRent, gearRental] = useWatch({
-    name: ['talent', 'guarantee', 'rent', 'gearRental'],
+  const { admissions, miscExpenses, rent } = useFinancials();
+  const [rawTalent, rawGuarantee, gearRental] = useWatch({
+    name: ['talent', 'guarantee', 'gearRental'],
     control
   });
-  const rent = useMemo(() => Number(rawRent) || 0, [rawRent]);
   const pcdcGuarantee = useMemo(() => Number(rawGuarantee) || 0, [rawGuarantee]);
   const talent = useMemo(() => rawTalent.map((t) => ({
     ...t,
