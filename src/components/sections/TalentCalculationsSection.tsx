@@ -3,11 +3,12 @@ import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
 import type { ReactNode } from 'react';
+import type { Person } from 'types/talent';
 
 export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-  const { talent, payBasis, pcdcShare } = useTalent();
+  const { talent, payBasis, pcdcGuarantee, pcdcShare } = useTalent();
   console.log('Talent', talent);
 
   return (
@@ -30,29 +31,12 @@ export const TalentCalculationsSection = () => {
         </Table>
       </Box>
 
-      {isXs && <>
-        {talent.map((t) => (
-          <Box key={t.name} sx={{ mt: 2, border: '1px solid', borderRadius: 1, p: 2 }}>
-            <Typography variant='body1' sx={{ fontWeight: 'bold' }}>{t.name} ({t.role})</Typography>
-            <Typography variant='body1'>Travel: {t.travel || '-'}</Typography>
-            <Typography variant='body1'>Guarantee: {t.guarantee || '-'}</Typography>
-            <Typography variant='body1'>Share: {t.share ? formatCurrency(t.share) : '-'}</Typography>
-            <Typography variant='body1'>Total: {t.totalPay ? formatCurrency(t.totalPay) : '-'}</Typography>
-            <Button variant='contained' color='primary' sx={{ mt: 2, mb: 1 }}>Sign</Button>
-          </Box>
-        ))}
-        <Typography variant='body2' sx={{ mt: 2, p: 2, fontStyle: 'italic' }}>
-          PCDC: {formatCurrency(talent.filter(t => t.role === 'caller')[0]?.guarantee || 0)} guarantee, {formatCurrency(pcdcShare)} share
-        </Typography>
-      </>}
-
-      {!isXs && (
-        <Box sx={{
-          mt: 2,
-          maxWidth: { xs: '100%', md: '735px' },
-          border: '1px solid',
-          borderRadius: 1
-        }}>
+      {isXs ? (
+        talent.map((person) => (
+          <TalentRow key={person.name} person={person} isXs={true} />
+        ))
+      ) : (
+        <Box sx={{ mt: 2, maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -65,37 +49,45 @@ export const TalentCalculationsSection = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {talent.map((t) => (
-                <TableRow key={t.name}>
-                  <TableCell>
-                    <Typography variant='body1'>{t.name} ({t.role})</Typography>
-                  </TableCell>
-                  <TableCell>
-                    {t.travel || '-'}
-                  </TableCell>
-                  <TableCell>
-                    {t.guarantee || '-'}
-                  </TableCell>
-                  <TableCell>
-                    {t.share ? formatCurrency(t.share) : '-'}
-                  </TableCell>
-                  <TableCell>
-                    {t.totalPay ? formatCurrency(t.totalPay) : '-'}
-                  </TableCell>
-                  <TableCell>
-                    <Button variant='contained' color='primary'>Sign</Button>
-                  </TableCell>
-                </TableRow>
+              {talent.map((person) => (
+                <TalentRow key={person.name} person={person} isXs={false} />
               ))}
             </TableBody>
           </Table>
-          <Typography variant='body2' sx={{ mt: 1, p: 2, fontStyle: 'italic' }}>
-            PCDC: {formatCurrency(talent.filter(t => t.role === 'caller')[0]?.guarantee || 0)} guarantee, {formatCurrency(pcdcShare)} share
-          </Typography>
         </Box>
       )}
 
+      <Typography variant='body2' sx={{ mt: { xs: 2, sm: 1 }, p: 2, fontStyle: 'italic' }}>
+        PCDC: {formatCurrency(pcdcGuarantee)} guarantee, {formatCurrency(pcdcShare)} share
+      </Typography>
     </Paper>
+  );
+};
+
+const TalentRow = ({person, isXs}: {person: Person; isXs: boolean}) => {
+  const nameWithRole = `${person.name} (${person.role})`;
+  const travel = person.travel || '-';
+  const guarantee = person.guarantee || '-';
+  const share = person.share ? formatCurrency(person.share) : '-';
+  const totalPay = person.totalPay ? formatCurrency(person.totalPay) : '-';
+  return isXs ? (
+    <Box key={person.name} sx={{ mt: 2, border: '1px solid', borderRadius: 1, p: 2 }}>
+      <Typography variant='body1' sx={{ fontWeight: 'bold' }}>{nameWithRole}</Typography>
+      <Typography variant='body1'>Travel: {travel}</Typography>
+      <Typography variant='body1'>Guarantee: {guarantee}</Typography>
+      <Typography variant='body1'>Share: {share}</Typography>
+      <Typography variant='body1'>Total: {totalPay}</Typography>
+      <Button variant='contained' color='primary' sx={{ mt: 2, mb: 1 }}>Sign</Button>
+    </Box>
+  ) : (
+    <TableRow>
+      <TableCell><Typography variant='body1'>{nameWithRole}</Typography></TableCell>
+      <TableCell>{travel}</TableCell>
+      <TableCell>{guarantee}</TableCell>
+      <TableCell>{share}</TableCell>
+      <TableCell>{totalPay}</TableCell>
+      <TableCell><Button variant='contained' color='primary'>Sign</Button></TableCell>
+    </TableRow>
   );
 };
 
@@ -112,7 +104,7 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
       </Box>
     </TableCell>
     <TableCell align='right' sx={{ borderBottom: 'none', fontSize: '1.2rem', pr: { xs: 2, sm: 4 } }}>
-      {value != null ? (Number.isInteger(value) ? value : value.toFixed(2)) : '-'}
+      {formatCurrency(value)}
     </TableCell>
   </TableRow>
 );

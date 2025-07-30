@@ -46,6 +46,7 @@ export const useTalent = () => {
   return {
     talent: finalTalent,
     payBasis,
+    pcdcGuarantee,
     pcdcShare
   };
 };
