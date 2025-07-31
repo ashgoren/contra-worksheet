@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Button, Box, Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, useMediaQuery } from '@mui/material';
+import RedoIcon from '@mui/icons-material/Redo'
+import { SignatureDialog } from 'components/SignatureDialog';
 import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
+import { useSignatures } from 'src/hooks/useSignatures';
 import type { ReactNode } from 'react';
 import type { Person } from 'types/talent';
 
@@ -9,7 +13,22 @@ export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const { talent, payBasis, pcdcGuarantee, pcdcShare } = useTalent();
-  console.log('Talent', talent);
+  const { addSignature, getSignature } = useSignatures();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentPerson, setCurrentPerson] = useState<Person | null>(null);
+
+  const handleSignatureClick = (person: Person) => {
+    setCurrentPerson(person);
+    setDialogOpen(true);
+  };
+
+  const handleSaveSignature = (signature: string) => {
+    setDialogOpen(false);
+    if (currentPerson) {
+      addSignature(currentPerson, signature);
+    }
+  };
 
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
@@ -33,7 +52,7 @@ export const TalentCalculationsSection = () => {
 
       {isXs ? (
         talent.map((person) => (
-          <TalentRow key={person.name} person={person} isXs={true} />
+          <TalentRow key={person.name} person={person} isXs={true} onSignatureClick={handleSignatureClick} getSignature={getSignature} />
         ))
       ) : (
         <Box sx={{ mt: 2, maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
@@ -50,7 +69,7 @@ export const TalentCalculationsSection = () => {
             </TableHead>
             <TableBody>
               {talent.map((person) => (
-                <TalentRow key={person.name} person={person} isXs={false} />
+                <TalentRow key={person.name} person={person} isXs={false} onSignatureClick={handleSignatureClick} getSignature={getSignature} />
               ))}
             </TableBody>
           </Table>
@@ -60,24 +79,41 @@ export const TalentCalculationsSection = () => {
       <Typography variant='body2' sx={{ mt: { xs: 2, sm: 1 }, p: 2, fontStyle: 'italic' }}>
         PCDC: {formatCurrency(pcdcGuarantee)} guarantee, {formatCurrency(pcdcShare)} share
       </Typography>
+
+      <SignatureDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onSave={handleSaveSignature}
+        person={currentPerson}
+      />
+
     </Paper>
   );
 };
 
-const TalentRow = ({person, isXs}: {person: Person; isXs: boolean}) => {
+const TalentRow = ({person, isXs, onSignatureClick, getSignature}: {
+  person: Person;
+  isXs: boolean;
+  onSignatureClick: (person: Person) => void;
+  getSignature: (name: string) => string | undefined
+}) => {
+  const { name, totalPay } = person;
+  if (!name || !totalPay) return null;
   const nameWithRole = `${person.name} (${person.role})`;
   const travel = person.travel || '-';
   const guarantee = person.guarantee || '-';
   const share = person.share ? formatCurrency(person.share) : '-';
-  const totalPay = person.totalPay ? formatCurrency(person.totalPay) : '-';
+  const total = person.totalPay ? formatCurrency(person.totalPay) : '-';
   return isXs ? (
     <Box key={person.name} sx={{ mt: 2, border: '1px solid', borderRadius: 1, p: 2 }}>
       <Typography variant='body1' sx={{ fontWeight: 'bold' }}>{nameWithRole}</Typography>
       <Typography variant='body1'>Travel: {travel}</Typography>
       <Typography variant='body1'>Guarantee: {guarantee}</Typography>
       <Typography variant='body1'>Share: {share}</Typography>
-      <Typography variant='body1'>Total: {totalPay}</Typography>
-      <Button variant='contained' color='primary' sx={{ mt: 2, mb: 1 }}>Sign</Button>
+      <Typography variant='body1'>Total: {total}</Typography>
+      <Box sx={{ mt: 1 }}>
+        <SignField person={person} onSignatureClick={onSignatureClick} getSignature={getSignature} />
+      </Box>
     </Box>
   ) : (
     <TableRow>
@@ -85,9 +121,62 @@ const TalentRow = ({person, isXs}: {person: Person; isXs: boolean}) => {
       <TableCell>{travel}</TableCell>
       <TableCell>{guarantee}</TableCell>
       <TableCell>{share}</TableCell>
-      <TableCell>{totalPay}</TableCell>
-      <TableCell><Button variant='contained' color='primary'>Sign</Button></TableCell>
+      <TableCell>{total}</TableCell>
+      <TableCell>
+        <SignField person={person} onSignatureClick={onSignatureClick} getSignature={getSignature} />
+      </TableCell>
     </TableRow>
+  );
+};
+
+const SignField = ({ person, onSignatureClick, getSignature }: {
+  person: Person;
+  onSignatureClick: (person: Person) => void;
+  getSignature: (name: string) => string | undefined;
+}) => {
+  return (
+    <>
+      {getSignature(person.name) ?
+        <Box
+          onClick={() => onSignatureClick(person)}
+          sx={{
+            position: 'relative',
+            cursor: 'pointer',
+            display: 'inline-block',
+            '&:hover .signature-overlay': { opacity: 1 }
+          }}
+        >
+          <img
+            src={getSignature(person.name)}
+            style={{ maxWidth: '100%', maxHeight: '50px', display: 'block' }}
+          />
+          <Box
+            className='signature-overlay'
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0,
+              transition: 'opacity 0.2s ease-in-out',
+              borderRadius: 1,
+            }}
+          >
+            <RedoIcon />
+          </Box>
+        </Box>
+      :
+        <Button variant='contained' color='primary' onClick={() => onSignatureClick(person)}>
+          Sign
+        </Button>
+      }
+    </>
   );
 };
 
