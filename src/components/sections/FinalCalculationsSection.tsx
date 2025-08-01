@@ -6,6 +6,17 @@ import { formatCurrency } from 'utils';
 export const FinalCalculationsSection = () => {
   const { pcdcProfit, danceProfitLoss, checkToPcdc } = useFinalCalculations();
 
+  if (pcdcProfit === null || danceProfitLoss === null || checkToPcdc === null) {
+    return (
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <SectionHeader title='Final Calculations' />
+        <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+          Not enough data to calculate.
+        </Typography>
+      </Paper>
+    );
+  }
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Final Calculations' />

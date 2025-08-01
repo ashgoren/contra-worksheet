@@ -30,6 +30,17 @@ export const TalentCalculationsSection = () => {
     }
   };
 
+  if (!payBasis || talent.filter((p) => p.name).length === 0) {
+    return (
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <SectionHeader title='Talent Pay Calculations' />
+        <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+          Not enough data to calculate.
+        </Typography>
+      </Paper>
+    )
+  }
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Talent Pay Calculations' />
