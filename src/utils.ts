@@ -1,4 +1,4 @@
-// not in useLocalStorage hook because this is called outside of FormProvider
+// not in useDataPersistence hook because this is called outside of FormProvider
 export const loadFromLocalStorage = () => {
   const stored = localStorage.getItem('worksheetData');
   return stored ? JSON.parse(stored) : null;

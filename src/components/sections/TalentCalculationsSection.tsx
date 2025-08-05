@@ -5,7 +5,7 @@ import { SignatureDialog } from 'components/SignatureDialog';
 import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
-import { useSignatures } from 'src/hooks/useSignatures';
+import { useSignatures } from 'hooks/useSignatures';
 import type { ReactNode } from 'react';
 import type { Person } from 'types/talent';
 

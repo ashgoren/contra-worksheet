@@ -1,4 +1,4 @@
-import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useDataPersistence } from 'hooks/useDataPersistence';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Box, Stack, Typography, TextField, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
 import type { TextFieldProps } from '@mui/material';
@@ -84,7 +84,7 @@ interface RHFCheckboxProps<TFieldValues extends FieldValues>
 
 export const RHFCheckbox = <TFieldValues extends FieldValues>({ name, label, ...rest }: RHFCheckboxProps<TFieldValues>) => {
   const { control } = useFormContext<TFieldValues>();
-  const { saveToLocalStorage } = useLocalStorage();
+  const { saveBackup } = useDataPersistence();
   return (
     <Controller
       name={name}
@@ -97,7 +97,7 @@ export const RHFCheckbox = <TFieldValues extends FieldValues>({ name, label, ...
               checked={field.value}
               onChange={(e) => {
                 field.onChange(e.target.checked);
-                saveToLocalStorage();
+                saveBackup();
               }}
               {...rest}
             />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useDataPersistence } from 'hooks/useDataPersistence';
 import { WorksheetFormInputs } from './WorksheetFormInputs';
 import { WorksheetFormCalculations } from './WorksheetFormCalculations';
 import { FormButtons } from './FormButtons';
@@ -8,7 +8,7 @@ import type { WorksheetFormData } from 'types/worksheet';
 
 export const WorksheetForm = () => {
   console.log('Rendering WorksheetForm');
-  const { saveToLocalStorage } = useLocalStorage();
+  const { saveBackup } = useDataPersistence();
   const { handleSubmit } = useFormContext<WorksheetFormData>();
   const [page, setPage] = useState(1);
 
@@ -19,7 +19,7 @@ export const WorksheetForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      onBlur={saveToLocalStorage}
+      onBlur={saveBackup}
     >
       {page === 1 && <WorksheetFormInputs />}
       {page === 2 && <WorksheetFormCalculations />}

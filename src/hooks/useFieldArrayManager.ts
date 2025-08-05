@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useConfirm } from 'material-ui-confirm';
-import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useDataPersistence } from 'hooks/useDataPersistence';
 import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormGetValues, FieldValues, ArrayPath, FieldArray, Path } from 'react-hook-form';
 
 interface UseFieldArrayManagerProps<TFieldValues extends FieldValues, TFieldName extends ArrayPath<TFieldValues>> {
@@ -17,13 +17,13 @@ export const useFieldArrayManager = <TFieldValues extends FieldValues, TFieldNam
   { fieldName, append, remove, getValues, shouldConfirmRemoval }: UseFieldArrayManagerProps<TFieldValues, TFieldName>) => {
 
   const confirm = useConfirm();
-  const { saveToLocalStorage } = useLocalStorage();
+  const { saveBackup } = useDataPersistence();
 
   const addLine = useCallback((defaultValues: FieldArray<TFieldValues, TFieldName>) => {
     console.log('Adding line with default values:', defaultValues);
     append(defaultValues);
-    saveToLocalStorage();
-  }, [append, saveToLocalStorage]);
+    saveBackup();
+  }, [append, saveBackup]);
 
   const removeLine = useCallback(async (index: number) => {
     const fieldArray = getValues(fieldName as Path<TFieldValues>);
@@ -37,8 +37,8 @@ export const useFieldArrayManager = <TFieldValues extends FieldValues, TFieldNam
     }
     console.log('Removing line:', field);
     remove(index);
-    saveToLocalStorage();
-  }, [fieldName, confirm, getValues, remove, saveToLocalStorage, shouldConfirmRemoval]);
+    saveBackup();
+  }, [fieldName, confirm, getValues, remove, saveBackup, shouldConfirmRemoval]);
 
   return { addLine, removeLine };
 };
