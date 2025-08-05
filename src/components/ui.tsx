@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { TailSpin } from 'react-loading-icons';
 
 export const SectionHeader = ({ title }: { title: string }) => (
   <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
@@ -34,3 +35,14 @@ export const StandoutBox = ({ children }: { children: React.ReactNode }) => {
     </Box>
   );
 }
+
+export const Loading = ({ text='Thinking...' }) => {
+  return (
+    <Box sx={{ my: 10, textAlign: 'center' }}>
+      <TailSpin stroke='black' strokeWidth='2.5' />
+      <Typography sx={{ mt: 5}} color='secondary'>
+        {text}
+      </Typography>
+    </Box>
+  );
+};
