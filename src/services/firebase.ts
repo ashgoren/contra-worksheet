@@ -1,14 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, memoryLocalCache } from 'firebase/firestore';
+const { VITE_API_KEY, VITE_AUTH_DOMAIN, VITE_PROJECT_ID, VITE_STORAGE_BUCKET, VITE_MESSAGING_SENDER_ID, VITE_APP_ID } = import.meta.env;
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAzpjNwmgPPxt8pWbHhuicAINoYq__ul7s",
-  authDomain: "pcdc-worksheet.firebaseapp.com",
-  projectId: "pcdc-worksheet",
-  storageBucket: "pcdc-worksheet.firebasestorage.app",
-  messagingSenderId: "1066708927715",
-  appId: "1:1066708927715:web:63e6e0594663c9912f71d6"
+  apiKey: VITE_API_KEY,
+  authDomain: VITE_AUTH_DOMAIN,
+  projectId: VITE_PROJECT_ID,
+  storageBucket: VITE_STORAGE_BUCKET,
+  messagingSenderId: VITE_MESSAGING_SENDER_ID,
+  appId: VITE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
