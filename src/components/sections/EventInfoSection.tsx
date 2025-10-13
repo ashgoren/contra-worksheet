@@ -42,7 +42,7 @@ export const EventInfoSection = () => {
         </Grid>
 
         {/* Notes */}
-        <RHFTextField name='notes' label='Notes (for spreadsheet)' multiline rows={4} fullWidth />
+        <RHFTextField name='notes' label='Notes' multiline rows={4} fullWidth />
       </Grid>
     </Paper>
   );

@@ -14,4 +14,4 @@ export const formatCurrency = (value: number | null | undefined): string => {
   return value.toFixed(2);
 };
 
-export const isNum = (value: number | string | null | undefined): value is number => typeof value === 'number';
+export const isNum = (value: unknown): value is number => typeof value === 'number';
