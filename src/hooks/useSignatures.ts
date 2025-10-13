@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import type { WorksheetFormData } from 'types/worksheet';
 import type { Person } from 'types/talent';
 
 export const useSignatures = () => {
-  const [signatures, setSignatures] = useState<Record<string, string>>({});
+  const { setValue, getValues } = useFormContext<WorksheetFormData>();
 
   const addSignature = (person: Person, signature: string) => {
-    setSignatures(prev => ({ ...prev, [person.name]: signature }));
+    console.log('person', person);
+    const personIndex = getValues('talent').findIndex(p => p.name === person.name);
+    if (personIndex !== -1) {
+      setValue(`talent.${personIndex}.signature`, signature, { shouldDirty: true });
+    } else {
+      console.error(`Person with name ${person.name} not found in talent array.`);
+    }
   };
 
-  const getSignature = (personName: string) => signatures[personName];
-
-  return { signatures, addSignature, getSignature };
+  return { addSignature };
 };

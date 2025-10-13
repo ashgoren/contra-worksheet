@@ -38,5 +38,5 @@ export interface WorksheetFormData {
   // Talent
   gearRental: boolean;
   guarantee: string;
-  talent: { name: string; role: string; travel: string }[];
+  talent: { name: string; role: string; travel: string, signature?: string }[];
 };

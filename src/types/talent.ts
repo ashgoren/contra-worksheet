@@ -5,4 +5,5 @@ export interface Person {
   guarantee: number;
   share: number;
   totalPay: number;
+  signature?: string;
 }

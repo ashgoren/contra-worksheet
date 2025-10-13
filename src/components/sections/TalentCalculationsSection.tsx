@@ -6,6 +6,7 @@ import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
 import { useSignatures } from 'hooks/useSignatures';
+import { useDataPersistence } from 'hooks/useDataPersistence';
 import type { ReactNode } from 'react';
 import type { Person } from 'types/talent';
 
@@ -13,7 +14,8 @@ export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const { talent, payBasis, pcdcGuarantee, pcdcShare } = useTalent();
-  const { addSignature, getSignature } = useSignatures();
+  const { addSignature } = useSignatures();
+  const { saveBackup } = useDataPersistence();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentPerson, setCurrentPerson] = useState<Person | null>(null);
@@ -27,6 +29,7 @@ export const TalentCalculationsSection = () => {
     setDialogOpen(false);
     if (currentPerson) {
       addSignature(currentPerson, signature);
+      saveBackup();
     }
   };
 
@@ -63,7 +66,7 @@ export const TalentCalculationsSection = () => {
 
       {isXs ? (
         talent.map((person) => (
-          <TalentRow key={person.name} person={person} isXs={true} onSignatureClick={handleSignatureClick} getSignature={getSignature} />
+          <TalentRow key={person.name} person={person} isXs={true} onSignatureClick={handleSignatureClick} />
         ))
       ) : (
         <Box sx={{ mt: 2, maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
@@ -80,7 +83,7 @@ export const TalentCalculationsSection = () => {
             </TableHead>
             <TableBody>
               {talent.map((person) => (
-                <TalentRow key={person.name} person={person} isXs={false} onSignatureClick={handleSignatureClick} getSignature={getSignature} />
+                <TalentRow key={person.name} person={person} isXs={false} onSignatureClick={handleSignatureClick} />
               ))}
             </TableBody>
           </Table>
@@ -102,11 +105,10 @@ export const TalentCalculationsSection = () => {
   );
 };
 
-const TalentRow = ({person, isXs, onSignatureClick, getSignature}: {
+const TalentRow = ({person, isXs, onSignatureClick}: {
   person: Person;
   isXs: boolean;
   onSignatureClick: (person: Person) => void;
-  getSignature: (name: string) => string | undefined
 }) => {
   const { name, totalPay } = person;
   if (!name || !totalPay) return null;
@@ -123,7 +125,7 @@ const TalentRow = ({person, isXs, onSignatureClick, getSignature}: {
       <Typography variant='body1'>Share: {share}</Typography>
       <Typography variant='body1'>Total: {total}</Typography>
       <Box sx={{ mt: 1 }}>
-        <SignField person={person} onSignatureClick={onSignatureClick} getSignature={getSignature} />
+        <SignField person={person} onSignatureClick={onSignatureClick} />
       </Box>
     </Box>
   ) : (
@@ -134,20 +136,19 @@ const TalentRow = ({person, isXs, onSignatureClick, getSignature}: {
       <TableCell>{share}</TableCell>
       <TableCell>{total}</TableCell>
       <TableCell>
-        <SignField person={person} onSignatureClick={onSignatureClick} getSignature={getSignature} />
+        <SignField person={person} onSignatureClick={onSignatureClick} />
       </TableCell>
     </TableRow>
   );
 };
 
-const SignField = ({ person, onSignatureClick, getSignature }: {
+const SignField = ({ person, onSignatureClick }: {
   person: Person;
   onSignatureClick: (person: Person) => void;
-  getSignature: (name: string) => string | undefined;
 }) => {
   return (
     <>
-      {getSignature(person.name) ?
+      {person.signature ?
         <Box
           onClick={() => onSignatureClick(person)}
           sx={{
@@ -158,7 +159,7 @@ const SignField = ({ person, onSignatureClick, getSignature }: {
           }}
         >
           <img
-            src={getSignature(person.name)}
+            src={person.signature}
             style={{ maxWidth: '100%', maxHeight: '50px', display: 'block' }}
           />
           <Box
