@@ -1,21 +1,12 @@
-import { useFinancials } from './useFinancials';
-import { useTalent } from './useTalent';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { calculateFinalFinancials } from "services/finalFinancials";
+import type { WorksheetFormData } from 'types/worksheet';
 
 export const useFinalCalculations = () => {
-  const { admissions, cashPayments, rent, miscExpenses } = useFinancials();
-  const { pcdcGuarantee, pcdcShare, talent } = useTalent();
+  const { control } = useFormContext<WorksheetFormData>();
+  const watchedData = useWatch({ control });
 
-  if (admissions === null || cashPayments === null || pcdcShare === null) {
-    return { pcdcProfit: null, danceProfitLoss: null, checkToPcdc: null };
-  }
+  const finalFinancials = calculateFinalFinancials(watchedData as WorksheetFormData);
 
-  const totalTalentPay = talent.reduce((acc, curr) => acc + curr.totalPay, 0);
-  const danceProfitLoss = admissions - totalTalentPay - rent;
-  const checkToPcdc = cashPayments - totalTalentPay - miscExpenses;
-
-  return {
-    pcdcProfit: pcdcGuarantee + pcdcShare,
-    danceProfitLoss,
-    checkToPcdc
-  }
+  return finalFinancials;
 };
