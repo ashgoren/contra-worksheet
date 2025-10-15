@@ -7,16 +7,16 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: 'white',
-    padding: 30,
+    padding: 15,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     textAlign: 'center',
     marginBottom: 10,
   },
   text: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 10,
     marginBottom: 15,
     color: '#333',
   }

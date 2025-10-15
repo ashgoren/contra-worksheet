@@ -5,18 +5,18 @@ import type { WorksheetFormData } from 'types/worksheet';
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 12,
-    marginTop: 10,
+    fontSize: 10,
+    marginTop: 5,
   },
   section: {
     marginBottom: 15,
-    padding: 15,
+    padding: 10,
     border: '1px solid #E0E0E0',
     borderRadius: 6,
     fontFamily: 'Helvetica',
   },
   sectionHeader: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#007acc',

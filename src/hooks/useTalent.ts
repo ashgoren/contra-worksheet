@@ -6,7 +6,7 @@ export const useTalent = () => {
   const { control } = useFormContext<WorksheetFormData>();
   
   const watchedData = useWatch({ control }) as WorksheetFormData;
-  const talentCalculations = calculateTalent(watchedData);
+  const { talent, payBasis, pcdcGuarantee, pcdcShare } = calculateTalent(watchedData);
 
-  return talentCalculations;
+  return { talent, payBasis, pcdcGuarantee, pcdcShare };
 };
