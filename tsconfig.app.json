@@ -39,5 +39,5 @@
       "ui": ["src/components/ui.tsx"],
     }
   },
-  "include": ["src"]
+  "include": ["src", "functions/src/EventInfoReport.tsx", "functions/src/FinancialSummaryReport.tsx", "functions/src/ItemizationsReport.tsx", "functions/src/TalentGridReport.tsx"]
 }
