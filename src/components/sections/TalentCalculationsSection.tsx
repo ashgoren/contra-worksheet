@@ -8,7 +8,7 @@ import { useTalent } from 'hooks/useTalent';
 import { useSignatures } from 'hooks/useSignatures';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import type { ReactNode } from 'react';
-import type { Person } from 'types/talent';
+import type { Person } from 'types/worksheet';
 
 export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));

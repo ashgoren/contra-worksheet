@@ -1,4 +1,4 @@
-export interface Person {
+interface Person {
   name: string;
   role: string;
   travel: number;
@@ -49,4 +49,6 @@ export interface WorksheetFormData {
   gearRental: boolean;
   guarantee: string;
   talent: Person[];
+
+  pcdcProfit: number;
 };

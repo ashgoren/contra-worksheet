@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "emulator": "firebase emulators:start --only functions,storage"
+    "emulator": "npm run emulator --prefix functions"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

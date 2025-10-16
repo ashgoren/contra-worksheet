@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { Button, Box, Dialog, Typography } from '@mui/material';
 import SignatureCanvas from 'react-signature-canvas';
 import { formatCurrency } from 'utils';
-import type { Person } from 'types/talent';
+import type { Person } from 'types/worksheet';
 
 export const SignatureDialog = ({ open, onClose, onSave, person }: {
   open: boolean;

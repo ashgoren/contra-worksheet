@@ -27,3 +27,18 @@ export const formatDateTime = (date: Date): string => {
 }
 
 export const isNum = (value: unknown): value is number => typeof value === 'number';
+
+export const blobToBase64 = async (blob : Blob) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result.split(',')[1]);
+      } else {
+        reject(new Error('Failed to read blob as base64 string.'));
+      }
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};

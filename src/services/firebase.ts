@@ -25,7 +25,7 @@ const upload = async (blob: Blob, path: string) => {
 }
 
 const firebaseFunctions = {
-  appendToSpreadsheet: httpsCallable(functions, 'appendToSpreadsheet')
+  saveWorksheet: httpsCallable(functions, 'saveWorksheet')
 };
 
 export { auth, db, upload, firebaseFunctions };

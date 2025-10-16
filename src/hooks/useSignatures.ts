@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import type { WorksheetFormData } from 'types/worksheet';
-import type { Person } from 'types/talent';
+import type { Person } from 'types/worksheet';
 
 export const useSignatures = () => {
   const { setValue, getValues } = useFormContext<WorksheetFormData>();

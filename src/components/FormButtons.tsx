@@ -6,13 +6,13 @@ import { DEFAULTS } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
 interface FormButtonsProps {
-  isValid: boolean;
+  submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
   setError: (error: string | null) => void;
 }
 
-export const FormButtons = ({ isValid, page, setPage, setError }: FormButtonsProps) => {
+export const FormButtons = ({ submittable, page, setPage, setError }: FormButtonsProps) => {
 
   // Clear error when page changes
   useEffect(() => {
@@ -23,7 +23,7 @@ export const FormButtons = ({ isValid, page, setPage, setError }: FormButtonsPro
     <Paper sx={{ p: 2, my: 4 }}>
       <Stack direction='row' spacing={2} justifyContent='space-between'>
         {page === 1 && <Page1Buttons setPage={setPage} setError={setError} />}
-        {page === 2 && <Page2Buttons setPage={setPage} isValid={isValid} />}
+        {page === 2 && <Page2Buttons setPage={setPage} submittable={submittable} />}
         {page === 'success' && <SuccessPageButtons setPage={setPage} />}
       </Stack>
     </Paper>
@@ -65,16 +65,16 @@ const Page1Buttons = ({ setPage, setError }: Page1ButtonsProps) => {
 
 interface Page2ButtonsProps {
   setPage: (page: number | string) => void;
-  isValid: boolean
+  submittable: boolean
 }
 
-const Page2Buttons = ({ setPage, isValid }: Page2ButtonsProps) => {
+const Page2Buttons = ({ setPage, submittable }: Page2ButtonsProps) => {
   return (
     <>
       <Button variant='contained' color='primary' onClick={() => setPage(1)}>
         Back
       </Button>
-      <Button type='submit' variant='contained' color='success' disabled={!isValid}>
+      <Button type='submit' variant='contained' color='success' disabled={!submittable}>
         Submit Form
       </Button>
     </>
