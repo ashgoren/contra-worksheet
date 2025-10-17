@@ -31,7 +31,7 @@ export const WorksheetForm = () => {
       console.log('PDF successfully uploaded');
       setPage('success');
     } catch (error) {
-      console.error('Error generating/uploading PDF:', error);
+      console.error('Error submitting data:', error);
       setError(`Form submission failed! ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setSubmitting(false);

@@ -31,3 +31,5 @@ CL*.md
 !*example
 functions/.env*
 !functions/*example
+
+functions/lib/

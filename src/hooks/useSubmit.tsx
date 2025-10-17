@@ -11,23 +11,18 @@ export const useSubmit = () => {
   const { pcdcProfit } = useFinalCalculations();
 
   const submitData = async (data: WorksheetFormData) => {
-    try {
-      // generate pdf and convert to base64
-      const blob = await pdf(<WorksheetReport data={data} />).toBlob();
-      const base64 = await blobToBase64(blob);
+    // generate pdf and convert to base64
+    const blob = await pdf(<WorksheetReport data={data} />).toBlob();
+    const base64 = await blobToBase64(blob);
 
-      // send pdf and form data to backend
-      await firebaseFunctions.saveWorksheet({
-        pdf: {
-          base64,
-          filename: `${data.date}.pdf`
-        },
-        worksheet: { ...data, talent, pcdcProfit }
-      });
-    } catch (error) {
-      console.error('Error saving worksheet', error);
-      throw error;
-    }
+    // send pdf and form data to backend
+    await firebaseFunctions.saveWorksheet({
+      pdf: {
+        base64,
+        filename: `${data.date}.pdf`
+      },
+      worksheet: { ...data, talent, pcdcProfit }
+    });
   };
 
   return { submitData };

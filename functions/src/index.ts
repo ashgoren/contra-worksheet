@@ -7,7 +7,9 @@ import { initializeApp } from 'firebase-admin/app';
 import { getGoogleServices } from './google';
 import { appendToSpreadsheet } from './appendToSpreadsheet';
 import { uploadPDF } from './uploadPDF';
+import { sendEmail } from './sendEmail';
 
+// Initialize Firebase Admin SDK
 initializeApp();
 
 // Set ID of Google Shared Drive folder (retrieve from URL)
@@ -20,11 +22,14 @@ const FOLDER_ID = '1VH0PrNa6weicqF86-Ctv1hHZQ6T6OdjY';
 const SHEET_ID = '16NYzvtuR8JSXS1_IngjONp7dQGngvxnqQW7BxZCFFhc';
 
 // Retrieve Service Token from Google Cloud Secret Manager
-const googleDriveServiceToken = defineSecret('GOOGLE_DRIVE_SERVICE_TOKEN');
+const googleServiceToken = defineSecret('GOOGLE_SERVICE_TOKEN');
+
+// Retrieve Email Config from Google Cloud Secret Manager
+const emailConfig = defineSecret('EMAIL');
 
 const maxInstances = 5;
 const region = 'us-west1';
-const secrets = [googleDriveServiceToken];
+const secrets = [googleServiceToken, emailConfig];
 
 export const saveWorksheet = onCall({ maxInstances, region, secrets }, async (req) => {
   logger.info('saveWorksheet function invoked');
@@ -39,13 +44,31 @@ export const saveWorksheet = onCall({ maxInstances, region, secrets }, async (re
     throw new HttpsError('invalid-argument', 'Missing PDF or worksheet data');
   }
 
-  const { drive, sheets } = getGoogleServices(googleDriveServiceToken);
-
   try {
-    const { pdfUrl } = await uploadPDF({ pdf, drive, folderId: FOLDER_ID });
+    const { drive, sheets } = getGoogleServices(googleServiceToken);
+
+    const { pdfUrl } = await uploadPDF({
+      pdf,
+      drive,
+      folderId: FOLDER_ID
+    });
     logger.info('PDF uploaded successfully');
-    await appendToSpreadsheet({ worksheet, pdfUrl, sheets, sheetId: SHEET_ID });
+
+    await appendToSpreadsheet({
+      worksheet,
+      pdfUrl,
+      sheets,
+      sheetId: SHEET_ID
+    });
     logger.info('Worksheet data appended to spreadsheet successfully');
+
+    await sendEmail({
+      emailConfig,
+      pdfUrl,
+      date: worksheet.date
+    });
+    logger.info('Email sent to bookkeeper');
+
     return { success: true };
   } catch (error) {
     logger.error('Error in saveWorksheet:', error);
