@@ -8,6 +8,7 @@ import { FormButtons } from './FormButtons';
 import { Success } from './Success';
 import { useFormValidation } from 'hooks/useFormValidation';
 import { useSubmit } from 'hooks/useSubmit';
+import { useOnlineStatus } from 'hooks/useOnlineStatus';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const WorksheetForm = () => {
@@ -17,6 +18,7 @@ export const WorksheetForm = () => {
   const { handleSubmit } = useFormContext<WorksheetFormData>();
   const { submitData } = useSubmit();
   const { isValid } = useFormValidation();
+  const isOnline = useOnlineStatus();
 
   const [page, setPage] = useState<number | string>(1);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +53,7 @@ export const WorksheetForm = () => {
       {error && <Alert severity='error' sx={{ mt: 2 }}>{error}</Alert>}
 
       <FormButtons
-        submittable={isValid && !submitting}
+        submittable={isOnline && isValid && !submitting}
         page={page}
         setPage={setPage}
         setError={setError}

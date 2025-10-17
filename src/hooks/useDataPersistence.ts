@@ -14,15 +14,19 @@ export const useDataPersistence = () => {
     localStorage.setItem('worksheetData', JSON.stringify(data));
 
     // Save backup to Firestore
-    try {
-      const sessionId = getSessionId();
-      await setDoc(doc(db, 'backups', sessionId), {
-        ...data,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
-      console.log('Firestore backup successful:', sessionId);
-    } catch (error) {
-      console.warn('Unable to perform Firestore backup:', error); // fail gracefully
+    if (navigator.onLine) {
+      try {
+        const sessionId = getSessionId();
+        await setDoc(doc(db, 'backups', sessionId), {
+          ...data,
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+        console.log('Firestore backup successful:', sessionId);
+      } catch (error) {
+        console.warn('Unable to perform Firestore backup:', error); // fail gracefully
+      }
+    } else {
+      console.log('Offline: Skipping Firestore backup');
     }
 
   }, [getValues]);
