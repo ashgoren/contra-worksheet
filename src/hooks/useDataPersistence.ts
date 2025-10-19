@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, query, orderBy, where } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import type { WorksheetFormData } from 'types/worksheet';
 
@@ -31,7 +31,24 @@ export const useDataPersistence = () => {
 
   }, [getValues]);
 
-  return { saveBackup };
+  // Retrieve backups from Firestore
+  const getBackups = useCallback(async () => {
+    try {
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      const q = query(collection(db, 'backups'), orderBy('updatedAt', 'desc'), where('updatedAt', ">", oneMonthAgo.toISOString()));
+      const querySnapshot = await getDocs(q);
+      const docs: Record<string, unknown>[] = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id});
+      });
+      return docs;
+    } catch (error) {
+      console.warn('Unable to retrieve backups from Firestore', error); // fail gracefully
+    }
+  }, []);
+
+  return { saveBackup, getBackups };
 };
 
 const getSessionId = () => {
