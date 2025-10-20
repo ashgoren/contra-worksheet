@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { doc, setDoc, getDocs, collection, query, orderBy, where } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, query, orderBy, limit } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import type { WorksheetFormData } from 'types/worksheet';
 
@@ -14,19 +14,19 @@ export const useDataPersistence = () => {
     localStorage.setItem('worksheetData', JSON.stringify(data));
 
     // Save backup to Firestore
-    if (navigator.onLine) {
+    if (data.date && data.band && navigator.onLine) {
       try {
-        const sessionId = getSessionId();
-        await setDoc(doc(db, 'backups', sessionId), {
+        await setDoc(doc(db, 'backups', data.date), {
           ...data,
           updatedAt: new Date().toISOString(),
         }, { merge: true });
-        console.log('Firestore backup successful:', sessionId);
+        console.log('Firestore backup successful:', data.date);
       } catch (error) {
         console.warn('Unable to perform Firestore backup:', error); // fail gracefully
       }
     } else {
-      console.log('Offline: Skipping Firestore backup');
+      if (!navigator.onLine) console.warn('Offline: Skipping Firestore backup');
+      if (!data.date || !data.band) console.warn('Date & band fields are blank: Skipping Firestore backup');
     }
 
   }, [getValues]);
@@ -36,11 +36,15 @@ export const useDataPersistence = () => {
     try {
       const oneMonthAgo = new Date();
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-      const q = query(collection(db, 'backups'), orderBy('updatedAt', 'desc'), where('updatedAt', ">", oneMonthAgo.toISOString()));
+      const q = query(
+        collection(db, 'backups'),
+        orderBy('date', 'desc'),
+        limit(6)
+      );
       const querySnapshot = await getDocs(q);
       const docs: Record<string, unknown>[] = [];
       querySnapshot.forEach((doc) => {
-        docs.push({ ...doc.data(), id: doc.id});
+        docs.push(doc.data());
       });
       return docs;
     } catch (error) {
@@ -49,13 +53,4 @@ export const useDataPersistence = () => {
   }, []);
 
   return { saveBackup, getBackups };
-};
-
-const getSessionId = () => {
-  let sessionId = sessionStorage.getItem('sessionId');
-  if (!sessionId) {
-    sessionId = new Date().toISOString();
-    sessionStorage.setItem('sessionId', sessionId);
-  }
-  return sessionId;
 };

@@ -14,6 +14,15 @@ export const formatCurrency = (value: number | null | undefined): string => {
   return value.toFixed(2);
 };
 
+export const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('en-US', {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: 'America/Los_Angeles',
+  }).replace(',', '');
+}
+
 export const formatDateTime = (date: Date): string => {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',

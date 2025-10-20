@@ -1,20 +1,23 @@
 import { useState } from 'react';
-import { Alert} from '@mui/material';
+import { useConfirm } from 'material-ui-confirm';
+import { Alert } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import { WorksheetFormInputs } from './WorksheetFormInputs';
 import { WorksheetFormCalculations } from './WorksheetFormCalculations';
 import { FormButtons } from './FormButtons';
+import { RestoreDialog } from './RestoreDialog';
 import { Success } from './Success';
 import { useFormValidation } from 'hooks/useFormValidation';
 import { useSubmit } from 'hooks/useSubmit';
 import { useOnlineStatus } from 'hooks/useOnlineStatus';
+import { DEFAULTS } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const WorksheetForm = () => {
   console.log('Rendering WorksheetForm');
 
-  const { saveBackup } = useDataPersistence();
+  const { saveBackup, getBackups } = useDataPersistence();
   const { handleSubmit } = useFormContext<WorksheetFormData>();
   const { submitData } = useSubmit();
   const { isValid } = useFormValidation();
@@ -23,6 +26,34 @@ export const WorksheetForm = () => {
   const [page, setPage] = useState<number | string>(1);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
+  const [backups, setBackups] = useState<WorksheetFormData[]>([]);
+  const [skipRestoreConfirm, setSkipRestoreConfirm] = useState(false);
+
+  const confirm = useConfirm();
+  const { reset } = useFormContext<WorksheetFormData>();
+
+  const handleReset = async (options?: { skipConfirm?: boolean }) => {
+    const skipConfirm = options?.skipConfirm ?? false;
+    setError(null);
+    const { confirmed } = skipConfirm ? { confirmed: true } : await confirm({
+      title: 'Reset Form (Danger!)',
+      description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will clear all data! Are you sure???</>
+    });
+    if (confirmed) {
+      localStorage.removeItem('worksheetData');
+      reset(DEFAULTS);
+      setPage(1);
+    }
+  };
+
+  const handleRestore = async (options?: { skipConfirm?: boolean }) => {
+    const skipConfirm = options?.skipConfirm ?? false;
+    const fetchedBackups = await getBackups() as WorksheetFormData[] | undefined;
+    setBackups(fetchedBackups || []);
+    setSkipRestoreConfirm(skipConfirm);
+    setRestoreDialogOpen(true);
+  }
 
   const onSubmit = async (data: WorksheetFormData) => {
     console.log('onSubmit', data);
@@ -57,6 +88,16 @@ export const WorksheetForm = () => {
         page={page}
         setPage={setPage}
         setError={setError}
+        onReset={handleReset}
+        onRestore={handleRestore}
+      />
+
+      <RestoreDialog
+        open={restoreDialogOpen}
+        backups={backups}
+        skipConfirm={skipRestoreConfirm}
+        setPage={setPage}
+        onClose={ () => setRestoreDialogOpen(false) }
       />
     </form>
   );

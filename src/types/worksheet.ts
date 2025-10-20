@@ -49,4 +49,7 @@ export interface WorksheetFormData {
   gearRental: boolean;
   guarantee: string;
   talent: Person[];
+
+  // Misc (added when saving)
+  updatedAt?: string;
 };

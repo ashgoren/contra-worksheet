@@ -1,18 +1,16 @@
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { useConfirm } from 'material-ui-confirm';
-import { Stack, Button, Paper } from '@mui/material';
-import { DEFAULTS } from 'src/config';
-import type { WorksheetFormData } from 'types/worksheet';
+import { Stack, Button, Paper, Box } from '@mui/material';
 
 interface FormButtonsProps {
   submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
   setError: (error: string | null) => void;
+  onReset: (options?: { skipConfirm?: boolean }) => void;
+  onRestore: (options?: { skipConfirm?: boolean }) => void;
 }
 
-export const FormButtons = ({ submittable, page, setPage, setError }: FormButtonsProps) => {
+export const FormButtons = ({ submittable, page, setPage, setError, onReset, onRestore }: FormButtonsProps) => {
 
   // Clear error when page changes
   useEffect(() => {
@@ -22,9 +20,9 @@ export const FormButtons = ({ submittable, page, setPage, setError }: FormButton
   return (
     <Paper sx={{ p: 2, my: 4 }}>
       <Stack direction='row' spacing={2} justifyContent='space-between'>
-        {page === 1 && <Page1Buttons setPage={setPage} setError={setError} />}
+        {page === 1 && <Page1Buttons setPage={setPage} onReset={onReset} onRestore={onRestore} />}
         {page === 2 && <Page2Buttons setPage={setPage} submittable={submittable} />}
-        {page === 'success' && <SuccessPageButtons setPage={setPage} />}
+        {page === 'success' && <SuccessPageButtons onReset={onReset} onRestore={onRestore} />}
       </Stack>
     </Paper>
   );
@@ -32,30 +30,22 @@ export const FormButtons = ({ submittable, page, setPage, setError }: FormButton
 
 interface Page1ButtonsProps {
   setPage: (page: number | string) => void;
-  setError: (error: string | null) => void;
+  onReset: (options?: { skipConfirm?: boolean }) => void;
+  onRestore: (options?: { skipConfirm?: boolean }) => void;
 }
 
-const Page1Buttons = ({ setPage, setError }: Page1ButtonsProps) => {
-  const confirm = useConfirm();
-  const { reset } = useFormContext<WorksheetFormData>();
-
-  const handleReset = async () => {
-    setError(null);
-    const { confirmed } = await confirm({
-      title: 'Reset Form (Danger!)',
-      description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will clear all data! Are you sure???</>
-    });
-    if (confirmed) {
-      localStorage.removeItem('worksheetData');
-      reset(DEFAULTS);
-    }
-  };
-
+const Page1Buttons = ({ setPage, onReset, onRestore }: Page1ButtonsProps) => {
   return (
     <>
-      <Button variant='text' onClick={handleReset}>
-        Reset Form
-      </Button>
+      <Box>
+        <Button variant='text' onClick={() => onReset()}>
+          Reset Form
+        </Button>
+        |
+        <Button variant='text' onClick={() => onRestore()}>
+          Restore Backup
+        </Button>
+      </Box>
       <Button variant='contained' color='info' onClick={() => setPage(2)}>
         Next
       </Button>
@@ -81,10 +71,20 @@ const Page2Buttons = ({ setPage, submittable }: Page2ButtonsProps) => {
   );
 }
 
-const SuccessPageButtons = ({ setPage }: { setPage: (page: number | string) => void }) => {
+interface SuccessPageProps {
+  onReset: (options?: { skipConfirm?: boolean }) => void;
+  onRestore: (options?: { skipConfirm?: boolean }) => void;
+}
+
+const SuccessPageButtons = ({ onReset, onRestore }: SuccessPageProps ) => {
   return (
-    <Button variant='contained' color='primary' onClick={() => setPage(2)}>
-      Back
-    </Button>
+    <>
+      <Button variant='text' onClick={() => onRestore({ skipConfirm: true })}>
+        Restore Backup
+      </Button>
+      <Button variant='contained' color='primary' onClick={() => onReset({ skipConfirm: true })}>
+        New Worksheet
+      </Button>
+    </>
   )
 }
