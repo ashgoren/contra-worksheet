@@ -22,6 +22,7 @@ export default defineConfig({
         short_name: 'Worksheet',
         description: 'PCDC Contra Worksheet',
         theme_color: '#ffffff',
+        display: 'browser',
         icons: [
           {
           src: '/web-app-manifest-192x192.png',
