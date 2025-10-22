@@ -6,7 +6,7 @@ export const calculateFinalFinancials = (data: WorksheetFormData) => {
   const { admissions, cashPayments, rent, miscExpenses } = calculateFinancials(data);
   const { pcdcGuarantee, pcdcShare, talent } = calculateTalent(data);
 
-  if (admissions === null || cashPayments === null || pcdcShare === null) {
+  if (admissions === null || cashPayments === null || pcdcShare === null || pcdcGuarantee === null || talent === null) {
     return { pcdcProfit: null, danceProfitLoss: null, checkToPcdc: null };
   }
 

@@ -1,11 +1,11 @@
 import { useFormContext } from 'react-hook-form';
 import type { WorksheetFormData } from 'types/worksheet';
-import type { Person } from 'types/worksheet';
+import type { PersonCalculated } from 'types/worksheet';
 
 export const useSignatures = () => {
   const { setValue, getValues } = useFormContext<WorksheetFormData>();
 
-  const addSignature = (person: Person, signature: string) => {
+  const addSignature = (person: PersonCalculated, signature: string) => {
     console.log('person', person);
     const personIndex = getValues('talent').findIndex(p => p.name === person.name);
     if (personIndex !== -1) {

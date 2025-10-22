@@ -2,13 +2,13 @@ import { useCallback, useRef, useState } from 'react';
 import { Button, Box, Dialog, Typography } from '@mui/material';
 import SignatureCanvas from 'react-signature-canvas';
 import { formatCurrency } from 'utils';
-import type { Person } from 'types/worksheet';
+import type { PersonCalculated } from 'types/worksheet';
 
 export const SignatureDialog = ({ open, onClose, onSave, person }: {
   open: boolean;
   onClose: () => void;
   onSave: (signature: string) => void;
-  person: Person | null;
+  person: PersonCalculated | null;
 }) => {
   const sigCanvasRef = useRef<SignatureCanvas>(null);
   const [empty, setEmpty] = useState(true);
