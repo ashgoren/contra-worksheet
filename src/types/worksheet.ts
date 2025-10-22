@@ -1,11 +1,18 @@
-export interface Person {
+// NOTE: PersonInput & PersonCalculated & WorksheetFormData are duplicated in functions/src/worksheetTypes.ts
+// Keep in sync when making changes
+
+export interface PersonInput {
   name: string;
   role: string;
   travel: number | string;
-  guarantee?: number;
-  share?: number;
-  totalPay?: number;
   signature?: string;
+}
+
+export interface PersonCalculated extends PersonInput {
+  travel: number; // narrowed from number | string
+  guarantee: number;
+  share: number;
+  totalPay: number;
 }
 
 export interface WorksheetFormData {
@@ -48,8 +55,9 @@ export interface WorksheetFormData {
   // Talent
   gearRental: boolean;
   guarantee: string;
-  talent: Person[];
+  talent: PersonInput[];
+}
 
-  // Misc (added when saving)
-  updatedAt?: string;
-};
+export interface WorksheetBackup extends WorksheetFormData {
+  updatedAt: string;
+}

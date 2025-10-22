@@ -2,20 +2,19 @@ import { useConfirm } from 'material-ui-confirm';
 import { Button, Box, Dialog, Typography } from '@mui/material';
 import { formatDate } from 'utils';
 import { useFormContext } from 'react-hook-form';
-import type { WorksheetFormData } from 'types/worksheet';
+import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: {
   open: boolean;
   onClose: () => void;
-  backups: WorksheetFormData[];
+  backups: WorksheetBackup[];
   skipConfirm: boolean;
   setPage: (page: number | string) => void
 }) => {
   const confirm = useConfirm();
   const { reset } = useFormContext<WorksheetFormData>();
 
-  const handleRestoreBackup = async (backup: WorksheetFormData) => {
-    console.log('Restoring backup', backup);
+  const handleRestoreBackup = async (backup: WorksheetBackup) => {
     onClose();
     const { confirmed } = skipConfirm ? { confirmed: true } : await confirm({
       title: 'Restore Backup?',
@@ -23,7 +22,9 @@ export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: 
     });
     if (confirmed || skipConfirm) {
       localStorage.removeItem('worksheetData');
-      reset(backup);
+      const { updatedAt: _, ...formData } = backup; // strip updatedAt
+      console.log('Restoring backup', formData);
+      reset(formData);
       setPage(1);
     }
   }

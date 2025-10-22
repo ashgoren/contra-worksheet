@@ -1,10 +1,15 @@
 import { logger } from 'firebase-functions/v2';
 import type { sheets_v4 } from 'googleapis';
 import { formatDateUTC, formatDateTime } from './utils';
-import type { WorksheetFormData } from './worksheetTypes';
+import type { WorksheetFormData, PersonCalculated } from './worksheetTypes';
+
+interface SubmittedData extends Omit<WorksheetFormData, 'talent'> {
+  talent: PersonCalculated[];
+  pcdcProfit: number;
+}
 
 interface AppendToSpreadsheetParams {
-  worksheet: WorksheetFormData;
+  worksheet: SubmittedData;
   pdfUrl: string;
   sheets: sheets_v4.Sheets;
   sheetId: string;

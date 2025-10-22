@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { doc, setDoc, getDocs, collection, query, orderBy, limit } from 'firebase/firestore';
 import { db } from 'services/firebase';
-import type { WorksheetFormData } from 'types/worksheet';
+import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const useDataPersistence = () => {
   const { getValues } = useFormContext<WorksheetFormData>();
@@ -16,10 +16,11 @@ export const useDataPersistence = () => {
     // Save backup to Firestore
     if (data.date && data.band && navigator.onLine) {
       try {
-        await setDoc(doc(db, 'backups', data.date), {
+        const backup: WorksheetBackup = {
           ...data,
           updatedAt: new Date().toISOString(),
-        }, { merge: true });
+        };
+        await setDoc(doc(db, 'backups', data.date), backup, { merge: true });
         console.log('Firestore backup successful:', data.date);
       } catch (error) {
         console.warn('Unable to perform Firestore backup:', error); // fail gracefully
@@ -32,7 +33,7 @@ export const useDataPersistence = () => {
   }, [getValues]);
 
   // Retrieve backups from Firestore
-  const getBackups = useCallback(async () => {
+  const getBackups = useCallback(async (): Promise<WorksheetBackup[] | undefined> => {
     try {
       const oneMonthAgo = new Date();
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
@@ -42,11 +43,7 @@ export const useDataPersistence = () => {
         limit(6)
       );
       const querySnapshot = await getDocs(q);
-      const docs: Record<string, unknown>[] = [];
-      querySnapshot.forEach((doc) => {
-        docs.push(doc.data());
-      });
-      return docs;
+      return querySnapshot.docs.map(doc => doc.data() as WorksheetBackup);
     } catch (error) {
       console.warn('Unable to retrieve backups from Firestore', error); // fail gracefully
     }

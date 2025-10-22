@@ -8,7 +8,7 @@ import { useTalent } from 'hooks/useTalent';
 import { useSignatures } from 'hooks/useSignatures';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import type { ReactNode } from 'react';
-import type { Person } from 'types/worksheet';
+import type { PersonCalculated } from 'types/worksheet';
 
 export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));
@@ -18,9 +18,9 @@ export const TalentCalculationsSection = () => {
   const { saveBackup } = useDataPersistence();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [currentPerson, setCurrentPerson] = useState<Person | null>(null);
+  const [currentPerson, setCurrentPerson] = useState<PersonCalculated | null>(null);
 
-  const handleSignatureClick = (person: Person) => {
+  const handleSignatureClick = (person: PersonCalculated) => {
     setCurrentPerson(person);
     setDialogOpen(true);
   };
@@ -106,9 +106,9 @@ export const TalentCalculationsSection = () => {
 };
 
 const TalentRow = ({person, isXs, onSignatureClick}: {
-  person: Person;
+  person: PersonCalculated;
   isXs: boolean;
-  onSignatureClick: (person: Person) => void;
+  onSignatureClick: (person: PersonCalculated) => void;
 }) => {
   const { name, totalPay } = person;
   if (!name || !totalPay) return null;
@@ -143,8 +143,8 @@ const TalentRow = ({person, isXs, onSignatureClick}: {
 };
 
 const SignField = ({ person, onSignatureClick }: {
-  person: Person;
-  onSignatureClick: (person: Person) => void;
+  person: PersonCalculated;
+  onSignatureClick: (person: PersonCalculated) => void;
 }) => {
   return (
     <>
