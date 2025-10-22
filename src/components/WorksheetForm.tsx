@@ -12,7 +12,7 @@ import { useFormValidation } from 'hooks/useFormValidation';
 import { useSubmit } from 'hooks/useSubmit';
 import { useOnlineStatus } from 'hooks/useOnlineStatus';
 import { DEFAULTS } from 'src/config';
-import type { WorksheetFormData } from 'types/worksheet';
+import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const WorksheetForm = () => {
   console.log('Rendering WorksheetForm');
@@ -27,7 +27,7 @@ export const WorksheetForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
-  const [backups, setBackups] = useState<WorksheetFormData[]>([]);
+  const [backups, setBackups] = useState<WorksheetBackup[]>([]);
   const [skipRestoreConfirm, setSkipRestoreConfirm] = useState(false);
 
   const confirm = useConfirm();
@@ -49,7 +49,7 @@ export const WorksheetForm = () => {
 
   const handleRestore = async (options?: { skipConfirm?: boolean }) => {
     const skipConfirm = options?.skipConfirm ?? false;
-    const fetchedBackups = await getBackups() as WorksheetFormData[] | undefined;
+    const fetchedBackups = await getBackups() as WorksheetBackup[] | undefined;
     setBackups(fetchedBackups || []);
     setSkipRestoreConfirm(skipConfirm);
     setRestoreDialogOpen(true);
@@ -61,7 +61,8 @@ export const WorksheetForm = () => {
     setSubmitting(true);
     try {
       await submitData(data);
-      console.log('PDF successfully uploaded');
+      console.log('Data successfully submitted');
+      localStorage.removeItem('worksheetData');
       setPage('success');
     } catch (error) {
       console.error('Error submitting data:', error);
