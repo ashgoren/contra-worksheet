@@ -1,37 +1,13 @@
 import { Button, Box, Dialog, Typography } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
-import { useConfirmAction } from 'hooks/useConfirmAction';
 import { formatDate } from 'utils';
-import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
+import type { WorksheetBackup } from 'types/worksheet';
 
-export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: {
+export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup }: {
   open: boolean;
   onClose: () => void;
   backups: WorksheetBackup[];
-  skipConfirm: boolean;
-  setPage: (page: number | string) => void
+  onRestoreBackup: (backup: WorksheetBackup) => void;
 }) => {
-  const confirmAction = useConfirmAction();
-  const { reset } = useFormContext<WorksheetFormData>();
-
-  const handleRestoreBackup = async (backup: WorksheetBackup) => {
-    onClose();
-    const confirmed = await confirmAction(
-      skipConfirm,
-      {
-        title: 'Restore Backup?',
-        description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will replace all data in the current worksheet! Are you sure?</>
-      }
-    );
-    if (confirmed) {
-      localStorage.removeItem('worksheetData');
-      const { updatedAt: _, ...formData } = backup; // strip updatedAt
-      console.log('Restoring backup', formData);
-      reset(formData);
-      setPage(1);
-    }
-  }
-
   return (
     <Dialog
       open={open}
@@ -55,7 +31,7 @@ export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: 
               key={index}
               variant='outlined'
               fullWidth sx={{ justifyContent: 'space-between', my: 1.5, textTransform: 'none' }}
-              onClick={ () => handleRestoreBackup(backup) }
+              onClick={() => onRestoreBackup(backup)}
             >
               <Typography variant='body1'>
                 {backup.date} - {backup.band}

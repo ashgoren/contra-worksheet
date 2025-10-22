@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
 import { Stack, Button, Paper, Box } from '@mui/material';
 
-type ConfirmOptions = { skipConfirm?: boolean };
-
 interface FormButtonsProps {
   submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
   setError: (error: string | null) => void;
-  onReset: (options?: ConfirmOptions) => void;
-  onRestore: (options?: ConfirmOptions) => void;
+  onReset: () => void;
+  onRestore: () => void;
 }
 
 export const FormButtons = ({ submittable, page, setPage, setError, onReset, onRestore }: FormButtonsProps) => {
@@ -22,71 +20,47 @@ export const FormButtons = ({ submittable, page, setPage, setError, onReset, onR
   return (
     <Paper sx={{ p: 2, my: 4 }}>
       <Stack direction='row' spacing={2} justifyContent='space-between'>
-        {page === 1 && <Page1Buttons setPage={setPage} onReset={onReset} onRestore={onRestore} />}
-        {page === 2 && <Page2Buttons setPage={setPage} submittable={submittable} />}
-        {page === 'success' && <SuccessPageButtons onReset={onReset} onRestore={onRestore} />}
+
+        {page === 1 && (
+          <>
+            <Box>
+              <Button variant='text' onClick={() => onReset()}>
+                Reset Form
+              </Button>
+              |
+              <Button variant='text' onClick={() => onRestore()}>
+                Restore Backup
+              </Button>
+            </Box>
+            <Button variant='contained' color='info' onClick={() => setPage(2)}>
+              Next
+            </Button>
+          </>
+        )}
+
+        {page === 2 && (
+          <>
+            <Button variant='contained' color='primary' onClick={() => setPage(1)}>
+              Back
+            </Button>
+            <Button type='submit' variant='contained' color='success' disabled={!submittable}>
+              Submit Form
+            </Button>
+          </>
+        )}
+
+        {page === 'success' && (
+          <>
+            <Button variant='text' onClick={() => onRestore()}>
+              Restore Backup
+            </Button>
+            <Button variant='contained' color='primary' onClick={() => onReset()}>
+              New Worksheet
+            </Button>
+          </>
+        )}
+
       </Stack>
     </Paper>
   );
 };
-
-interface Page1ButtonsProps {
-  setPage: (page: number | string) => void;
-  onReset: (options?: ConfirmOptions) => void;
-  onRestore: (options?: ConfirmOptions) => void;
-}
-
-const Page1Buttons = ({ setPage, onReset, onRestore }: Page1ButtonsProps) => {
-  return (
-    <>
-      <Box>
-        <Button variant='text' onClick={() => onReset()}>
-          Reset Form
-        </Button>
-        |
-        <Button variant='text' onClick={() => onRestore()}>
-          Restore Backup
-        </Button>
-      </Box>
-      <Button variant='contained' color='info' onClick={() => setPage(2)}>
-        Next
-      </Button>
-    </>
-  );
-}
-
-interface Page2ButtonsProps {
-  setPage: (page: number | string) => void;
-  submittable: boolean
-}
-
-const Page2Buttons = ({ setPage, submittable }: Page2ButtonsProps) => {
-  return (
-    <>
-      <Button variant='contained' color='primary' onClick={() => setPage(1)}>
-        Back
-      </Button>
-      <Button type='submit' variant='contained' color='success' disabled={!submittable}>
-        Submit Form
-      </Button>
-    </>
-  );
-}
-
-interface SuccessPageProps {
-  onReset: (options?: ConfirmOptions) => void;
-  onRestore: (options?: ConfirmOptions) => void;
-}
-
-const SuccessPageButtons = ({ onReset, onRestore }: SuccessPageProps ) => {
-  return (
-    <>
-      <Button variant='text' onClick={() => onRestore({ skipConfirm: true })}>
-        Restore Backup
-      </Button>
-      <Button variant='contained' color='primary' onClick={() => onReset({ skipConfirm: true })}>
-        New Worksheet
-      </Button>
-    </>
-  )
-}
