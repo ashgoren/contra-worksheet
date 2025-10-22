@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { Stack, Button, Paper, Box } from '@mui/material';
 
+type ConfirmOptions = { skipConfirm?: boolean };
+
 interface FormButtonsProps {
   submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
   setError: (error: string | null) => void;
-  onReset: (options?: { skipConfirm?: boolean }) => void;
-  onRestore: (options?: { skipConfirm?: boolean }) => void;
+  onReset: (options?: ConfirmOptions) => void;
+  onRestore: (options?: ConfirmOptions) => void;
 }
 
 export const FormButtons = ({ submittable, page, setPage, setError, onReset, onRestore }: FormButtonsProps) => {
@@ -30,8 +32,8 @@ export const FormButtons = ({ submittable, page, setPage, setError, onReset, onR
 
 interface Page1ButtonsProps {
   setPage: (page: number | string) => void;
-  onReset: (options?: { skipConfirm?: boolean }) => void;
-  onRestore: (options?: { skipConfirm?: boolean }) => void;
+  onReset: (options?: ConfirmOptions) => void;
+  onRestore: (options?: ConfirmOptions) => void;
 }
 
 const Page1Buttons = ({ setPage, onReset, onRestore }: Page1ButtonsProps) => {
@@ -72,8 +74,8 @@ const Page2Buttons = ({ setPage, submittable }: Page2ButtonsProps) => {
 }
 
 interface SuccessPageProps {
-  onReset: (options?: { skipConfirm?: boolean }) => void;
-  onRestore: (options?: { skipConfirm?: boolean }) => void;
+  onReset: (options?: ConfirmOptions) => void;
+  onRestore: (options?: ConfirmOptions) => void;
 }
 
 const SuccessPageButtons = ({ onReset, onRestore }: SuccessPageProps ) => {

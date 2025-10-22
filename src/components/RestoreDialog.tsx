@@ -1,7 +1,7 @@
-import { useConfirm } from 'material-ui-confirm';
 import { Button, Box, Dialog, Typography } from '@mui/material';
-import { formatDate } from 'utils';
 import { useFormContext } from 'react-hook-form';
+import { useConfirmAction } from 'hooks/useConfirmAction';
+import { formatDate } from 'utils';
 import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: {
@@ -11,16 +11,19 @@ export const RestoreDialog = ({ open, onClose, backups, skipConfirm, setPage }: 
   skipConfirm: boolean;
   setPage: (page: number | string) => void
 }) => {
-  const confirm = useConfirm();
+  const confirmAction = useConfirmAction();
   const { reset } = useFormContext<WorksheetFormData>();
 
   const handleRestoreBackup = async (backup: WorksheetBackup) => {
     onClose();
-    const { confirmed } = skipConfirm ? { confirmed: true } : await confirm({
-      title: 'Restore Backup?',
-      description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will replace all data in the current worksheet! Are you sure?</>
-    });
-    if (confirmed || skipConfirm) {
+    const confirmed = await confirmAction(
+      skipConfirm,
+      {
+        title: 'Restore Backup?',
+        description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will replace all data in the current worksheet! Are you sure?</>
+      }
+    );
+    if (confirmed) {
       localStorage.removeItem('worksheetData');
       const { updatedAt: _, ...formData } = backup; // strip updatedAt
       console.log('Restoring backup', formData);
