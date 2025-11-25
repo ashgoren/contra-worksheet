@@ -26,7 +26,7 @@ export const CashProcessingSection = () => {
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
       <SectionHeader title='Starting Cash & Misc Expenses' />
       
-      <RHFAdornedField name='startingCash' label='Starting Cash' adornment='$' fullWidth />
+      <RHFAdornedField name='startingCash' label='Starting Cash' adornment='$' fullWidth confirmOnChange={true} />
 
       <Box sx = {(theme) => ({ mt: 2, [theme.breakpoints.up('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
         <Subtitle title='Misc Expenses' />

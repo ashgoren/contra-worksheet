@@ -33,25 +33,27 @@ export const calculateTalent = (data: WorksheetFormData): {
     };
   }
 
+  const talentTrimed = data.talent.filter(t => t.name.trim() !== '');
+
   // 1. Calculate Guarantees
   const pcdcGuarantee = Number(data.guarantee) || 0;
   const soundGuarantee = data.gearRental ? SOUND_GUARANTEE - GEAR_RENTAL : SOUND_GUARANTEE;
   const guarantees: Record<string, number> = {
-    ...calculatePortions(pcdcGuarantee, data.talent),
-    sound: calculatePortions(soundGuarantee, data.talent).sound
+    ...calculatePortions(pcdcGuarantee, talentTrimed),
+    sound: calculatePortions(soundGuarantee, talentTrimed).sound
   };
 
   // 2. Add Travel & Guarantee to Talent
-  const talent = data.talent.map((t) => ({
+  const talent = talentTrimed.map((t) => ({
     ...t,
     travel: Number(t.travel) || 0,
     guarantee: guarantees[t.role],
   }));
   const totalTravel = talent.reduce((sum, t) => sum + t.travel, 0);
-  const totalGuarantee = talent.reduce((sum, t) => sum + t.guarantee, 0) + pcdcGuarantee; // PCDC also gets a 90 guarantee
+  const totalGuarantee = talent.reduce((sum, t) => sum + t.guarantee, 0);
 
   // 3. Calculate Pay Basis
-  const payBasis = admissions - rent - miscExpenses - totalGuarantee - totalTravel;
+  const payBasis = admissions - rent - miscExpenses - totalGuarantee - totalTravel - (data.gearRental ? GEAR_RENTAL : 0);
 
   // 4. Calculate Shares
   let pcdcShare = 0;
@@ -62,13 +64,13 @@ export const calculateTalent = (data: WorksheetFormData): {
     const numCallerShares = Math.min(MAX_SHARES_PER_ROLE.caller, numCallers);
     const numMusicianShares = Math.min(MAX_SHARES_PER_ROLE.musician, numMusicians);
     const numShares = numCallerShares + numMusicianShares + 1; // PCDC also gets one share
-    
+
     pcdcShare = payBasis / numShares;
     shares = calculatePortions(pcdcShare, talent);
   }
   const talentWithShares = talent.map((t) => ({
     ...t,
-    share: t.role === 'sound' ? 0 : shares[t.role]
+    share: t.role === 'sound' ? 0 : Math.floor(shares[t.role])
   }));
 
   // 5. Calculate Total Pay
@@ -81,6 +83,6 @@ export const calculateTalent = (data: WorksheetFormData): {
     talent: finalTalent,
     payBasis,
     pcdcGuarantee,
-    pcdcShare
+    pcdcShare: Math.floor(pcdcShare)
   };
 };

@@ -1,24 +1,20 @@
-import { parse, isNum } from 'utils';
+import { isNum } from 'utils';
 import type { WorksheetFormData } from 'types/worksheet';
 
-export const calculateTotalCash = (data: Pick<WorksheetFormData, 'ones' | 'fives' | 'tens' | 'twenties' | 'fifties' | 'hundreds' | 'coins'>): number | null => {
-  const cashValues = [data.ones, data.fives, data.tens, data.twenties, data.fifties, data.hundreds, data.coins].map(parse);
-  if (cashValues.every(isNum)) {
-    const [ ones, fives, tens, twenties, fifties, hundreds, coins ] = cashValues;
-    return coins + ones + fives * 5 + tens * 10 + twenties * 20 + fifties * 50 + hundreds * 100;
-  }
-  return null;
+export const calculateTotalCash = (data: Pick<WorksheetFormData, 'ones' | 'fives' | 'tens' | 'twenties' | 'fifties' | 'hundreds' | 'coins'>): number => {
+  const cashValues = [data.ones, data.fives, data.tens, data.twenties, data.fifties, data.hundreds, data.coins].map(Number); // Default these to 0 if blank
+  const [ ones, fives, tens, twenties, fifties, hundreds, coins ] = cashValues;
+  return coins + ones + fives * 5 + tens * 10 + twenties * 20 + fifties * 50 + hundreds * 100;
 };
 
 export const calculateFinancials = (data: WorksheetFormData) => {
   const totalCashInBox = calculateTotalCash(data);
 
-  const startingCash = parse(data.startingCash);
-  const checks = parse(data.checks);
-  const electronic = parse(data.electronic);
-  const donations = parse(data.donations);
-  const rent = Number(data.rent) || 0;
-
+  const startingCash = Number(data.startingCash) || 0; // this should always be set
+  const checks = Number(data.checks) || 0;
+  const electronic = Number(data.electronic) || 0;
+  const donations = Number(data.donations) || 0;
+  const rent = Number(data.rent) || 0; // this should always be set
   const memberships = data.memberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount) }));
   const totalMemberships = memberships.reduce((acc, curr) => acc + curr.amount, 0);
 

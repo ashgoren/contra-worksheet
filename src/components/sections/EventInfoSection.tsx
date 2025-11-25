@@ -15,7 +15,7 @@ export const EventInfoSection = () => {
             <RHFTextField name='date' label='Date' type='date' />
             <RHFTextField name='band' label='Band Name' />
             <RHFTextField name='location' label='Location' />
-            <RHFAdornedField name='rent' label='Hall Rental' adornment='$' fullWidth />
+            <RHFAdornedField name='rent' label='Hall Rental' adornment='$' fullWidth confirmOnChange={true} />
           </Box>
         </Grid>
 

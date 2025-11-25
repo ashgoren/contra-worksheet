@@ -1,16 +1,28 @@
+import { useRef } from 'react';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Box, Stack, Typography, TextField, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
+import { useConfirm } from 'material-ui-confirm';
 import type { TextFieldProps } from '@mui/material';
 import type { Path, FieldValues } from 'react-hook-form';
 
 interface RHFTextFieldProps<TFieldValues extends FieldValues>
   extends Omit<TextFieldProps, 'name' | 'defaultValue'> {
     name: Path<TFieldValues>;
+    confirmOnChange?: boolean;
 }
 
-export const RHFTextField = <TFieldValues extends FieldValues>({ name, label, type = 'text', size = 'small', ...rest }: RHFTextFieldProps<TFieldValues>) => {
+export const RHFTextField = <TFieldValues extends FieldValues>({
+  name,
+  label,
+  type = 'text',
+  size = 'small',
+  confirmOnChange = false,
+  ...rest
+}: RHFTextFieldProps<TFieldValues>) => {
   const { control } = useFormContext();
+  const confirm = useConfirm();
+  const originalValueRef = useRef('');
   return (
     <Controller
       name={name}
@@ -21,6 +33,9 @@ export const RHFTextField = <TFieldValues extends FieldValues>({ name, label, ty
           label={label}
           type={type === 'number' ? 'text' : type}
           size={size}
+          onFocus={() => {
+           originalValueRef.current = field.value;
+          }}
           onChange={(e) => {
             const { value } = e.target;
             if (type === 'number') {
@@ -28,6 +43,21 @@ export const RHFTextField = <TFieldValues extends FieldValues>({ name, label, ty
               if (isUnsignedFloat) field.onChange(value);
             } else {
               field.onChange(value);
+            }
+          }}
+          onBlur={async () => {
+            if (!field.value) {
+              field.onChange(originalValueRef.current);
+              return;
+            }
+            if (confirmOnChange && field.value !== originalValueRef.current) {
+              const { confirmed } = await confirm({
+                title: `Confirm Change: ${label}`,
+                description: `Are you sure you want to change ${label} to $${field.value}?`,
+              });
+              if (!confirmed) {
+                field.onChange(originalValueRef.current);
+              }
             }
           }}
           value={field.value ?? ''}

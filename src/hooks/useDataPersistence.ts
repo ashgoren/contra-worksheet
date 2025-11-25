@@ -27,7 +27,7 @@ export const useDataPersistence = () => {
       }
     } else {
       if (!navigator.onLine) console.warn('Offline: Skipping Firestore backup');
-      if (!data.date || !data.band) console.warn('Date & band fields are blank: Skipping Firestore backup');
+      if (!data.date || !data.band) console.warn('Date or band fields are blank: Skipping Firestore backup');
     }
 
   }, [getValues]);

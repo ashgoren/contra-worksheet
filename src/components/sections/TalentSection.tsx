@@ -30,7 +30,7 @@ export const TalentSection = () => {
         <RHFCheckbox name='gearRental' label='Sound person used our gear?' />
       </Typography>
 
-      <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' />
+      <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' confirmOnChange={true} />
 
       <Box sx = {(theme) => ({ mt: 2, [theme.breakpoints.up('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
         <Subtitle title='Talent' />

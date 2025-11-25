@@ -4,10 +4,6 @@ export const loadFromLocalStorage = () => {
   return stored ? JSON.parse(stored) : null;
 };
 
-export const parse = (value: string | undefined): number | null => {
-  return (value != null && value !== '') ? Number(value) : null;
-};
-
 export const formatCurrency = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return '-';
   if (Number.isInteger(value)) return String(value);

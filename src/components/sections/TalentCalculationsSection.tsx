@@ -58,7 +58,7 @@ export const TalentCalculationsSection = () => {
         </Typography>
         <Table>
           <TableBody>
-            <SummaryTableRow label='Pay Basis' description={<>used to calculate shares<br />{`admissions - rent - misc expenses - total travel - talent guarantees - pcdc guarantee`}</>} value={payBasis} />
+            <SummaryTableRow label='Pay Basis' description={<>used to calculate shares<br />{`admissions - rent - misc expenses - total travel - talent guarantees`}</>} value={payBasis} />
             <SummaryTableRow label='Share' description={<>based on pay basis and # of talent</>} value={pcdcShare} />
           </TableBody>
         </Table>
