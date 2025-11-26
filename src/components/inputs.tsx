@@ -46,10 +46,6 @@ export const RHFTextField = <TFieldValues extends FieldValues>({
             }
           }}
           onBlur={async () => {
-            if (!field.value) {
-              field.onChange(originalValueRef.current);
-              return;
-            }
             if (confirmOnChange && field.value !== originalValueRef.current) {
               const { confirmed } = await confirm({
                 title: `Confirm Change: ${label}`,
