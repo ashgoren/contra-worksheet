@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Box, Dialog, Typography } from '@mui/material';
 import SignatureCanvas from 'react-signature-canvas';
 import { formatCurrency } from 'utils';
@@ -21,8 +21,9 @@ export const SignatureDialog = ({ open, onClose, onSave, person }: {
     setEmpty(true);
   };
 
-  const setupObserver = useCallback(() => {
-    const node = containerRef.current; 
+  useEffect(() => {
+    if (!open) return;
+    const node = containerRef.current;
     if (!node) return; 
     const observer = new ResizeObserver(entries => {
       const width = entries[0]?.contentRect?.width; // content area width excluding padding
@@ -31,8 +32,9 @@ export const SignatureDialog = ({ open, onClose, onSave, person }: {
         setTimeout(() => { clear() }, 50); // timeout necsssary to reset bg color
       }
     });
-    observer.observe(node); // auto-destroyed on component unmount
-  }, []);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [open]);
 
   if (!person) return null;
 
@@ -53,7 +55,6 @@ export const SignatureDialog = ({ open, onClose, onSave, person }: {
       onClose={onClose}
       maxWidth='sm'
       fullWidth
-      slotProps={{ transition: { onEntered: setupObserver } }}
     >
       <Box ref={containerRef} sx={{
         my: 1,
