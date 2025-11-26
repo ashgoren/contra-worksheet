@@ -24,8 +24,8 @@ export const FinalCalculationsSection = () => {
         <Table>
           <TableBody>
             <SummaryTableRow label='PCDC Profit' description='guarantee + share' value={pcdcProfit} />
-            <SummaryTableRow label='Dance Profit/Loss' description='admissions - totalTalentPay - rent - gear rental fee (if applicable)' value={danceProfitLoss} />
-            <SummaryTableRow label='Check to PCDC' description='cash payments - totalTalentPay - miscExpenses' value={checkToPcdc} />
+            <SummaryTableRow label='Dance Profit/Loss' description='admissions - totalTalentPay - rent - gear rental fee if applicable' value={danceProfitLoss} />
+            <SummaryTableRow label='Check to PCDC' description='cash payments - totalTalentPay - miscExpenses - gear rental fee if applicable' value={checkToPcdc} />
           </TableBody>
         </Table>
       </Box>

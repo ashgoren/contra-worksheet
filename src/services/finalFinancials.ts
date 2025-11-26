@@ -13,7 +13,7 @@ export const calculateFinalFinancials = (data: WorksheetFormData) => {
 
   const totalTalentPay = talent.reduce((acc, curr) => acc + curr.totalPay, 0);
   const danceProfitLoss = admissions - totalTalentPay - rent - (data.gearRental ? GEAR_RENTAL : 0);
-  const checkToPcdc = cashPayments - totalTalentPay - miscExpenses;
+  const checkToPcdc = cashPayments - totalTalentPay - miscExpenses - (data.gearRental ? GEAR_RENTAL : 0);
 
   return {
     pcdcProfit: pcdcGuarantee + pcdcShare,
