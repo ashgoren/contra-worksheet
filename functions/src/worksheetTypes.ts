@@ -1,9 +1,11 @@
 // NOTE: These types are duplicated from src/types/worksheet.ts
 // Keep in sync when making changes
 
+export type Role = 'sound' | 'caller' | 'musician';
+
 export interface PersonInput {
   name: string;
-  role: string;
+  role: Role;
   travel: number | string;
   signature?: string;
 }

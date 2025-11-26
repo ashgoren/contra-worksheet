@@ -1,10 +1,10 @@
 import { isNum } from 'utils';
 import { calculateFinancials } from './financials';
 import { SOUND_GUARANTEE, GEAR_RENTAL, MAX_SHARES_PER_ROLE } from 'src/config';
-import type { WorksheetFormData, PersonCalculated } from 'types/worksheet';
+import type { WorksheetFormData, PersonCalculated, Role } from 'types/worksheet';
 
-const calculatePortions = (amount: number, talent: { role: string }[]) => {
-  const roles = ['sound', 'caller', 'musician'];
+const calculatePortions = (amount: number, talent: { role: Role }[]) => {
+  const roles: Role[] = ['sound', 'caller', 'musician'];
   return roles.reduce((acc, role) => {
     const numPeople = talent.filter(t => t.role === role).length;
     if (numPeople === 0) {

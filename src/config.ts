@@ -1,3 +1,5 @@
+import type { Role } from 'types/worksheet';
+
 export const USE_SYSTEM_COLOR_MODE = true;
 
 export const SOUND_GUARANTEE = 150;
@@ -39,9 +41,9 @@ export const DEFAULTS = {
   gearRental: false,
   guarantee: '90',
   talent: [
-    { name: '', role: 'sound', travel: '' },
-    { name: '', role: 'caller', travel: '' },
-    { name: '', role: 'musician', travel: '' },
-    { name: '', role: 'musician', travel: '' },
+    { name: '', role: 'sound' as Role, travel: '' },
+    { name: '', role: 'caller' as Role, travel: '' },
+    { name: '', role: 'musician' as Role, travel: '' },
+    { name: '', role: 'musician' as Role, travel: '' },
   ],
 };
