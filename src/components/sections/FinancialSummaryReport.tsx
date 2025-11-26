@@ -90,7 +90,7 @@ export const FinancialSummaryReport = ({ data }: { data: WorksheetFormData }) =>
         <SummaryTableRow label='Evening Deposits' value={financials.eveningDeposits} description='total cash in box + checks' isOdd />
         <SummaryTableRow label='Admissions' value={financials.admissions} description='total payments - donations - memberships' />
         <SummaryTableRow label='PCDC Profit' value={pcdcProfit} description='guarantee + share' />
-        <SummaryTableRow label='Dance Profit/Loss' value={danceProfitLoss} description='admissions - totalTalentPay - rent' />
+        <SummaryTableRow label='Dance Profit/Loss' value={danceProfitLoss} description='admissions - totalTalentPay - rent - gear rental fee (if applicable)' />
         <SummaryTableRow label='Check to PCDC' value={checkToPcdc} description='cash payments - totalTalentPay - miscExpenses' />
       </View>
     </View>

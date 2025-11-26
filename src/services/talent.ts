@@ -53,7 +53,7 @@ export const calculateTalent = (data: WorksheetFormData): {
   const totalGuarantee = talent.reduce((sum, t) => sum + t.guarantee, 0);
 
   // 3. Calculate Pay Basis
-  const payBasis = admissions - rent - miscExpenses - totalGuarantee - totalTravel - (data.gearRental ? GEAR_RENTAL : 0);
+  const payBasis = admissions - rent - totalTravel - totalGuarantee - pcdcGuarantee - (data.gearRental ? GEAR_RENTAL : 0);
 
   // 4. Calculate Shares
   let pcdcShare = 0;
