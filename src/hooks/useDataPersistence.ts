@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { doc, setDoc, getDocs, collection, query, orderBy, limit } from 'firebase/firestore';
 import { db } from 'services/firebase';
+import { debounce } from 'lodash';
 import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const useDataPersistence = () => {
@@ -32,6 +33,12 @@ export const useDataPersistence = () => {
 
   }, [getValues]);
 
+  const debouncedSaveBackup = useRef(debounce(saveBackup, 2000)).current;
+
+  useEffect(() => {
+    return () => debouncedSaveBackup.cancel();
+  }, [debouncedSaveBackup]);
+
   // Retrieve backups from Firestore
   const getBackups = useCallback(async (): Promise<WorksheetBackup[] | undefined> => {
     try {
@@ -49,5 +56,8 @@ export const useDataPersistence = () => {
     }
   }, []);
 
-  return { saveBackup, getBackups };
+  return {
+    saveBackup: debouncedSaveBackup,
+    getBackups
+  };
 };
