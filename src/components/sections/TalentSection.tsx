@@ -4,6 +4,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import { SectionHeader, Subtitle } from 'ui';
+import { TravelAmountsPopover } from 'components/Popover';
 import { RHFCheckbox, RHFTextField, RHFAdornedField, RHFSelect } from 'inputs';
 import { useFieldArrayManager } from 'hooks/useFieldArrayManager';
 import type { WorksheetFormData } from 'types/worksheet';
@@ -33,7 +34,11 @@ export const TalentSection = () => {
       <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' confirmOnChange={true} />
 
       <Box sx = {(theme) => ({ mt: 2, [theme.breakpoints.up('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
-        <Subtitle title='Talent' />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Subtitle title='Talent' />
+          <TravelAmountsPopover />
+        </Box>
+
         <Stack direction='column' spacing={2} sx={{ mt: 2 }}>
           {fields.map((field, index) => (
             <Grid container spacing={2} key={field.id} sx = {(theme) => ({ mt: 2, [theme.breakpoints.down('sm')]: { p: 3, border: '1px solid #ccc', borderRadius: 1 } }) }>
