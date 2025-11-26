@@ -19,7 +19,7 @@ export const WorksheetForm = () => {
   const { handleSubmit, reset, getValues } = useFormContext<WorksheetFormData>();
   const { saveBackup, getBackups } = useDataPersistence();
   const { submitData } = useSubmit();
-  const { isValid } = useFormValidation();
+  const { isValid, errors } = useFormValidation();
   const isOnline = useOnlineStatus();
   const confirm = useConfirm();
 
@@ -75,6 +75,7 @@ export const WorksheetForm = () => {
     console.log('onSubmit', data);
     setError(null);
     setSubmitting(true);
+
     try {
       await submitData(data);
       console.log('Data successfully submitted');
@@ -95,7 +96,17 @@ export const WorksheetForm = () => {
       onBlur={saveBackup}
     >
       {page === 1 && <WorksheetFormInputs />}
+
       {page === 2 && <WorksheetFormCalculations />}
+      {page === 2 && !isValid &&
+        <Alert severity='warning' sx={{ mt: 2 }}>Update before submitting:
+          <ul>
+            {errors.map((err, idx) => (
+              <li key={idx}>{err}</li>
+            ))}
+          </ul>
+        </Alert>
+      }
       {page === 'success' && <Success />}
 
       {submitting && <Alert severity='info' sx={{ mt: 2 }}>Submitting form, please wait...</Alert>}

@@ -1,10 +1,11 @@
 import { isNum } from 'utils';
 import type { WorksheetFormData } from 'types/worksheet';
 
-export const calculateTotalCash = (data: Pick<WorksheetFormData, 'ones' | 'fives' | 'tens' | 'twenties' | 'fifties' | 'hundreds' | 'coins'>): number => {
+export const calculateTotalCash = (data: Pick<WorksheetFormData, 'ones' | 'fives' | 'tens' | 'twenties' | 'fifties' | 'hundreds' | 'coins'>): number | null => {
   const cashValues = [data.ones, data.fives, data.tens, data.twenties, data.fifties, data.hundreds, data.coins].map(Number); // Default these to 0 if blank
   const [ ones, fives, tens, twenties, fifties, hundreds, coins ] = cashValues;
-  return coins + ones + fives * 5 + tens * 10 + twenties * 20 + fifties * 50 + hundreds * 100;
+  const total = coins + ones + fives * 5 + tens * 10 + twenties * 20 + fifties * 50 + hundreds * 100;
+  return total > 0 ? total : null;
 };
 
 export const calculateFinancials = (data: WorksheetFormData) => {
