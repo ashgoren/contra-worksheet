@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_FIREBASE_CONFIG: ${{ secrets.VITE_FIREBASE_CONFIG }}
+      VITE_BOOKKEEPER_CONTACT: ${{ secrets.VITE_BOOKKEEPER_CONTACT }}
+      VITE_MEMBERSHIP_CONTACT: ${{ secrets.VITE_MEMBERSHIP_CONTACT }}
     steps:
       - uses: actions/checkout@v4
       - name: npm install
