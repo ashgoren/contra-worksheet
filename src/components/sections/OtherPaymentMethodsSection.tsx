@@ -5,9 +5,9 @@ import { RHFAdornedField } from 'inputs';
 export const OtherPaymentMethodsSection = () => {
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-      <SectionHeader title='Other Payment Methods' />
+      <SectionHeader title='Checks & Electronic' />
       <Typography variant='body2' sx={{ mb: 2, fontStyle: 'italic' }}>
-        Include donations & memberships
+        Include donations & memberships paid by these means
       </Typography>
 
       <Grid container spacing={2}>

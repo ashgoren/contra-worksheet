@@ -39,6 +39,7 @@ export const calculateFinancials = (data: WorksheetFormData) => {
     : null;
 
   return {
+    startingCash,
     totalCashInBox,
     cashPayments,
     miscExpenses: totalPettyCash,

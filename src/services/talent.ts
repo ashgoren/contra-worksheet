@@ -20,7 +20,10 @@ export const calculateTalent = (data: WorksheetFormData): {
   talent: PersonCalculated[] | null,
   payBasis: number | null,
   pcdcGuarantee: number | null,
-  pcdcShare: number | null
+  pcdcShare: number | null,
+  gearRental: number | null,
+  totalTravel: number | null,
+  totalGuarantee: number | null
 } => {
   const { admissions, miscExpenses, rent } = calculateFinancials(data);
 
@@ -29,7 +32,10 @@ export const calculateTalent = (data: WorksheetFormData): {
       talent: null,
       payBasis: null,
       pcdcGuarantee: null,
-      pcdcShare: null
+      pcdcShare: null,
+      gearRental: null,
+      totalTravel: null,
+      totalGuarantee: null
     };
   }
 
@@ -83,6 +89,9 @@ export const calculateTalent = (data: WorksheetFormData): {
     talent: finalTalent,
     payBasis,
     pcdcGuarantee,
-    pcdcShare: Math.floor(pcdcShare)
+    pcdcShare: Math.floor(pcdcShare),
+    gearRental: data.gearRental ? GEAR_RENTAL : 0,
+    totalTravel,
+    totalGuarantee
   };
 };

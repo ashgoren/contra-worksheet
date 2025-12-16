@@ -1,10 +1,21 @@
 import { Alert, Typography } from '@mui/material';
+import { useFinalCalculations } from 'hooks/useFinalCalculations';
+
 const { VITE_BOOKKEEPER_CONTACT, VITE_MEMBERSHIP_CONTACT } = import.meta.env;
 
 export const Success = () => {
+  const { checkToPcdc } = useFinalCalculations();
+
   return (
     <>
       <Alert severity='success'>Worksheet submitted!</Alert>
+
+      <Typography sx={{ my: 3, ml: 2 }}>
+        {Number(checkToPcdc) > 0
+          ? <strong>Write check to PCDC for: ${checkToPcdc}</strong>
+          : <>No check to PCDC</>
+        }
+      </Typography>
 
       <Typography sx={{ my: 3, ml: 2 }}>
         <strong>Mail checks to:</strong><br />

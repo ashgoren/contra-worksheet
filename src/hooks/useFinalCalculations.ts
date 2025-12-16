@@ -6,7 +6,7 @@ export const useFinalCalculations = () => {
   const { control } = useFormContext<WorksheetFormData>();
   const watchedData = useWatch({ control });
 
-  const { pcdcProfit, danceProfitLoss, checkToPcdc } = calculateFinalFinancials(watchedData as WorksheetFormData);
+  const { totalTalentPay, pcdcProfit, danceProfitLoss, checkToPcdc } = calculateFinalFinancials(watchedData as WorksheetFormData);
 
-  return { pcdcProfit, danceProfitLoss, checkToPcdc };
+  return { totalTalentPay, pcdcProfit, danceProfitLoss, checkToPcdc };
 };

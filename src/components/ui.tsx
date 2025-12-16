@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Divider } from '@mui/material';
 import { TailSpin } from 'react-loading-icons';
 
 export const SectionHeader = ({ title }: { title: string }) => (
@@ -6,6 +6,10 @@ export const SectionHeader = ({ title }: { title: string }) => (
     {title}
   </Typography>
 );
+
+export const SectionDivider = () => {
+  return <Divider component='hr' sx={{ borderBottomWidth: 4, my: 4 }} />
+}
 
 export const Subtitle = ({ title }: { title: string }) => (
   <Typography variant='subtitle2' component='h3' sx={{ fontWeight: 'bold', mb: 1 }}>

@@ -23,7 +23,7 @@ export const FinalCalculationsSection = () => {
       <Box sx={{ maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
         <Table>
           <TableBody>
-            <SummaryTableRow label='PCDC Profit' description='guarantee + share' value={pcdcProfit} />
+            {/* <SummaryTableRow label='PCDC Profit' description='guarantee + share' value={pcdcProfit} /> */}
             <SummaryTableRow label='Dance Profit/Loss' description='admissions - totalTalentPay - rent - gear rental fee if applicable' value={danceProfitLoss} />
             <SummaryTableRow label='Check to PCDC' description='cash payments - totalTalentPay - miscExpenses - gear rental fee if applicable' value={checkToPcdc} />
           </TableBody>
@@ -31,7 +31,7 @@ export const FinalCalculationsSection = () => {
       </Box>
       <Typography variant='body2' sx={{ mt: { xs: 2, sm: 1 }, p: 2, fontStyle: 'italic' }}>
         Confirm Check to PCDC amount equals remaining cash<br />
-        (after paying talent and petty cash, excluding starting cash)
+        (after paying talent and misc expenses, excluding starting cash)
       </Typography>
     </Paper>
   );

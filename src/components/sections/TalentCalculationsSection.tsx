@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Button, Box, Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, useMediaQuery } from '@mui/material';
+import { Button, Box, Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, useMediaQuery, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import RedoIcon from '@mui/icons-material/Redo'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { SignatureDialog } from 'components/SignatureDialog';
 import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
+import { useFinancials } from 'hooks/useFinancials';
 import { useSignatures } from 'hooks/useSignatures';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import type { ReactNode } from 'react';
@@ -13,7 +15,9 @@ import type { PersonCalculated } from 'types/worksheet';
 export const TalentCalculationsSection = () => {
   const isXs = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-  const { talent, payBasis, pcdcGuarantee, pcdcShare } = useTalent();
+  const { gearRental, talent, payBasis, pcdcGuarantee, pcdcShare, totalTravel, totalGuarantee } = useTalent();
+  const { rent, admissions } = useFinancials();
+
   const { addSignature } = useSignatures();
   const { saveBackup } = useDataPersistence();
 
@@ -36,7 +40,7 @@ export const TalentCalculationsSection = () => {
   if (!payBasis || !talent || talent.filter((p) => p.name).length === 0) {
     return (
       <Paper sx={{ p: 2, mb: 2 }}>
-        <SectionHeader title='Talent Pay Calculations' />
+        <SectionHeader title='Talent Pay' />
         <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
           Not enough data to calculate.
         </Typography>
@@ -46,22 +50,28 @@ export const TalentCalculationsSection = () => {
 
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
-      <SectionHeader title='Talent Pay Calculations' />
+      <SectionHeader title='Talent Pay' />
 
       <Box sx={{
         maxWidth: { xs: '100%', md: '735px' },
         border: '1px solid',
         borderRadius: 1
       }}>
-        <Typography variant='subtitle2' component='h3' sx={{ p: 2, fontWeight: 'bold' }}>
-          Internal Calculations
-        </Typography>
-        <Table>
-          <TableBody>
-            <SummaryTableRow label='Pay Basis' description={<>used to calculate shares<br />{`admissions - rent - total travel - talent guarantees - pcdc guarantee - gear rental fee if applicable`}</>} value={payBasis} />
-            <SummaryTableRow label='Share' description={<>based on pay basis and # of talent</>} value={pcdcShare} />
-          </TableBody>
-        </Table>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ mt: 2 }}>
+            <Typography variant='subtitle2' component='h3'>
+              Internal Calculations
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Table>
+              <TableBody>
+                <SummaryTableRow label='Pay Basis' description={`${admissions} admissions - ${rent} rent - ${totalTravel} travel - ${totalGuarantee} talent guarantees - ${pcdcGuarantee} pcdc guarantee - ${gearRental} gear rental`} value={payBasis} />
+                <SummaryTableRow label='Share' description={<>based on pay basis and number of talent</>} value={pcdcShare} />
+              </TableBody>
+            </Table>
+          </AccordionDetails>
+        </Accordion>
       </Box>
 
       {isXs ? (
@@ -198,7 +208,7 @@ const SummaryTableRow = ({ label, value, description }: { label: string; value: 
       <Box>
         <Typography variant='body1'>{label}</Typography>
         {description && (
-          <Typography variant='caption' color='text.secondary' sx={{ fontStyle: 'italic' }}>
+          <Typography variant='caption' color='text.secondary'>
             {description}
           </Typography>
         )}

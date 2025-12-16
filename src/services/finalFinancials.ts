@@ -8,7 +8,7 @@ export const calculateFinalFinancials = (data: WorksheetFormData) => {
   const { pcdcGuarantee, pcdcShare, talent } = calculateTalent(data);
 
   if (admissions === null || cashPayments === null || pcdcShare === null || pcdcGuarantee === null || talent === null) {
-    return { pcdcProfit: null, danceProfitLoss: null, checkToPcdc: null };
+    return { pcdcProfit: null, danceProfitLoss: null, checkToPcdc: null, totalTalentPay: null };
   }
 
   const totalTalentPay = talent.reduce((acc, curr) => acc + curr.totalPay, 0);
@@ -16,6 +16,7 @@ export const calculateFinalFinancials = (data: WorksheetFormData) => {
   const checkToPcdc = cashPayments - totalTalentPay - miscExpenses - (data.gearRental ? GEAR_RENTAL : 0);
 
   return {
+    totalTalentPay,
     pcdcProfit: pcdcGuarantee + pcdcShare,
     danceProfitLoss,
     checkToPcdc

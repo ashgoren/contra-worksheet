@@ -12,9 +12,10 @@ interface FormButtonsProps {
 
 export const FormButtons = ({ submittable, page, setPage, setError, onReset, onRestore }: FormButtonsProps) => {
 
-  // Clear error when page changes
+  // Clear error & scroll to top on page change
   useEffect(() => {
     setError(null);
+    window.scrollTo(0, 0);
   }, [page, setError]);
 
   return (

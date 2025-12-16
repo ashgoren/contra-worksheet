@@ -18,7 +18,8 @@ export const useFinancials = () => {
     memberships,
     totalPayments,
     eveningDeposits,
-    admissions
+    admissions,
+    startingCash
   } = calculateFinancials(watchedData);
 
   return {
@@ -32,6 +33,7 @@ export const useFinancials = () => {
     memberships,
     totalPayments,
     eveningDeposits,
-    admissions
+    admissions,
+    startingCash
   };
 };
