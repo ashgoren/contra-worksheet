@@ -1,5 +1,5 @@
 import { Document, Page, Text, StyleSheet } from '@react-pdf/renderer';
-import { EventInfoReport, FinancialSummaryReport, ItemizationsReport, TalentGridReport } from 'components/sections';
+import { EventInfoReport, FinancialSummaryReport, ItemizationsReport, TalentGridReport } from 'components/sections/report';
 import { formatDateTime } from 'utils';
 import type { WorksheetFormData } from 'types/worksheet';
 

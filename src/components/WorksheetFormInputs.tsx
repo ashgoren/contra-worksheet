@@ -1,5 +1,5 @@
 import { Alert} from '@mui/material';
-import { EventInfoSection, CashBreakdownSection, OtherPaymentMethodsSection, DonationSection, MembershipSection, MiscExpensesSection, TalentSection } from 'components/sections';
+import { EventInfoSection, CashBreakdownSection, OtherPaymentMethodsSection, DonationSection, MembershipSection, MiscExpensesSection, TalentSection } from 'components/sections/inputs';
 import { useOnlineStatus } from 'hooks/useOnlineStatus';
 
 export const WorksheetFormInputs = () => {
