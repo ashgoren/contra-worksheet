@@ -27,11 +27,11 @@ export const FinancialSummary = () => {
             {/* <SummaryTableRow label='Evening Deposits' value={eveningDeposits} description='total cash in box + checks' /> */}
             <SummaryTableRow label='Admissions' value={admissions} description={`${totalPayments} payments - ${donations} donations - ${memberships} memberships`} />
             {/* <SummaryTableRow label='Talent Pay' value={totalTalentPay} /> */}
-            <SummaryTableRow label='Dance Profit/Loss' description={`${admissions} admissions - ${totalTalentPay} talent pay - ${rent} rent - ${gearRental} gear rental`} value={danceProfitLoss}/>
+            <SummaryTableRow label='Dance Profit/Loss' description={`${admissions} admissions - ${totalTalentPay} talent pay - ${rent} rent`} value={danceProfitLoss}/>
             {/* {miscExpenses > 0 && <SummaryTableRow label='Misc Expenses' value={miscExpenses} />} */}
             <SummaryTableRow label='Check to PCDC'
               description={<>
-                {`${cashPayments} cash payments - ${totalTalentPay} talent pay - ${miscExpenses} misc expenses - ${gearRental} gear rental`}<br />
+                {`${cashPayments} cash payments - ${totalTalentPay} talent pay - ${miscExpenses} misc expenses + ${gearRental} gear rental`}<br />
                 {Number(checkToPcdc) > 0 && <em>{`After paying talent & misc expenses, confirm there's ${checkToPcdc} left in the box (excluding starting cash)`}</em>}
               </>}
               value={Number(checkToPcdc) > 0 ? checkToPcdc : 0}

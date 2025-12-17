@@ -84,7 +84,7 @@ export const calculateTalent = (data: WorksheetFormData): {
     ...t,
     totalPay: t.travel + t.guarantee + t.share
   }));
-  
+
   return {
     talent: finalTalent,
     payBasis,
