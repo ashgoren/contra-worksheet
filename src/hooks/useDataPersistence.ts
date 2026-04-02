@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { doc, setDoc, getDocs, collection, query, orderBy, limit } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import { debounce } from 'lodash';
 import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
@@ -42,12 +42,12 @@ export const useDataPersistence = () => {
   // Retrieve backups from Firestore
   const getBackups = useCallback(async (): Promise<WorksheetBackup[] | undefined> => {
     try {
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      // const oneMonthAgo = new Date();
+      // oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
       const q = query(
         collection(db, 'backups'),
         orderBy('date', 'desc'),
-        limit(6)
+        // limit(6)
       );
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => doc.data() as WorksheetBackup);

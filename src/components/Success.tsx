@@ -6,6 +6,7 @@ const { VITE_BOOKKEEPER_CONTACT, VITE_MEMBERSHIP_CONTACT } = import.meta.env;
 export const Success = () => {
   const { checkToPcdc } = useFinalCalculations();
 
+  console.log('checkToPcdc', checkToPcdc);
   return (
     <>
       <Alert severity='success'>Worksheet submitted!</Alert>
