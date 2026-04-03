@@ -1,12 +1,8 @@
 import { Alert, Typography } from '@mui/material';
-import { useFinalCalculations } from 'hooks/useFinalCalculations';
 
 const { VITE_BOOKKEEPER_CONTACT, VITE_MEMBERSHIP_CONTACT } = import.meta.env;
 
-export const Success = () => {
-  const { checkToPcdc } = useFinalCalculations();
-
-  console.log('checkToPcdc', checkToPcdc);
+export const Success = ({ checkToPcdc }: { checkToPcdc: number | null }) => {
   return (
     <>
       <Alert severity='success'>Worksheet submitted!</Alert>

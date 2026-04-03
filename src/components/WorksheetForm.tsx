@@ -10,6 +10,7 @@ import { RestoreDialog } from './RestoreDialog';
 import { Success } from './Success';
 import { useFormValidation } from 'hooks/useFormValidation';
 import { useSubmit } from 'hooks/useSubmit';
+import { calculateFinalFinancials } from 'services/finalFinancials';
 import { useOnlineStatus } from 'hooks/useOnlineStatus';
 import { isEqual } from 'lodash';
 import { DEFAULTS } from 'src/config';
@@ -26,6 +27,7 @@ export const WorksheetForm = () => {
   const [page, setPage] = useState<number | string>(1);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [submittedCheckToPcdc, setSubmittedCheckToPcdc] = useState<number | null>(null);
 
   const [backups, setBackups] = useState<WorksheetBackup[]>([]);
   const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
@@ -79,6 +81,8 @@ export const WorksheetForm = () => {
     try {
       await submitData(data);
       console.log('Data successfully submitted');
+      const { checkToPcdc } = calculateFinalFinancials(data);
+      setSubmittedCheckToPcdc(checkToPcdc);
       localStorage.removeItem('worksheetData');
       reset(DEFAULTS);
       setPage('success');
@@ -108,7 +112,7 @@ export const WorksheetForm = () => {
         </Alert>
       }
 
-      {page === 'success' && <Success />}
+      {page === 'success' && <Success checkToPcdc={submittedCheckToPcdc} />}
 
       {submitting && <Alert severity='info' sx={{ mt: 2 }}>Submitting form, please wait...</Alert>}
       {error && <Alert severity='error' sx={{ mt: 2 }}>{error}</Alert>}
