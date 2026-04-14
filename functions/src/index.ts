@@ -19,7 +19,7 @@ const FOLDER_ID = '1VH0PrNa6weicqF86-Ctv1hHZQ6T6OdjY';
 
 // Set ID of Google Sheet (retrieve from URL)
 // Spreadsheet must be shared with the service account client_email
-const SHEET_ID = '16NYzvtuR8JSXS1_IngjONp7dQGngvxnqQW7BxZCFFhc';
+const SPREADSHEET_ID = '13vLX4a63vLJ0W4FRmak1N3iMcdicFdwU1sMl8Gl8d8w';
 
 // Retrieve Service Token from Google Cloud Secret Manager
 const googleServiceToken = defineSecret('GOOGLE_SERVICE_TOKEN');
@@ -58,7 +58,7 @@ export const saveWorksheet = onCall({ maxInstances, region, secrets }, async (re
       worksheet,
       pdfUrl,
       sheets,
-      sheetId: SHEET_ID
+      spreadsheetId: SPREADSHEET_ID
     });
     logger.info('Worksheet data appended to spreadsheet successfully');
 

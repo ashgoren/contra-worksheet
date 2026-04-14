@@ -38,10 +38,10 @@ interface AppendToSpreadsheetParams {
   worksheet: SubmittedData;
   pdfUrl: string;
   sheets: sheets_v4.Sheets;
-  sheetId: string;
+  spreadsheetId: string;
 }
 
-export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, sheetId }: AppendToSpreadsheetParams) => {
+export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, spreadsheetId }: AppendToSpreadsheetParams) => {
   logger.info('Worksheet:', worksheet );
 
   const talent = {
@@ -80,25 +80,20 @@ export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, sheetId }
   };
 
   try {
-    // await sheets.spreadsheets.values.append({
-    //   spreadsheetId: sheetId,
-    //   range: 'Worksheets',
-    //   valueInputOption: 'USER_ENTERED',
-    //   insertDataOption: 'INSERT_ROWS',
-    //   requestBody: {
-    //     values: [
-    //       columnOrder.map(col => rowData[col])
-    //     ]
-    //   }
-    // });
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+    const sheetId = spreadsheet.data.sheets?.find(s => s.properties?.title === 'History')?.properties?.sheetId;
+    if (sheetId === undefined) {
+      throw new Error('Sheet with title "History" not found');
+    }
+
     await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: sheetId,
+      spreadsheetId,
       requestBody: {
         requests: [
           {
             insertDimension: {
               range: {
-                sheetId: Number(sheetId),
+                sheetId,
                 dimension: 'ROWS',
                 startIndex: 1,
                 endIndex: 3
@@ -110,7 +105,7 @@ export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, sheetId }
       }
     });
     await sheets.spreadsheets.values.update({
-      spreadsheetId: sheetId,
+      spreadsheetId,
       range: `History!A3`,
       valueInputOption: 'USER_ENTERED',
       requestBody: {

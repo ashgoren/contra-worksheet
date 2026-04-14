@@ -1,4 +1,11 @@
-### Contra Worksheet 
+# Deployment
+
+```sh
+git push origin main # or merge branch into main
+firebase deploy --only functions
+```
+
+# Contra Worksheet 
 
 Questions are noted and automatic calculations are indicated with `->`.
 
