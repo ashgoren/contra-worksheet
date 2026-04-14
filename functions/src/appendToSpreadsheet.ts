@@ -80,11 +80,39 @@ export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, sheetId }
   };
 
   try {
-    await sheets.spreadsheets.values.append({
+    // await sheets.spreadsheets.values.append({
+    //   spreadsheetId: sheetId,
+    //   range: 'Worksheets',
+    //   valueInputOption: 'USER_ENTERED',
+    //   insertDataOption: 'INSERT_ROWS',
+    //   requestBody: {
+    //     values: [
+    //       columnOrder.map(col => rowData[col])
+    //     ]
+    //   }
+    // });
+    await sheets.spreadsheets.batchUpdate({
       spreadsheetId: sheetId,
-      range: 'Worksheets',
+      requestBody: {
+        requests: [
+          {
+            insertDimension: {
+              range: {
+                sheetId: Number(sheetId),
+                dimension: 'ROWS',
+                startIndex: 1,
+                endIndex: 3
+              },
+              inheritFromBefore: false
+            }
+          }
+        ]
+      }
+    });
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: sheetId,
+      range: `History!A3`,
       valueInputOption: 'USER_ENTERED',
-      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [
           columnOrder.map(col => rowData[col])
