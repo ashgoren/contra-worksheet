@@ -25,7 +25,8 @@ const columnOrder = [
   'rafflePrize',
   'notes',
   'pdfUrl',
-  'timestamp'
+  'timestamp',
+  'submittedBy'
 ];
 
 interface SubmittedData extends Omit<WorksheetFormData, 'talent'> {
@@ -74,7 +75,8 @@ export const appendToSpreadsheet = async ({ worksheet, pdfUrl, sheets, sheetId }
     rafflePrize: worksheet.rafflePrize,
     notes: worksheet.notes,
     pdfUrl,
-    timestamp: formatDateTime(new Date())
+    timestamp: formatDateTime(new Date()),
+    submittedBy: worksheet.submittedBy ?? ''
   };
 
   try {
