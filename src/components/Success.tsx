@@ -1,4 +1,5 @@
 import { Alert, Typography } from '@mui/material';
+import { formatCurrency } from 'src/utils';
 
 const { VITE_BOOKKEEPER_CONTACT, VITE_MEMBERSHIP_CONTACT } = import.meta.env;
 
@@ -9,7 +10,7 @@ export const Success = ({ checkToPcdc }: { checkToPcdc: number | null }) => {
 
       <Typography sx={{ my: 3, ml: 2 }}>
         {Number(checkToPcdc) > 0
-          ? <strong>Write check to PCDC for: ${checkToPcdc}</strong>
+          ? <strong>Write check to PCDC for: {formatCurrency(checkToPcdc)}</strong>
           : <>No check to PCDC</>
         }
       </Typography>
