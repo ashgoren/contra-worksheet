@@ -24,7 +24,7 @@ export const sendEmail = async ({ emailConfig, pdfUrl, date }: SendEmailProps) =
 
   logger.info('Sending email', { from, to });
   try {
-    mailTransport.sendMail({
+    await mailTransport.sendMail({
       from,
       to,
       subject: `PCDC Contra Worksheet - ${date}`,
