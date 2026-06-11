@@ -4,6 +4,8 @@
 
 **Page 1 — Data entry:** Fill in event info (most of which flows directly to the bookings history spreadsheet), cash/check/electronic payment breakdown, donations, memberships, misc expenses, and the talent grid.
 
+> **Cash breakdown note:**  Cash breakdown must include ALL cash in box, ***INCLUDING cash donations & cash membership payments!***
+
 > **Talent grid order:**  The first row defaults to the sound person, which is different from the old paper form.
 
 **Page 2 — Calculations:** Displays computed results based on your inputs, including the talent grid with share amounts and signature spots. There is also a spot to enter your name before submitting.
