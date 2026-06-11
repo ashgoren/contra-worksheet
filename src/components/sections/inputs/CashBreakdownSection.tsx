@@ -8,8 +8,8 @@ export const CashBreakdownSection = () => {
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
       <SectionHeader title='Cash Breakdown' />
-      <Typography variant='body2' sx={{ mb: 2, fontStyle: 'italic' }}>
-        Count all cash in box, including donations, memberships, starting cash
+      <Typography variant='body1' sx={{ mb: 2, fontStyle: 'italic', color: 'red' }}>
+        Count all cash in box, <strong>including donations, memberships, starting cash</strong>
       </Typography>
 
       <Grid container spacing={3}>
