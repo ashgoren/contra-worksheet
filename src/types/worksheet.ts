@@ -61,8 +61,10 @@ export interface WorksheetFormData {
 
   // Submission
   submittedBy: string;
+  submissionNote: string;
 }
 
 export interface WorksheetBackup extends WorksheetFormData {
   updatedAt: string;
+  sessionId: string;
 }

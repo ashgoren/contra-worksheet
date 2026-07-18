@@ -1,3 +1,5 @@
+export const generateSessionId = (): string => crypto.randomUUID();
+
 // not in useDataPersistence hook because this is called outside of FormProvider
 export const loadFromLocalStorage = () => {
   const stored = localStorage.getItem('worksheetData');

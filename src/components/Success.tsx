@@ -10,7 +10,7 @@ export const Success = ({ checkToPcdc }: { checkToPcdc: number | null }) => {
 
       <Typography sx={{ my: 3, ml: 2 }}>
         {Number(checkToPcdc) > 0
-          ? <strong>Write check to PCDC for: {formatCurrency(checkToPcdc)}</strong>
+          ? <strong>Write check to PCDC for: ${formatCurrency(checkToPcdc)}</strong>
           : <>No check to PCDC</>
         }
       </Typography>

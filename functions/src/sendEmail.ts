@@ -7,9 +7,10 @@ interface SendEmailProps {
   emailConfig: ReturnType<typeof defineSecret>;
   pdfUrl: string;
   date: string;
+  submissionNote?: string;
 }
 
-export const sendEmail = async ({ emailConfig, pdfUrl, date }: SendEmailProps) => {
+export const sendEmail = async ({ emailConfig, pdfUrl, date, submissionNote }: SendEmailProps) => {
   const { from, to, aws_smtp_user, aws_smtp_password, aws_smtp_endpoint } = JSON.parse(emailConfig.value());
   logger.info('from', from, 'to', to, 'aws_smtp_endpoint', aws_smtp_endpoint, 'aws_smtp_user', aws_smtp_user, 'aws_smtp_password (length)', aws_smtp_password.length);
 
@@ -29,6 +30,7 @@ export const sendEmail = async ({ emailConfig, pdfUrl, date }: SendEmailProps) =
       to,
       subject: `PCDC Contra Worksheet - ${date}`,
       text: `Worksheet for ${date} submitted at ${formatDateTime(new Date())}: ${pdfUrl}`
+        + (submissionNote ? `\n\nNote from submitter: ${submissionNote}` : '')
     });
     logger.info(`Email sent successfully to ${to}`);
   } catch (error) {

@@ -16,6 +16,21 @@ export const SubmitterSection = () => {
           <TextField {...field} label='Name of person submitting form' size='small' sx={{ width: 300 }} />
         )}
       />
+      <Controller
+        name='submissionNote'
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label='Note for bookkeeper (optional)'
+            multiline
+            rows={2}
+            size='small'
+            fullWidth
+            sx={{ mt: 2 }}
+          />
+        )}
+      />
     </Paper>
   );
 };

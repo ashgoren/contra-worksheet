@@ -5,7 +5,7 @@ import { db } from 'services/firebase';
 import { debounce } from 'lodash';
 import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
-export const useDataPersistence = () => {
+export const useDataPersistence = (sessionId: string) => {
   const { getValues } = useFormContext<WorksheetFormData>();
 
   const saveBackup = useCallback(async () => {
@@ -13,27 +13,37 @@ export const useDataPersistence = () => {
 
     // Save to localStorage
     localStorage.setItem('worksheetData', JSON.stringify(data));
+    localStorage.setItem('worksheetSessionId', sessionId);
 
-    // Save backup to Firestore
-    if (data.date && data.band && navigator.onLine) {
+    // Save backup to Firestore (offline persistence handles queuing when offline)
+    if (data.date && data.band) {
       try {
         const backup: WorksheetBackup = {
           ...data,
+          sessionId,
           updatedAt: new Date().toISOString(),
         };
-        await setDoc(doc(db, 'backups', data.date), backup, { merge: true });
-        console.log('Firestore backup successful:', data.date);
+        await setDoc(doc(db, 'backups', sessionId), backup, { merge: true });
+        console.log('Firestore backup successful:', sessionId);
       } catch (error) {
         console.warn('Unable to perform Firestore backup:', error); // fail gracefully
       }
     } else {
-      if (!navigator.onLine) console.warn('Offline: Skipping Firestore backup');
-      if (!data.date || !data.band) console.warn('Date or band fields are blank: Skipping Firestore backup');
+      console.warn('Date or band fields are blank: Skipping Firestore backup');
     }
 
-  }, [getValues]);
+  }, [getValues, sessionId]);
 
-  const debouncedSaveBackup = useRef(debounce(saveBackup, 2000)).current;
+  // Stable ref so the debounced function always calls the latest saveBackup
+  // (necessary because sessionId can change without remounting the hook)
+  const saveBackupRef = useRef(saveBackup);
+  useEffect(() => {
+    saveBackupRef.current = saveBackup;
+  }, [saveBackup]);
+
+  const debouncedSaveBackup = useRef(
+    debounce(() => saveBackupRef.current(), 2000)
+  ).current;
 
   useEffect(() => {
     return () => debouncedSaveBackup.cancel();

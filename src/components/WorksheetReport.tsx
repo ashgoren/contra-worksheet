@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginBottom: 15,
     color: '#333',
+  },
+  submissionNote: {
+    marginBottom: 15,
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#333',
   }
 });
 
@@ -27,6 +33,10 @@ export const WorksheetReport = ({ data }: { data: WorksheetFormData }) => (
     <Page size='A4' style={styles.page}>
       <Text style={styles.title}>PCDC Contra Worksheet &mdash; {data.date}</Text>
       <Text style={styles.text}>Generated {formatDateTime(new Date())}</Text>
+
+      {data.submissionNote && (
+        <Text style={styles.submissionNote}>Note for bookkeeper: {data.submissionNote}</Text>
+      )}
 
       <EventInfoReport data={data} />
       <ItemizationsReport data={data} />

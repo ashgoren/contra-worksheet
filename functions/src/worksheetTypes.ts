@@ -61,4 +61,5 @@ export interface WorksheetFormData {
 
   // Submission
   submittedBy: string;
+  submissionNote: string;
 }

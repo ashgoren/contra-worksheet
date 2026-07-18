@@ -47,4 +47,5 @@ export const DEFAULTS = {
     { name: '', role: 'musician' as Role, travel: '' },
   ],
   submittedBy: '',
+  submissionNote: '',
 };

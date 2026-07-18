@@ -65,7 +65,8 @@ export const saveWorksheet = onCall({ maxInstances, region, secrets }, async (re
     await sendEmail({
       emailConfig,
       pdfUrl,
-      date: worksheet.date
+      date: worksheet.date,
+      submissionNote: worksheet.submissionNote
     });
     logger.info('Email sent to bookkeeper');
 
