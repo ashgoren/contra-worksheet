@@ -58,7 +58,7 @@ export const useDataPersistence = () => {
       // oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
       const q = query(
         collection(db, 'backups'),
-        orderBy('date', 'desc'),
+        orderBy('updatedAt', 'desc'),
         // limit(6)
       );
       const querySnapshot = await getDocs(q);
