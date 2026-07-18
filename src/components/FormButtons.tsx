@@ -1,22 +1,25 @@
 import { useEffect } from 'react';
-import { Stack, Button, Paper, Box } from '@mui/material';
+import { Stack, Button, Paper, Divider } from '@mui/material';
 
 interface FormButtonsProps {
   submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
   setError: (error: string | null) => void;
+  setNotice: (notice: string | null) => void;
   onReset: () => void;
   onRestore: () => void;
+  onDuplicate: () => void;
 }
 
-export const FormButtons = ({ submittable, page, setPage, setError, onReset, onRestore }: FormButtonsProps) => {
+export const FormButtons = ({ submittable, page, setPage, setError, setNotice, onReset, onRestore, onDuplicate }: FormButtonsProps) => {
 
-  // Clear error & scroll to top on page change
+  // Clear error & notice, and scroll to top, on page change
   useEffect(() => {
     setError(null);
+    setNotice(null);
     window.scrollTo(0, 0);
-  }, [page, setError]);
+  }, [page, setError, setNotice]);
 
   return (
     <Paper sx={{ p: 2, my: 4 }}>
@@ -24,15 +27,19 @@ export const FormButtons = ({ submittable, page, setPage, setError, onReset, onR
 
         {page === 1 && (
           <>
-            <Box>
+            <Stack direction='row' alignItems='center' spacing={1}>
               <Button variant='text' onClick={() => onReset()}>
-                Reset Form
+                Reset
               </Button>
-              |
+              <Divider orientation='vertical' flexItem />
+              <Button variant='text' size='small' onClick={() => onDuplicate()}>
+                Duplicate
+              </Button>
+              <Divider orientation='vertical' flexItem />
               <Button variant='text' onClick={() => onRestore()}>
-                Restore Backup
+                Backups
               </Button>
-            </Box>
+            </Stack>
             <Button variant='contained' color='info' onClick={() => setPage(2)}>
               Next
             </Button>
@@ -53,7 +60,7 @@ export const FormButtons = ({ submittable, page, setPage, setError, onReset, onR
         {page === 'success' && (
           <>
             <Button variant='text' onClick={() => onRestore()}>
-              Restore Backup
+              Backups
             </Button>
             <Button variant='contained' color='primary' onClick={() => onReset()}>
               New Worksheet

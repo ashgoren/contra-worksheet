@@ -8,7 +8,7 @@ const firebaseConfig = JSON.parse(VITE_FIREBASE_CONFIG);
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+const db = initializeFirestore(app, { localCache: persistentLocalCache(), ignoreUndefinedProperties: true });
 const functions = getFunctions(app, 'us-west1');
 
 if (DEV) {

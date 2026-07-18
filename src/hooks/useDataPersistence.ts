@@ -3,10 +3,12 @@ import { useFormContext } from 'react-hook-form';
 import { doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import { debounce } from 'lodash';
+import { useSessionId } from 'contexts/SessionIdContext';
 import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
-export const useDataPersistence = (sessionId: string) => {
+export const useDataPersistence = () => {
   const { getValues } = useFormContext<WorksheetFormData>();
+  const { sessionId } = useSessionId();
 
   const saveBackup = useCallback(async () => {
     const data = getValues();

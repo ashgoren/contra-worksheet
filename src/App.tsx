@@ -7,13 +7,14 @@ import { useAuth } from 'hooks/useAuth';
 import { Loading } from 'components/ui';
 import { WorksheetForm } from 'components/WorksheetForm';
 import { SignIn } from 'components/auth/SignIn';
+import { SessionIdProvider } from 'contexts/SessionIdContext';
 import { DEFAULTS } from 'src/config';
 import { loadFromLocalStorage } from 'utils';
 // import { auth } from 'services/firebase';
 
 function App() {
   const { user, loading } = useAuth();
-  const defaultValues = loadFromLocalStorage() || DEFAULTS;
+  const defaultValues = { ...DEFAULTS, ...loadFromLocalStorage() };
   const methods = useForm<WorksheetFormData>({ defaultValues });
 
   if (loading) {
@@ -31,8 +32,10 @@ function App() {
       <Layout>
         <FormProvider {...methods}>
           <ConfirmProvider>
-            {user ? <WorksheetForm /> : <SignIn />}
-            {/* <button type='button' onClick={() => auth.signOut()}>Sign Out</button> */}
+            <SessionIdProvider>
+              {user ? <WorksheetForm /> : <SignIn />}
+              {/* <button type='button' onClick={() => auth.signOut()}>Sign Out</button> */}
+            </SessionIdProvider>
           </ConfirmProvider>
         </FormProvider>
       </Layout>
