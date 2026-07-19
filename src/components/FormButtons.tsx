@@ -5,21 +5,17 @@ interface FormButtonsProps {
   submittable: boolean;
   page: number | string;
   setPage: (page: number | string) => void;
-  setError: (error: string | null) => void;
-  setNotice: (notice: string | null) => void;
   onReset: () => void;
   onRestore: () => void;
   onDuplicate: () => void;
 }
 
-export const FormButtons = ({ submittable, page, setPage, setError, setNotice, onReset, onRestore, onDuplicate }: FormButtonsProps) => {
+export const FormButtons = ({ submittable, page, setPage, onReset, onRestore, onDuplicate }: FormButtonsProps) => {
 
-  // Clear error & notice, and scroll to top, on page change
+  // Scroll to top on page change
   useEffect(() => {
-    setError(null);
-    setNotice(null);
     window.scrollTo(0, 0);
-  }, [page, setError, setNotice]);
+  }, [page]);
 
   return (
     <Paper sx={{ p: 2, my: 4 }}>

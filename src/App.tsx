@@ -8,6 +8,7 @@ import { Loading } from 'components/ui';
 import { WorksheetForm } from 'components/WorksheetForm';
 import { SignIn } from 'components/auth/SignIn';
 import { SessionIdProvider } from 'contexts/SessionIdContext';
+import { NotificationProvider } from 'contexts/NotificationContext';
 import { DEFAULTS } from 'src/config';
 import { loadFromLocalStorage } from 'utils';
 // import { auth } from 'services/firebase';
@@ -32,10 +33,12 @@ function App() {
       <Layout>
         <FormProvider {...methods}>
           <ConfirmProvider>
-            <SessionIdProvider>
-              {user ? <WorksheetForm /> : <SignIn />}
-              {/* <button type='button' onClick={() => auth.signOut()}>Sign Out</button> */}
-            </SessionIdProvider>
+            <NotificationProvider>
+              <SessionIdProvider>
+                {user ? <WorksheetForm /> : <SignIn />}
+                {/* <button type='button' onClick={() => auth.signOut()}>Sign Out</button> */}
+              </SessionIdProvider>
+            </NotificationProvider>
           </ConfirmProvider>
         </FormProvider>
       </Layout>

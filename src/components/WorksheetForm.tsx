@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useConfirm } from 'material-ui-confirm';
 import { useDataPersistence } from 'hooks/useDataPersistence';
 import { useSessionId } from 'contexts/SessionIdContext';
+import { useNotification } from 'contexts/NotificationContext';
 import { WorksheetFormInputs } from './WorksheetFormInputs';
 import { WorksheetFormCalculations } from './WorksheetFormCalculations';
 import { FormButtons } from './FormButtons';
@@ -21,14 +22,13 @@ export const WorksheetForm = () => {
   const { handleSubmit, reset, getValues } = useFormContext<WorksheetFormData>();
   const { saveBackup, getBackups, deleteBackup } = useDataPersistence();
   const { regenerateSessionId, setSessionId } = useSessionId();
+  const { notify } = useNotification();
   const { submitData } = useSubmit();
   const { isValid, errors } = useFormValidation();
   const isOnline = useOnlineStatus();
   const confirm = useConfirm();
 
   const [page, setPage] = useState<number | string>(1);
-  const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submittedCheckToPcdc, setSubmittedCheckToPcdc] = useState<number | null>(null);
 
@@ -38,8 +38,6 @@ export const WorksheetForm = () => {
   const isFormDirty = !isEqual(getValues(), DEFAULTS);
 
   const resetFormState = (values: WorksheetFormData) => {
-    setError(null);
-    setNotice(null);
     localStorage.removeItem('worksheetData');
     reset({ ...DEFAULTS, ...values });
     setPage(1);
@@ -56,6 +54,7 @@ export const WorksheetForm = () => {
     console.log('Resetting form to defaults');
     regenerateSessionId();
     resetFormState(DEFAULTS);
+    notify('Form reset to a blank worksheet.', 'success');
   };
 
   const handleDuplicate = async () => {
@@ -71,8 +70,7 @@ export const WorksheetForm = () => {
     regenerateSessionId();
     reset({ ...current, band: newBand });
     setPage(1);
-    setError(null);
-    setNotice(`Duplicated as a new worksheet${newBand ? ` - "${newBand}"` : ''}. This is the new copy.`);
+    notify(`Duplicated as a new worksheet${newBand ? ` - "${newBand}"` : ''}. This is the new copy.`, 'success');
 
     // The confirm dialog's exit transition holds document.body at overflow: hidden
     // for ~225ms after the promise resolves, so scrolling immediately is a no-op.
@@ -80,7 +78,6 @@ export const WorksheetForm = () => {
   };
 
   const handleGetBackups = async () => {
-    setError(null);
     const fetchedBackups = await getBackups();
     setBackups(fetchedBackups || []);
     setRestoreDialogOpen(true);
@@ -99,6 +96,7 @@ export const WorksheetForm = () => {
     console.log('Restoring backup', formData);
     setSessionId(backupSessionId);
     resetFormState(formData);
+    notify(`Restored backup for "${backup.band}" - ${backup.date}.`, 'success');
   };
 
   const handleDeleteBackup = async (backup: WorksheetBackup) => {
@@ -113,14 +111,12 @@ export const WorksheetForm = () => {
       setBackups(prev => prev.filter(b => b.sessionId !== backup.sessionId));
     } catch (error) {
       console.error('Error deleting backup:', error);
-      setError(`Failed to delete backup: ${error instanceof Error ? error.message : String(error)}`);
+      notify(`Failed to delete backup: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
   const onSubmit = async (data: WorksheetFormData) => {
     console.log('onSubmit', data);
-    setError(null);
-    setNotice(null);
     setSubmitting(true);
 
     try {
@@ -134,7 +130,7 @@ export const WorksheetForm = () => {
       setPage('success');
     } catch (error) {
       console.error('Error submitting data:', error);
-      setError(`Form submission failed! ${error instanceof Error ? error.message : String(error)}`);
+      notify(`Form submission failed! ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setSubmitting(false);
     }
@@ -145,8 +141,6 @@ export const WorksheetForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       onBlur={saveBackup}
     >
-      {notice && <Alert severity='success' sx={{ mb: 2 }} onClose={() => setNotice(null)}>{notice}</Alert>}
-
       {page === 1 && <WorksheetFormInputs />}
 
       {page === 2 && <WorksheetFormCalculations />}
@@ -163,14 +157,11 @@ export const WorksheetForm = () => {
       {page === 'success' && <Success checkToPcdc={submittedCheckToPcdc} />}
 
       {submitting && <Alert severity='info' sx={{ mt: 2 }}>Submitting form, please wait...</Alert>}
-      {error && <Alert severity='error' sx={{ mt: 2 }}>{error}</Alert>}
 
       <FormButtons
         submittable={isOnline && isValid && !submitting}
         page={page}
         setPage={setPage}
-        setError={setError}
-        setNotice={setNotice}
         onReset={handleReset}
         onRestore={handleGetBackups}
         onDuplicate={handleDuplicate}
@@ -181,7 +172,6 @@ export const WorksheetForm = () => {
         onClose={() => setRestoreDialogOpen(false)}
         onRestoreBackup={handleRestoreBackup}
         onDeleteBackup={handleDeleteBackup}
-        error={error}
         backups={backups}
       />
     </form>

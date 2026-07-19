@@ -1,16 +1,15 @@
 import { Fragment } from 'react';
-import { Alert, Button, Box, Dialog, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { Button, Box, Dialog, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import { formatDate, formatDateUTC } from 'utils';
 import type { WorksheetBackup } from 'types/worksheet';
 
-export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup, onDeleteBackup, error }: {
+export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup, onDeleteBackup }: {
   open: boolean;
   onClose: () => void;
   backups: WorksheetBackup[];
   onRestoreBackup: (backup: WorksheetBackup) => void;
   onDeleteBackup: (backup: WorksheetBackup) => void;
-  error: string | null;
 }) => {
   return (
     <Dialog
@@ -29,7 +28,6 @@ export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup, onDelet
         <Typography variant='h6' gutterBottom>
           Restore Backup
         </Typography>
-        {error && <Alert severity='error' sx={{ mb: 2 }}>{error}</Alert>}
         <List disablePadding sx={{ mb: 2 }}>
           {backups.map((backup, index) => {
             const eventDate = formatDateUTC(new Date(backup.date));

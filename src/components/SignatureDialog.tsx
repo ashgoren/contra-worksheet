@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button, Box, Dialog, Typography } from '@mui/material';
 import SignatureCanvas from 'react-signature-canvas';
 import { formatCurrency } from 'utils';
+import { useNotification } from 'contexts/NotificationContext';
 import type { PersonCalculated } from 'types/worksheet';
 
 export const SignatureDialog = ({ open, onClose, onSave, person }: {
@@ -12,6 +13,7 @@ export const SignatureDialog = ({ open, onClose, onSave, person }: {
 }) => {
   const sigCanvasRef = useRef<SignatureCanvas>(null);
   const [empty, setEmpty] = useState(true);
+  const { notify } = useNotification();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [canvasWidth, setCanvasWidth] = useState(500);
@@ -45,7 +47,7 @@ export const SignatureDialog = ({ open, onClose, onSave, person }: {
     if (signature) {
       onSave(signature);
     } else {
-      console.error('No signature to save');
+      notify('Please draw a signature before saving.', 'warning');
     }
   };
 
