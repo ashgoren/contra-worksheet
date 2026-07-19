@@ -1,6 +1,6 @@
 import { isNum } from 'utils';
 import { calculateFinancials } from './financials';
-import { SOUND_GUARANTEE, GEAR_RENTAL, MAX_SHARES_PER_ROLE } from 'src/config';
+import { SOUND_GUARANTEE, MAX_SHARES_PER_ROLE } from 'src/config';
 import type { WorksheetFormData, PersonCalculated, Role } from 'types/worksheet';
 
 const calculatePortions = (amount: number, talent: { role: Role }[]) => {
@@ -42,8 +42,9 @@ export const calculateTalent = (data: WorksheetFormData): {
   const talentTrimed = data.talent.filter(t => t.name.trim() !== '');
 
   // 1. Calculate Guarantees
+  const gearRentalFee = data.gearRental ? Number(data.gearRentalFee) || 0 : 0;
   const pcdcGuarantee = Number(data.guarantee) || 0;
-  const soundGuarantee = data.gearRental ? SOUND_GUARANTEE - GEAR_RENTAL : SOUND_GUARANTEE;
+  const soundGuarantee = SOUND_GUARANTEE - gearRentalFee;
   const guarantees: Record<string, number> = {
     ...calculatePortions(pcdcGuarantee, talentTrimed),
     sound: calculatePortions(soundGuarantee, talentTrimed).sound
@@ -59,7 +60,7 @@ export const calculateTalent = (data: WorksheetFormData): {
   const totalGuarantee = talent.reduce((sum, t) => sum + t.guarantee, 0);
 
   // 3. Calculate Pay Basis
-  const payBasis = admissions - rent - totalTravel - totalGuarantee - pcdcGuarantee - (data.gearRental ? GEAR_RENTAL : 0);
+  const payBasis = admissions - rent - totalTravel - totalGuarantee - pcdcGuarantee - gearRentalFee;
 
   // 4. Calculate Shares
   let pcdcShare = 0;
@@ -90,7 +91,7 @@ export const calculateTalent = (data: WorksheetFormData): {
     payBasis,
     pcdcGuarantee,
     pcdcShare: Math.floor(pcdcShare),
-    gearRental: data.gearRental ? GEAR_RENTAL : 0,
+    gearRental: gearRentalFee,
     totalTravel,
     totalGuarantee
   };

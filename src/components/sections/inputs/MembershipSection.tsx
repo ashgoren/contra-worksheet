@@ -1,4 +1,4 @@
-import { Paper, IconButton, Stack, Grid, Button } from '@mui/material';
+import { Paper, IconButton, Stack, Grid, Button, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import { useFormContext, useFieldArray } from 'react-hook-form';
@@ -25,6 +25,9 @@ export const MembershipSection = () => {
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
       <SectionHeader title='Memberships' />
+        <Typography variant='body2' sx={{ mb: 2, fontStyle: 'italic' }}>
+          Be sure you've also included these in the cash (or check or electronic) total.
+        </Typography>
       <Stack direction='column' spacing={2} sx={{ mt: 2 }}>
         {fields.map((field, index) => (
           <Grid container spacing={2} key={field.id}>

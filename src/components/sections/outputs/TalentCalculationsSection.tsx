@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Box, Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, useMediaQuery, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Button, Box, Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, useMediaQuery, Accordion, AccordionSummary, AccordionDetails, Tooltip } from '@mui/material';
 import RedoIcon from '@mui/icons-material/Redo'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { SignatureDialog } from 'components/SignatureDialog';
@@ -7,8 +7,10 @@ import { SectionHeader } from 'ui';
 import { formatCurrency } from 'utils';
 import { useTalent } from 'hooks/useTalent';
 import { useFinancials } from 'hooks/useFinancials';
+import { useFinalCalculations } from 'hooks/useFinalCalculations';
 import { useSignatures } from 'hooks/useSignatures';
 import { useDataPersistence } from 'hooks/useDataPersistence';
+import { SOUND_GUARANTEE, MAX_SHARES_PER_ROLE } from 'src/config';
 import type { ReactNode } from 'react';
 import type { PersonCalculated } from 'types/worksheet';
 
@@ -17,6 +19,9 @@ export const TalentCalculationsSection = () => {
 
   const { gearRental, talent, payBasis, pcdcGuarantee, pcdcShare, totalTravel, totalGuarantee } = useTalent();
   const { rent, admissions } = useFinancials();
+  const { totalTalentPay } = useFinalCalculations();
+
+  const gearRentalNote = `Sound pay is $${SOUND_GUARANTEE} minus $${formatCurrency(gearRental)} gear rental`;
 
   const { addSignature } = useSignatures();
   const { saveBackup } = useDataPersistence();
@@ -48,6 +53,15 @@ export const TalentCalculationsSection = () => {
     )
   }
 
+  const numCallers = talent.filter((t) => t.role === 'caller').length;
+  const numMusicians = talent.filter((t) => t.role === 'musician').length;
+  const numCallerShares = Math.min(MAX_SHARES_PER_ROLE.caller, numCallers);
+  const numMusicianShares = Math.min(MAX_SHARES_PER_ROLE.musician, numMusicians);
+  const numShares = numCallerShares + numMusicianShares + 1;
+  const callerLabel = `${numCallerShares} caller${numCallers > MAX_SHARES_PER_ROLE.caller ? ' (max)' : ''}`;
+  const musicianLabel = `${numMusicianShares} musician${numMusicians > MAX_SHARES_PER_ROLE.musician ? ' (max)' : ''}`;
+  const sumOfTalentPay = talent.reduce((sum, t) => sum + (t.totalPay || 0), 0);
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Talent Pay' />
@@ -60,14 +74,43 @@ export const TalentCalculationsSection = () => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ mt: 2 }}>
             <Typography variant='subtitle2' component='h3'>
-              Internal Calculations
+              Click for detailed explanation and internal calculations...
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Table>
               <TableBody>
-                <SummaryTableRow label='Pay Basis' description={`${admissions} admissions - ${rent} rent - ${totalTravel} travel - ${totalGuarantee} talent guarantees - ${pcdcGuarantee} pcdc guarantee - ${gearRental} gear rental`} value={payBasis} />
-                <SummaryTableRow label='Share' description={<>based on pay basis and number of talent</>} value={pcdcShare} />
+                <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 1 }}>
+                  Total pay for each caller and musician is calculated as the sum of their travel, guarantee, and share (if any).
+                  The share is calculated as the pay basis divided by the number of shares (1 for PCDC + 1 for caller + 1 per musician up to {MAX_SHARES_PER_ROLE.musician}).
+                  If there are more than {MAX_SHARES_PER_ROLE.musician} musicians, then {MAX_SHARES_PER_ROLE.musician} shares are split among all musicians, so each musician's share is reduced.
+                </Typography>
+                <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 1 }}>
+                  The sound person's total pay is considered to be ${SOUND_GUARANTEE} + travel (if any), but their actual pay is reduced by the gear rental fee if they used our gear.
+                </Typography>
+                <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 1 }}>
+                  These calculations are automatically reflected in the talent pay table below.
+                </Typography>
+                <SummaryTableRow
+                  label='Pay Basis'
+                  description={`${admissions} admissions - ${rent} rent - ${totalTravel} travel - ${totalGuarantee} talent guarantees - ${pcdcGuarantee} pcdc guarantee - ${gearRental} gear rental`}
+                  value={payBasis}
+                />
+                <SummaryTableRow
+                  label={`Base Share (does not include guarantee)`}
+                  description={`${payBasis} pay basis ÷ ${numShares} shares (${callerLabel} + ${musicianLabel} + 1 pcdc)`}
+                  value={pcdcShare}
+                />
+                <SummaryTableRow
+                  label='Total Talent Pay'
+                  description={`${sumOfTalentPay} total from below, but adding back in the gear rental fee (if applicable)`}
+                  value={totalTalentPay}
+                />
+                <SummaryTableRow
+                  label='PCDC cut'
+                  description={`${pcdcGuarantee} guarantee + ${pcdcShare} share`}
+                  value={(pcdcGuarantee ?? 0) + (pcdcShare ?? 0)}
+                />
               </TableBody>
             </Table>
           </AccordionDetails>
@@ -76,7 +119,7 @@ export const TalentCalculationsSection = () => {
 
       {isXs ? (
         talent.map((person) => (
-          <TalentRow key={person.name} person={person} isXs={true} onSignatureClick={handleSignatureClick} />
+          <TalentRow key={person.name} person={person} gearRental={gearRental} gearRentalNote={gearRentalNote} isXs={true} onSignatureClick={handleSignatureClick} />
         ))
       ) : (
         <Box sx={{ mt: 2, maxWidth: { xs: '100%', md: '735px' }, border: '1px solid', borderRadius: 1 }}>
@@ -85,24 +128,30 @@ export const TalentCalculationsSection = () => {
               <TableRow>
                 <TableCell>Talent</TableCell>
                 <TableCell>Travel</TableCell>
-                <TableCell>Guarantee</TableCell>
-                <TableCell>Share</TableCell>
-                <TableCell>Total</TableCell>
+                <TableCell>+Guarantee</TableCell>
+                <TableCell>+Share</TableCell>
+                <TableCell>=Total</TableCell>
                 <TableCell>Signature</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {talent.map((person) => (
-                <TalentRow key={person.name} person={person} isXs={false} onSignatureClick={handleSignatureClick} />
+                <TalentRow key={person.name} person={person} gearRental={gearRental} gearRentalNote={gearRentalNote} isXs={false} onSignatureClick={handleSignatureClick} />
               ))}
             </TableBody>
           </Table>
         </Box>
       )}
 
-      <Typography variant='body2' sx={{ mt: { xs: 2, sm: 1 }, p: 2, fontStyle: 'italic' }}>
-        PCDC: {formatCurrency(pcdcGuarantee)} guarantee, {formatCurrency(pcdcShare)} share
-      </Typography>
+      {Boolean(gearRental) && (
+        <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mt: 1, px: 2 }}>
+          * {gearRentalNote}
+        </Typography>
+      )}
+
+      {/* <Typography variant='body2' sx={{ mt: { xs: 2, sm: 1 }, p: 2 }}>
+        Note that PCDC also gets its own ${formatCurrency((pcdcGuarantee ?? 0) + (pcdcShare ?? 0))} cut (${formatCurrency(pcdcGuarantee)} guarantee + ${formatCurrency(pcdcShare)} share).
+      </Typography> */}
 
       <SignatureDialog
         open={dialogOpen}
@@ -115,8 +164,10 @@ export const TalentCalculationsSection = () => {
   );
 };
 
-const TalentRow = ({person, isXs, onSignatureClick}: {
+const TalentRow = ({person, gearRental, gearRentalNote, isXs, onSignatureClick}: {
   person: PersonCalculated;
+  gearRental: number | null;
+  gearRentalNote: string;
   isXs: boolean;
   onSignatureClick: (person: PersonCalculated) => void;
 }) => {
@@ -124,7 +175,17 @@ const TalentRow = ({person, isXs, onSignatureClick}: {
   if (!name || !totalPay) return null;
   const nameWithRole = `${person.name} (${person.role})`;
   const travel = person.travel || '-';
-  const guarantee = person.guarantee || '-';
+  const showGearRentalNote = person.role === 'sound' && Boolean(gearRental);
+  const guarantee = person.guarantee ? (
+    <>
+      {person.guarantee}
+      {showGearRentalNote && (
+        <Tooltip title={gearRentalNote}>
+          <Box component='span' sx={{ cursor: 'default' }}>*</Box>
+        </Tooltip>
+      )}
+    </>
+  ) : '-';
   const share = person.share ? formatCurrency(person.share) : '-';
   const total = person.totalPay ? formatCurrency(person.totalPay) : '-';
   return isXs ? (

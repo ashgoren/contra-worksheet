@@ -56,6 +56,7 @@ export interface WorksheetFormData {
 
   // Talent
   gearRental: boolean;
+  gearRentalFee: string;
   guarantee: string;
   talent: PersonInput[];
 

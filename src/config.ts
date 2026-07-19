@@ -39,6 +39,7 @@ export const DEFAULTS = {
   pettyCash: [{ item: '', amount: '' }],
   startingCash: '200',
   gearRental: false,
+  gearRentalFee: '0',
   guarantee: '90',
   talent: [
     { name: '', role: 'sound' as Role, travel: '' },

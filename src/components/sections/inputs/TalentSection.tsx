@@ -1,4 +1,5 @@
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { Paper, Typography, Grid, Button, IconButton, Stack, Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -7,10 +8,11 @@ import { SectionHeader, Subtitle } from 'ui';
 import { TravelAmountsPopover } from 'components/Popover';
 import { RHFCheckbox, RHFTextField, RHFAdornedField, RHFSelect } from 'inputs';
 import { useFieldArrayManager } from 'hooks/useFieldArrayManager';
+import { GEAR_RENTAL } from 'src/config';
 import type { WorksheetFormData } from 'types/worksheet';
 
 export const TalentSection = () => {
-  const { control, getValues } = useFormContext<WorksheetFormData>();
+  const { control, getValues, setValue } = useFormContext<WorksheetFormData>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'talent',
@@ -24,12 +26,26 @@ export const TalentSection = () => {
     shouldConfirmRemoval: (field) => !!field.name || !!field.travel
   });
 
+  const gearRentalChecked = useWatch({ control, name: 'gearRental' });
+  const wasChecked = useRef(gearRentalChecked);
+  useEffect(() => {
+    if (!gearRentalChecked) {
+      setValue('gearRentalFee', '0');
+    } else if (!wasChecked.current) {
+      setValue('gearRentalFee', String(GEAR_RENTAL));
+    }
+    wasChecked.current = gearRentalChecked;
+  }, [gearRentalChecked, setValue]);
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <SectionHeader title='Talent' />
       <Typography variant='body2' sx={{ mb: 2 }}>
         <RHFCheckbox name='gearRental' label='Sound person used our gear?' />
       </Typography>
+      <Box sx={{ mb: 2 }}>
+        <RHFAdornedField name='gearRentalFee' label='Sound gear rental fee' adornment='$' disabled={!gearRentalChecked} />
+      </Box>
 
       <RHFAdornedField name='guarantee' label='Talent Guarantee' adornment='$' confirmOnChange={true} />
 

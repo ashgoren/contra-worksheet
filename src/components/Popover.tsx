@@ -1,6 +1,5 @@
 import { useState, type MouseEvent } from 'react';
-import { Popover, Typography, IconButton, Box, Table, TableBody, TableRow, TableCell } from '@mui/material';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Popover, Typography, Button, Box, Table, TableBody, TableRow, TableCell } from '@mui/material';
 
 export const TravelAmountsPopover = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -19,9 +18,15 @@ export const TravelAmountsPopover = () => {
   return (
     <div>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton size="small" onClick={handleClick} onMouseDown={(e) => e.preventDefault()}>
-          <InfoOutlinedIcon fontSize="small" />
-        </IconButton>
+        <Button
+          size="small"
+          color="inherit"
+          onClick={handleClick}
+          onMouseDown={(e) => e.preventDefault()}
+          sx={{ textTransform: 'none', color: 'text.secondary' }}
+        >
+          (view travel amounts)
+        </Button>
       </Box>
       <Popover
         id={id}
