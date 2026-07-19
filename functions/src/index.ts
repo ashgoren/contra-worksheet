@@ -54,21 +54,22 @@ export const saveWorksheet = onCall({ maxInstances, region, secrets }, async (re
     });
     logger.info('PDF uploaded successfully');
 
-    await appendToSpreadsheet({
-      worksheet,
-      pdfUrl,
-      sheets,
-      spreadsheetId: SPREADSHEET_ID
-    });
-    logger.info('Worksheet data appended to spreadsheet successfully');
+    // Neither depends on the other so run concurrently
+    await Promise.all([
+      appendToSpreadsheet({
+        worksheet,
+        pdfUrl,
+        sheets,
+        spreadsheetId: SPREADSHEET_ID
+      }).then(() => logger.info('Worksheet data appended to spreadsheet successfully')),
 
-    await sendEmail({
-      emailConfig,
-      pdfUrl,
-      date: worksheet.date,
-      submissionNote: worksheet.submissionNote
-    });
-    logger.info('Email sent to bookkeeper');
+      sendEmail({
+        emailConfig,
+        pdfUrl,
+        date: worksheet.date,
+        submissionNote: worksheet.submissionNote
+      }).then(() => logger.info('Email sent to bookkeeper'))
+    ]);
 
     return { success: true };
   } catch (error) {
