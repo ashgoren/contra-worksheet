@@ -21,6 +21,17 @@ export const formatDate = (date: Date): string => {
   }).replace(',', '');
 }
 
+// For date-only strings (e.g. '2026-07-18'), which parse as UTC midnight —
+// formatting in a local timezone would shift the displayed day backward.
+export const formatDateUTC = (date: Date): string => {
+  return date.toLocaleDateString('en-US', {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: 'UTC',
+  }).replace(',', '');
+}
+
 export const formatDateTime = (date: Date): string => {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',

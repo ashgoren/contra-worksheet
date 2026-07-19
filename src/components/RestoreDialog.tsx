@@ -1,12 +1,16 @@
-import { Button, Box, Dialog, Typography } from '@mui/material';
-import { formatDate } from 'utils';
+import { Fragment } from 'react';
+import { Alert, Button, Box, Dialog, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import { formatDate, formatDateUTC } from 'utils';
 import type { WorksheetBackup } from 'types/worksheet';
 
-export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup }: {
+export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup, onDeleteBackup, error }: {
   open: boolean;
   onClose: () => void;
   backups: WorksheetBackup[];
   onRestoreBackup: (backup: WorksheetBackup) => void;
+  onDeleteBackup: (backup: WorksheetBackup) => void;
+  error: string | null;
 }) => {
   return (
     <Dialog
@@ -25,23 +29,37 @@ export const RestoreDialog = ({ open, onClose, backups, onRestoreBackup }: {
         <Typography variant='h6' gutterBottom>
           Restore Backup
         </Typography>
-        <Box sx={{ mb: 2 }}>
-          {backups.map((backup, index) => (
-            <Button
-              key={index}
-              variant='outlined'
-              fullWidth sx={{ justifyContent: 'space-between', my: 1.5, textTransform: 'none' }}
-              onClick={() => onRestoreBackup(backup)}
-            >
-              <Typography variant='body1'>
-                {backup.date} - {backup.band}
-              </Typography>
-              <Typography variant='body2'>
-                {backup.updatedAt && `Updated ${formatDate(new Date(backup.updatedAt))}`}
-              </Typography>
-            </Button>
-          ))}
-        </Box>
+        {error && <Alert severity='error' sx={{ mb: 2 }}>{error}</Alert>}
+        <List disablePadding sx={{ mb: 2 }}>
+          {backups.map((backup, index) => {
+            const eventDate = formatDateUTC(new Date(backup.date));
+            const editedDate = backup.updatedAt ? formatDate(new Date(backup.updatedAt)) : null;
+            const showEdited = editedDate && editedDate !== eventDate;
+
+            return (
+              <Fragment key={backup.sessionId}>
+                {index > 0 && <Divider component='li' />}
+                <ListItem
+                  disablePadding
+                  secondaryAction={
+                    <IconButton aria-label='Delete backup' color='error' onClick={() => onDeleteBackup(backup)}>
+                      <DeleteOutline />
+                    </IconButton>
+                  }
+                >
+                  <ListItemButton onClick={() => onRestoreBackup(backup)} sx={{ borderRadius: 1 }}>
+                    <ListItemText
+                      primary={backup.band || '(no band name)'}
+                      secondary={
+                        <><strong>{eventDate}</strong>{showEdited ? ` (updated ${editedDate})` : ''}</>
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Fragment>
+            );
+          })}
+        </List>
         <Box display='flex' justifyContent='space-between' sx={{ mt: 1 }}>
           <Button variant='contained' color='info' onClick={onClose}>Cancel</Button>
         </Box>

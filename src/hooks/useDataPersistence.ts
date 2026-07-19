@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import { debounce } from 'lodash';
 import { useSessionId } from 'contexts/SessionIdContext';
@@ -58,18 +58,27 @@ export const useDataPersistence = () => {
       // oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
       const q = query(
         collection(db, 'backups'),
+        orderBy('date', 'desc'),
         orderBy('updatedAt', 'desc'),
         // limit(6)
       );
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => doc.data() as WorksheetBackup);
+      // Use the actual document ID as sessionId, not the stored field — backups
+      // saved before the sessionId system existed have no sessionId field at all.
+      return querySnapshot.docs.map(doc => ({ ...doc.data(), sessionId: doc.id }) as WorksheetBackup);
     } catch (error) {
       console.warn('Unable to retrieve backups from Firestore', error); // fail gracefully
     }
   }, []);
 
+  // Delete a single backup from Firestore
+  const deleteBackup = useCallback(async (backupSessionId: string) => {
+    await deleteDoc(doc(db, 'backups', backupSessionId));
+  }, []);
+
   return {
     saveBackup: debouncedSaveBackup,
-    getBackups
+    getBackups,
+    deleteBackup
   };
 };

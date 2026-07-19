@@ -19,7 +19,7 @@ import type { WorksheetFormData, WorksheetBackup } from 'types/worksheet';
 
 export const WorksheetForm = () => {
   const { handleSubmit, reset, getValues } = useFormContext<WorksheetFormData>();
-  const { saveBackup, getBackups } = useDataPersistence();
+  const { saveBackup, getBackups, deleteBackup } = useDataPersistence();
   const { regenerateSessionId, setSessionId } = useSessionId();
   const { submitData } = useSubmit();
   const { isValid, errors } = useFormValidation();
@@ -80,6 +80,7 @@ export const WorksheetForm = () => {
   };
 
   const handleGetBackups = async () => {
+    setError(null);
     const fetchedBackups = await getBackups();
     setBackups(fetchedBackups || []);
     setRestoreDialogOpen(true);
@@ -98,6 +99,22 @@ export const WorksheetForm = () => {
     console.log('Restoring backup', formData);
     setSessionId(backupSessionId);
     resetFormState(formData);
+  };
+
+  const handleDeleteBackup = async (backup: WorksheetBackup) => {
+    const { confirmed } = await confirm({
+      title: 'Delete Backup?',
+      description: <><strong style={{ color: 'red' }}>WARNING:</strong> This will permanently delete the backup for "{backup.date} - {backup.band}". This cannot be undone. Are you sure?</>
+    });
+    if (!confirmed) return;
+
+    try {
+      await deleteBackup(backup.sessionId);
+      setBackups(prev => prev.filter(b => b.sessionId !== backup.sessionId));
+    } catch (error) {
+      console.error('Error deleting backup:', error);
+      setError(`Failed to delete backup: ${error instanceof Error ? error.message : String(error)}`);
+    }
   };
 
   const onSubmit = async (data: WorksheetFormData) => {
@@ -163,6 +180,8 @@ export const WorksheetForm = () => {
         open={restoreDialogOpen}
         onClose={() => setRestoreDialogOpen(false)}
         onRestoreBackup={handleRestoreBackup}
+        onDeleteBackup={handleDeleteBackup}
+        error={error}
         backups={backups}
       />
     </form>
