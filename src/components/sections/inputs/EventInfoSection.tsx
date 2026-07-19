@@ -23,8 +23,8 @@ export const EventInfoSection = () => {
         <Grid size={{ xs: 12, md: 4 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <ColumnHeader title='Attendance' />
-            <RHFAdornedField name='paidAttendees' label='Paid Attendees' adornment='#' fullWidth />
-            <RHFAdornedField name='unpaidAttendees' label='Unpaid Attendees' adornment='#' fullWidth />
+            <RHFAdornedField name='paidAttendees' label='Paid Dancers' adornment='#' fullWidth />
+            <RHFAdornedField name='unpaidAttendees' label='Unpaid Dancers' adornment='#' fullWidth />
             <RHFAdornedField name='newcomers' label='Newcomers' adornment='#' fullWidth />
             <RHFAdornedField name='secondDanceCards' label='2nd Dance Cards' adornment='#' fullWidth />
           </Box>
