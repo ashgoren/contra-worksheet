@@ -14,6 +14,7 @@ export const SubmissionInstructions = ({ checkToPcdc }: { checkToPcdc: number | 
       </Typography>
 
       <Typography sx={{ my: 3, ml: 2 }}>
+        <strong>Make checks payable to PCDC.</strong><br /><br />
         <strong>Mail checks to:</strong><br />
         {parseContact(VITE_BOOKKEEPER_CONTACT)}
       </Typography>
