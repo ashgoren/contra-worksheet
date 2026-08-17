@@ -38,6 +38,7 @@ export const DEFAULTS = {
   memberships: [{ name: '', amount: '' }],
   pettyCash: [{ item: '', amount: '' }],
   startingCash: '200',
+  cashRemovedForPayments: '',
   gearRental: false,
   gearRentalFee: '0',
   guarantee: '90',

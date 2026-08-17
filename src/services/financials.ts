@@ -12,6 +12,7 @@ export const calculateFinancials = (data: WorksheetFormData) => {
   const totalCashInBox = calculateTotalCash(data);
 
   const startingCash = Number(data.startingCash) || 0; // this should always be set
+  const cashRemovedForPayments = Number(data.cashRemovedForPayments) || 0;
   const checks = Number(data.checks) || 0;
   const electronic = Number(data.electronic) || 0;
   const donations = Number(data.donations) || 0;
@@ -23,7 +24,7 @@ export const calculateFinancials = (data: WorksheetFormData) => {
   const totalPettyCash = pettyCash.reduce((acc, curr) => acc + curr.amount, 0);
 
   const cashPayments = isNum(totalCashInBox) && isNum(startingCash)
-    ? totalCashInBox - startingCash
+    ? totalCashInBox - startingCash + cashRemovedForPayments
     : null;
 
   const totalPayments = isNum(cashPayments) && isNum(checks) && isNum(electronic)
@@ -40,6 +41,7 @@ export const calculateFinancials = (data: WorksheetFormData) => {
 
   return {
     startingCash,
+    cashRemovedForPayments,
     totalCashInBox,
     cashPayments,
     miscExpenses: totalPettyCash,

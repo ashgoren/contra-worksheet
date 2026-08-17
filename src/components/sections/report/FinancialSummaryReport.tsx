@@ -80,15 +80,16 @@ export const FinancialSummaryReport = ({ data }: { data: WorksheetFormData }) =>
       <Text style={styles.sectionHeader}>Financial Summary</Text>
       <View style={styles.table}>
         <SummaryTableRow label='Total Cash In Box' value={financials.totalCashInBox} isOdd />
-        <SummaryTableRow label='Cash Payments' value={financials.cashPayments} description='total minus starting' />
-        <SummaryTableRow label='Misc Expenses' value={financials.miscExpenses} isOdd />
-        <SummaryTableRow label='Checks' value={financials.checks} />
-        <SummaryTableRow label='Electronic' value={financials.electronic} isOdd />
-        <SummaryTableRow label='Donations' value={financials.donations} />
-        <SummaryTableRow label='Memberships' value={financials.memberships} isOdd />
-        <SummaryTableRow label='Total Payments' value={financials.totalPayments} description='cash payments + checks + electronic' />
-        <SummaryTableRow label='Evening Deposits' value={financials.eveningDeposits} description='total cash in box + checks' isOdd />
-        <SummaryTableRow label='Admissions' value={financials.admissions} description='total payments - donations - memberships' />
+        <SummaryTableRow label='Cash Previously Removed' value={financials.cashRemovedForPayments} />
+        <SummaryTableRow label='Cash Payments' value={financials.cashPayments} description='total + cash previously removed - starting' isOdd />
+        <SummaryTableRow label='Misc Expenses' value={financials.miscExpenses} />
+        <SummaryTableRow label='Checks' value={financials.checks} isOdd />
+        <SummaryTableRow label='Electronic' value={financials.electronic} />
+        <SummaryTableRow label='Donations' value={financials.donations} isOdd />
+        <SummaryTableRow label='Memberships' value={financials.memberships} />
+        <SummaryTableRow label='Total Payments' value={financials.totalPayments} description='cash payments + checks + electronic' isOdd />
+        <SummaryTableRow label='Evening Deposits' value={financials.eveningDeposits} description='total cash in box + checks' />
+        <SummaryTableRow label='Admissions' value={financials.admissions} description='total payments - donations - memberships' isOdd />
         <SummaryTableRow label='PCDC Profit' value={pcdcProfit} description='guarantee + share' />
         <SummaryTableRow label='Dance Profit/Loss' value={danceProfitLoss} description='admissions - totalTalentPay - rent' />
         <SummaryTableRow label='Check to PCDC' value={checkToPcdc} description='cash payments - totalTalentPay - miscExpenses + gear rental fee if applicable' />

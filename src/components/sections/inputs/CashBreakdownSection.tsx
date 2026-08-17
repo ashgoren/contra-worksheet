@@ -7,9 +7,9 @@ export const CashBreakdownSection = () => {
   const { totalCashInBox } = useCash();
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-      <SectionHeader title='Cash Breakdown' />
-      <Typography variant='body1' sx={{ mb: 2, fontStyle: 'italic', color: 'red' }}>
-        Count all cash in box, <strong>including donations, memberships, starting cash</strong>
+      <SectionHeader title='Cash Breakdown (Gross)' />
+      <Typography variant='body1' sx={{ mb: 4, fontStyle: 'italic', color: 'red' }}>
+        Count all cash in box, <strong>including donations, memberships, starting cash</strong>.<br />
       </Typography>
 
       <Grid container spacing={3}>
@@ -46,6 +46,11 @@ export const CashBreakdownSection = () => {
       <Grid size={{ xs: 12, sm: 4 }}>
         <Typography variant='body1' sx={{ my: 2 }}>How much of that was starting cash?</Typography>
         <RHFAdornedField name='startingCash' label='Starting Cash' adornment='$' fullWidth confirmOnChange={true} />
+      </Grid>
+
+      <Grid size={{ xs: 12, sm: 4 }}>
+        <Typography variant='body1' sx={{ my: 2, color: 'red', fontWeight: 'bold' }}>Prior to the above counting of cash, did you remove any cash from the box to make payments?</Typography>
+        <RHFAdornedField name='cashRemovedForPayments' label='Cash previously removed' adornment='$' fullWidth />
       </Grid>
     </Paper>
   );

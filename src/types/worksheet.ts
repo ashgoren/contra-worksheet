@@ -52,6 +52,7 @@ export interface WorksheetFormData {
 
   // Cash processing
   startingCash: string;
+  cashRemovedForPayments: string;
   pettyCash: { item: string; amount: string; }[];
 
   // Talent
