@@ -23,7 +23,7 @@ export const MiscExpensesSection = () => {
 
   return (
     <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-      <SectionHeader title='Misc Expenses' />
+      <SectionHeader title='Misc Cash Expenses' />
       <Stack direction='column' spacing={2} sx={{ mt: 2 }}>
         {fields.map((field, index) => (
           <Grid container spacing={2} key={field.id} alignItems='center'>
