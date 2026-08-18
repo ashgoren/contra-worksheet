@@ -7,6 +7,7 @@ import { useAuth } from 'hooks/useAuth';
 import { Loading } from 'components/ui';
 import { WorksheetForm } from 'components/WorksheetForm';
 import { SignIn } from 'components/auth/SignIn';
+import { UpdatePrompt } from 'components/UpdatePrompt';
 import { SessionIdProvider } from 'contexts/SessionIdContext';
 import { NotificationProvider } from 'contexts/NotificationContext';
 import { DEFAULTS } from 'src/config';
@@ -24,6 +25,7 @@ function App() {
         <Layout>
           <Loading />
         </Layout>
+        <UpdatePrompt />
       </Container>
     )
   }
@@ -42,6 +44,7 @@ function App() {
           </ConfirmProvider>
         </FormProvider>
       </Layout>
+      <UpdatePrompt />
     </Container>
   )
 }
