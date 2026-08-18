@@ -14,13 +14,19 @@ export const useFinancials = () => {
     checks,
     electronic,
     donations,
+    donationsCash,
+    donationsCheck,
+    donationsElectronic,
     rent,
     memberships,
+    membershipsCash,
+    membershipsCheck,
+    membershipsElectronic,
     totalPayments,
     eveningDeposits,
     admissions,
     startingCash,
-    cashRemovedForPayments
+    cashRemovedBeforeCounting
   } = calculateFinancials(watchedData);
 
   return {
@@ -30,12 +36,18 @@ export const useFinancials = () => {
     checks,
     electronic,
     donations,
+    donationsCash,
+    donationsCheck,
+    donationsElectronic,
     rent,
     memberships,
+    membershipsCash,
+    membershipsCheck,
+    membershipsElectronic,
     totalPayments,
     eveningDeposits,
     admissions,
     startingCash,
-    cashRemovedForPayments
+    cashRemovedBeforeCounting
   };
 };

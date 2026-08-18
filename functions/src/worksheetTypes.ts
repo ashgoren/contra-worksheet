@@ -2,6 +2,8 @@
 // Keep in sync when making changes
 
 export type Role = 'sound' | 'caller' | 'musician';
+export type PaymentMethod = 'cash' | 'check' | 'electronic';
+export type ExpenseTiming = 'before' | 'after';
 
 export interface PersonInput {
   name: string;
@@ -47,13 +49,14 @@ export interface WorksheetFormData {
   electronic: string;
 
   // Donations & memberships
-  donations: string;
-  memberships: { name: string; amount: string }[];
+  donationsCash: string;
+  donationsCheck: string;
+  donationsElectronic: string;
+  memberships: { name: string; amount: string; method: PaymentMethod }[];
 
   // Cash processing
   startingCash: string;
-  cashRemovedForPayments: string;
-  pettyCash: { item: string; amount: string; }[];
+  pettyCash: { item: string; amount: string; timing: ExpenseTiming | '' }[];
 
   // Talent
   gearRental: boolean;

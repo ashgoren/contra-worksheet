@@ -12,10 +12,10 @@ export const WorksheetFormInputs = () => {
       }
 
       <EventInfoSection />
-      <CashBreakdownSection />
-      <OtherPaymentMethodsSection />
       <DonationSection />
       <MembershipSection />
+      <CashBreakdownSection />
+      <OtherPaymentMethodsSection />
       <MiscExpensesSection />
       <TalentSection />
     </>

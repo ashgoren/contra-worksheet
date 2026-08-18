@@ -1,4 +1,4 @@
-import type { Role } from 'types/worksheet';
+import type { Role, PaymentMethod, ExpenseTiming } from 'types/worksheet';
 
 export const USE_SYSTEM_COLOR_MODE = true;
 
@@ -34,11 +34,12 @@ export const DEFAULTS = {
   coins: '',
   checks: '',
   electronic: '',
-  donations: '',
-  memberships: [{ name: '', amount: '' }],
-  pettyCash: [{ item: '', amount: '' }],
+  donationsCash: '',
+  donationsCheck: '',
+  donationsElectronic: '',
+  memberships: [{ name: '', amount: '', method: 'cash' as PaymentMethod }],
+  pettyCash: [{ item: '', amount: '', timing: '' as ExpenseTiming | '' }],
   startingCash: '200',
-  cashRemovedForPayments: '',
   gearRental: false,
   gearRentalFee: '0',
   guarantee: '90',

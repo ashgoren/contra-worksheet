@@ -63,7 +63,7 @@ export const ItemizationsReport = ({ data }: { data: WorksheetFormData }) => {
         {validMemberships.length > 0 ? (
           validMemberships.map((membership, index) => (
             <View key={index} style={styles.tableRow}>
-              <Text style={styles.itemName}>{membership.name}</Text>
+              <Text style={styles.itemName}>{membership.name} ({membership.method})</Text>
               <Text style={styles.itemAmount}>{formatCurrency(Number(membership.amount))}</Text>
             </View>
           ))
@@ -78,7 +78,7 @@ export const ItemizationsReport = ({ data }: { data: WorksheetFormData }) => {
         {validPettyCash.length > 0 ? (
           validPettyCash.map((expense, index) => (
             <View key={index} style={styles.tableRow}>
-              <Text style={styles.itemName}>{expense.item}</Text>
+              <Text style={styles.itemName}>{expense.item}{expense.timing ? ` (paid ${expense.timing} counting)` : ''}</Text>
               <Text style={styles.itemAmount}>{formatCurrency(Number(expense.amount))}</Text>
             </View>
           ))

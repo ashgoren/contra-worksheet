@@ -12,19 +12,25 @@ export const calculateFinancials = (data: WorksheetFormData) => {
   const totalCashInBox = calculateTotalCash(data);
 
   const startingCash = Number(data.startingCash) || 0; // this should always be set
-  const cashRemovedForPayments = Number(data.cashRemovedForPayments) || 0;
   const checks = Number(data.checks) || 0;
   const electronic = Number(data.electronic) || 0;
-  const donations = Number(data.donations) || 0;
+  const donationsCash = Number(data.donationsCash) || 0;
+  const donationsCheck = Number(data.donationsCheck) || 0;
+  const donationsElectronic = Number(data.donationsElectronic) || 0;
+  const totalDonations = donationsCash + donationsCheck + donationsElectronic;
   const rent = Number(data.rent) || 0; // this should always be set
-  const memberships = data.memberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount) }));
+  const memberships = data.memberships.filter(el => el.amount !== '').map(el => ({ name: el.name, amount: Number(el.amount), method: el.method }));
   const totalMemberships = memberships.reduce((acc, curr) => acc + curr.amount, 0);
+  const membershipsCash = memberships.filter(m => m.method === 'cash').reduce((acc, curr) => acc + curr.amount, 0);
+  const membershipsCheck = memberships.filter(m => m.method === 'check').reduce((acc, curr) => acc + curr.amount, 0);
+  const membershipsElectronic = memberships.filter(m => m.method === 'electronic').reduce((acc, curr) => acc + curr.amount, 0);
 
-  const pettyCash = data.pettyCash.filter(el => el.amount !== '').map(el => ({ item: el.item, amount: Number(el.amount) }));
+  const pettyCash = data.pettyCash.filter(el => el.amount !== '').map(el => ({ item: el.item, amount: Number(el.amount), timing: el.timing }));
   const totalPettyCash = pettyCash.reduce((acc, curr) => acc + curr.amount, 0);
+  const cashRemovedBeforeCounting = pettyCash.filter(p => p.timing === 'before').reduce((acc, curr) => acc + curr.amount, 0);
 
   const cashPayments = isNum(totalCashInBox) && isNum(startingCash)
-    ? totalCashInBox - startingCash + cashRemovedForPayments
+    ? totalCashInBox - startingCash + cashRemovedBeforeCounting
     : null;
 
   const totalPayments = isNum(cashPayments) && isNum(checks) && isNum(electronic)
@@ -35,21 +41,27 @@ export const calculateFinancials = (data: WorksheetFormData) => {
     ? totalCashInBox + checks
     : null;
 
-  const admissions = isNum(totalPayments) && isNum(donations) && isNum(totalMemberships)
-    ? totalPayments - donations - totalMemberships
+  const admissions = isNum(totalPayments) && isNum(totalDonations) && isNum(totalMemberships)
+    ? totalPayments - totalDonations - totalMemberships
     : null;
 
   return {
     startingCash,
-    cashRemovedForPayments,
+    cashRemovedBeforeCounting,
     totalCashInBox,
     cashPayments,
     miscExpenses: totalPettyCash,
     checks,
     electronic,
-    donations,
+    donations: totalDonations,
+    donationsCash,
+    donationsCheck,
+    donationsElectronic,
     rent,
     memberships: totalMemberships,
+    membershipsCash,
+    membershipsCheck,
+    membershipsElectronic,
     totalPayments,
     eveningDeposits,
     admissions

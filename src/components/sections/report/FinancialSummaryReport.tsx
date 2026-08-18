@@ -80,8 +80,8 @@ export const FinancialSummaryReport = ({ data }: { data: WorksheetFormData }) =>
       <Text style={styles.sectionHeader}>Financial Summary</Text>
       <View style={styles.table}>
         <SummaryTableRow label='Total Cash In Box' value={financials.totalCashInBox} isOdd />
-        <SummaryTableRow label='Cash Previously Removed' value={financials.cashRemovedForPayments} />
-        <SummaryTableRow label='Cash Payments' value={financials.cashPayments} description='total + cash previously removed - starting' isOdd />
+        <SummaryTableRow label='Cash Removed Before Counting' value={financials.cashRemovedBeforeCounting} />
+        <SummaryTableRow label='Cash Payments' value={financials.cashPayments} description='total + cash removed before counting - starting' isOdd />
         <SummaryTableRow label='Misc Expenses' value={financials.miscExpenses} />
         <SummaryTableRow label='Checks' value={financials.checks} isOdd />
         <SummaryTableRow label='Electronic' value={financials.electronic} />
